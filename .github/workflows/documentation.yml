@@ -32,38 +32,21 @@ jobs:
         with:
           dotnet-version: '10.0.x'
 
+      - name: Validate PowerShell automation syntax
+        shell: pwsh
+        run: |
+          ./tools/Test-PowerShellSyntax.ps1
+
       - name: Install Graphviz
         shell: pwsh
         run: |
           choco install graphviz -y --no-progress
           cmd /c "dot -V 2>&1"
 
-      - name: Install official Doxygen 1.17.0
+      - name: Install verified official Doxygen 1.17.0
         shell: pwsh
         run: |
-          $url = "https://www.doxygen.nl/files/doxygen-1.17.0.windows.x64.bin.zip"
-          $zip = Join-Path $env:RUNNER_TEMP "doxygen-1.17.0.zip"
-          $dir = Join-Path $env:RUNNER_TEMP "doxygen-1.17.0"
-          $expected = "94594407c4cbca3049d76aacbb05d4a6f7d0f4e93c0de410b825d25ca5621c83"
-
-          Invoke-WebRequest -Uri $url -OutFile $zip
-
-          $actual = (Get-FileHash $zip -Algorithm SHA256).Hash.ToLowerInvariant()
-          if ($actual -ne $expected) {
-            throw "Doxygen SHA-256 mismatch. Expected $expected, got $actual."
-          }
-
-          Expand-Archive -Path $zip -DestinationPath $dir -Force
-
-          $exe = Get-ChildItem $dir -Recurse -Filter doxygen.exe -File |
-            Select-Object -First 1
-
-          if ($null -eq $exe) {
-            throw "doxygen.exe was not found in the official archive."
-          }
-
-          Add-Content -Path $env:GITHUB_PATH -Value $exe.Directory.FullName
-          & $exe.FullName --version
+          ./tools/Install-Doxygen.ps1
 
       - name: Build and validate dynamic documentation portal
         shell: pwsh
