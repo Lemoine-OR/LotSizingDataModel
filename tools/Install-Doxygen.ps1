@@ -229,10 +229,18 @@ if ($null -eq $exe) {
 
 $reportedVersion = (& $exe.FullName --version).Trim()
 
-if ($reportedVersion -ne $Version) {
+# Official Doxygen binaries may append a build/commit identifier, for example:
+#   1.17.0 (65a43c0aba45cc23b3ca11b6b5334d4eea931726)
+#
+# Validate the semantic version at the beginning of the output, but do not
+# require the complete output string to equal the bare version number.
+$escapedVersion = [regex]::Escape($Version)
+$versionPattern = "^$escapedVersion(?:$|\s|\()"
+
+if ($reportedVersion -notmatch $versionPattern) {
     throw (
-        "Verified archive contains Doxygen version '$reportedVersion', " +
-        "expected '$Version'."
+        "Verified archive contains Doxygen version output '$reportedVersion', " +
+        "which does not identify expected version '$Version'."
     )
 }
 
