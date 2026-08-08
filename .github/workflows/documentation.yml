@@ -12,12 +12,18 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
 jobs:
+
   documentation:
     name: Build Doxygen documentation
     runs-on: windows-latest
 
     steps:
+
       - name: Checkout repository
         uses: actions/checkout@v6
 
@@ -33,27 +39,15 @@ jobs:
         run: |
           doxygen Doxyfile-LotSizingDataModel.Core
 
-      - name: Locate generated HTML
+      - name: Prepare generated HTML
         shell: pwsh
         run: |
-          $index = Get-ChildItem `
-            -Path $PWD `
-            -Recurse `
-            -Filter index.html `
-            -File |
-            Where-Object {
-              $_.Directory.Name -eq "html"
-            } |
-            Select-Object -First 1
+          $source = Join-Path $PWD "Documentation\html"
 
-          if ($null -eq $index) {
-            throw "Doxygen did not generate an html/index.html file."
+          if (-not (Test-Path (Join-Path $source "index.html"))) {
+            throw "Doxygen did not generate Documentation/html/index.html."
           }
 
-          Write-Host "Doxygen index found at:"
-          Write-Host $index.FullName
-
-          $source = $index.Directory.FullName
           $target = Join-Path $PWD "dist\documentation\html"
 
           New-Item -ItemType Directory -Force $target | Out-Null
@@ -64,10 +58,50 @@ jobs:
             -Recurse `
             -Force
 
-      - name: Upload Doxygen HTML
+          New-Item `
+            -ItemType File `
+            -Path (Join-Path $target ".nojekyll") `
+            -Force | Out-Null
+
+      - name: Upload Doxygen HTML artifact
         uses: actions/upload-artifact@v5
         with:
           name: LotSizingDataModel-Doxygen-HTML
           path: dist/documentation/html
           if-no-files-found: error
           retention-days: 30
+
+      - name: Configure GitHub Pages
+        if: github.event_name != 'pull_request'
+        uses: actions/configure-pages@v5
+
+      - name: Upload GitHub Pages artifact
+        if: github.event_name != 'pull_request'
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: dist/documentation/html
+
+
+  deploy:
+    name: Deploy documentation to GitHub Pages
+
+    if: github.event_name != 'pull_request'
+
+    needs:
+      - documentation
+
+    runs-on: ubuntu-latest
+
+    permissions:
+      pages: write
+      id-token: write
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+
+      - name: Deploy GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
