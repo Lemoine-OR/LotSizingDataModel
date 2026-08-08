@@ -1,0 +1,74 @@
+<Project>
+  <!--
+    Safety gate:
+    NBGV version-height semantics depend on version.json being committed.
+    Design-time builds are excluded so Visual Studio can always load projects.
+  -->
+  <Target Name="ValidateLotSizingVersionSource"
+          BeforeTargets="CoreCompile"
+          Condition="'$(DesignTimeBuild)' != 'true' and '$(IsCrossTargetingBuild)' != 'true'">
+    <Exec Command="git --version"
+          WorkingDirectory="$(MSBuildThisFileDirectory)"
+          IgnoreExitCode="true"
+          ConsoleToMSBuild="true">
+      <Output TaskParameter="ExitCode" PropertyName="_LotSizingGitExitCode" />
+    </Exec>
+    <Error Condition="'$(_LotSizingGitExitCode)' != '0'"
+           Text="Git is required to build versioned LotSizingDataModel assemblies." />
+
+    <Exec Command="git cat-file -e &quot;HEAD:version.json&quot;"
+          WorkingDirectory="$(MSBuildThisFileDirectory)"
+          IgnoreExitCode="true"
+          ConsoleToMSBuild="true">
+      <Output TaskParameter="ExitCode" PropertyName="_LotSizingVersionTrackedExitCode" />
+    </Exec>
+    <Error Condition="'$(_LotSizingVersionTrackedExitCode)' != '0'"
+           Text="version.json is not committed in HEAD. Commit the automation/versioning files once before the first versioned build." />
+
+    <Exec Command="git diff --quiet HEAD -- version.json"
+          WorkingDirectory="$(MSBuildThisFileDirectory)"
+          IgnoreExitCode="true"
+          ConsoleToMSBuild="true">
+      <Output TaskParameter="ExitCode" PropertyName="_LotSizingVersionDirtyExitCode" />
+    </Exec>
+    <Error Condition="'$(_LotSizingVersionDirtyExitCode)' != '0'"
+           Text="version.json has uncommitted changes. Commit version.json before building so the DLL version is reproducible." />
+  </Target>
+
+  <!--
+    Machine-readable bridge from NBGV to PowerShell/Doxygen/packaging.
+    Invoke after restore:
+      dotnet msbuild project.csproj /t:WriteLotSizingDataModelVersion
+          /p:LotSizingVersionOutput=...
+  -->
+  <Target Name="WriteLotSizingDataModelVersion"
+          DependsOnTargets="GetBuildVersion">
+    <PropertyGroup>
+      <LotSizingVersionOutput Condition="'$(LotSizingVersionOutput)' == ''">$(BaseIntermediateOutputPath)LotSizingDataModel.version.txt</LotSizingVersionOutput>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <_LotSizingVersionLine Include="AssemblyVersion=$(AssemblyVersion)" />
+      <_LotSizingVersionLine Include="AssemblyFileVersion=$(AssemblyFileVersion)" />
+      <_LotSizingVersionLine Include="AssemblyInformationalVersion=$(AssemblyInformationalVersion)" />
+      <_LotSizingVersionLine Include="BuildVersion=$(BuildVersion)" />
+      <_LotSizingVersionLine Include="BuildVersionSimple=$(BuildVersionSimple)" />
+      <_LotSizingVersionLine Include="BuildVersion3Components=$(BuildVersion3Components)" />
+      <_LotSizingVersionLine Include="GitCommitId=$(GitCommitId)" />
+      <_LotSizingVersionLine Include="GitCommitIdShort=$(GitCommitIdShort)" />
+      <_LotSizingVersionLine Include="GitVersionHeight=$(GitVersionHeight)" />
+      <_LotSizingVersionLine Include="MajorMinorVersion=$(MajorMinorVersion)" />
+      <_LotSizingVersionLine Include="PackageVersion=$(PackageVersion)" />
+      <_LotSizingVersionLine Include="NuGetPackageVersion=$(NuGetPackageVersion)" />
+      <_LotSizingVersionLine Include="PublicRelease=$(PublicRelease)" />
+    </ItemGroup>
+
+    <MakeDir Directories="$([System.IO.Path]::GetDirectoryName('$(LotSizingVersionOutput)'))"
+             Condition="'$([System.IO.Path]::GetDirectoryName('$(LotSizingVersionOutput)'))' != ''" />
+
+    <WriteLinesToFile File="$(LotSizingVersionOutput)"
+                      Lines="@(_LotSizingVersionLine)"
+                      Overwrite="true"
+                      Encoding="UTF-8" />
+  </Target>
+</Project>

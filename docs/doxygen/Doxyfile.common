@@ -1,14 +1,15 @@
 # LotSizingDataModel - shared Doxygen configuration
 # Validated design target: Doxygen 1.17.0
 #
-# Project-specific Doxyfiles include this file and override PROJECT_NAME,
-# PROJECT_BRIEF, INPUT, OUTPUT_DIRECTORY, GENERATE_TAGFILE and main page.
+# docs/build-documentation.ps1 dynamically discovers public projects and
+# generates a temporary per-project configuration that overrides PROJECT_NAME,
+# PROJECT_NUMBER, PROJECT_BRIEF, INPUT, OUTPUT_DIRECTORY and the main page.
 
 DOXYFILE_ENCODING       = UTF-8
 OUTPUT_LANGUAGE         = English
 
 PROJECT_NAME            = "LotSizingDataModel"
-PROJECT_NUMBER          = 1.0
+PROJECT_NUMBER          = "generated-by-build-script"
 PROJECT_BRIEF           = "C# framework for modeling, solving and validating lot-sizing problems"
 PROJECT_LOGO            = docs/assets/doxygen-project-logo.png
 PROJECT_ICON            = docs/assets/doxygen-project-icon.png
@@ -112,7 +113,8 @@ GENERATE_DOCBOOK        = NO
 GENERATE_AUTOGEN_DEF    = NO
 GENERATE_PERLMOD        = NO
 
-# Cross-project linking (injected by docs/build-documentation.ps1).
+# Cross-project TAGFILES are deliberately disabled. Several assemblies share
+# the LotSizingDataModel root namespace; self-contained sites avoid ambiguous links.
 TAGFILES                =
 GENERATE_TAGFILE        =
 

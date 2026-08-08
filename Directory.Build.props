@@ -1,0 +1,57 @@
+<Project>
+  <PropertyGroup>
+    <!-- One version computation is shared by every project below this directory. -->
+    <GitVersionBaseDirectory>$(MSBuildThisFileDirectory)</GitVersionBaseDirectory>
+
+    <!-- Repository/product identity. -->
+    <Authors>David Lemoine</Authors>
+    <Company>Lemoine-OR</Company>
+    <AssemblyCompany>Lemoine-OR</AssemblyCompany>
+    <Product>LotSizingDataModel</Product>
+    <AssemblyProduct>LotSizingDataModel</AssemblyProduct>
+    <Title>$(MSBuildProjectName)</Title>
+    <AssemblyTitle>$(MSBuildProjectName)</AssemblyTitle>
+
+    <Description Condition="'$(Description)' == ''">$(MSBuildProjectName) component of LotSizingDataModel, developed by David Lemoine (Lemoine-OR).</Description>
+    <Copyright>Copyright © David Lemoine — Lemoine-OR</Copyright>
+
+    <RepositoryUrl>https://github.com/Lemoine-OR/LotSizingDataModel</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageProjectUrl>https://github.com/Lemoine-OR/LotSizingDataModel</PackageProjectUrl>
+
+    <!-- XML API documentation is generated for every SDK-style project. -->
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);1591</NoWarn>
+
+    <!-- NBGV exposes the exact build identity to runtime code as
+         LotSizingDataModel.Build.ThisAssembly. -->
+    <NBGV_ThisAssemblyNamespace>LotSizingDataModel.Build</NBGV_ThisAssemblyNamespace>
+    <NBGV_ThisAssemblyIncludesPackageVersion>true</NBGV_ThisAssemblyIncludesPackageVersion>
+
+    <!-- Default branded Win32 icon for DLLs and EXEs.
+         A project may still override ApplicationIcon in its own .csproj. -->
+    <ApplicationIcon Condition="'$(Win32Resource)' == '' and Exists('$(MSBuildThisFileDirectory)docs/assets/dll-icon.ico')">$(MSBuildThisFileDirectory)docs/assets/dll-icon.ico</ApplicationIcon>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Pinned deliberately for reproducible builds. -->
+    <PackageReference Include="Nerdbank.GitVersioning"
+                      Version="3.10.70"
+                      PrivateAssets="all"
+                      Condition="!Exists('packages.config')" />
+
+    <!-- Extra searchable metadata in the managed assembly. -->
+    <AssemblyAttribute Include="System.Reflection.AssemblyMetadataAttribute">
+      <_Parameter1>Author</_Parameter1>
+      <_Parameter2>David Lemoine</_Parameter2>
+    </AssemblyAttribute>
+    <AssemblyAttribute Include="System.Reflection.AssemblyMetadataAttribute">
+      <_Parameter1>Organization</_Parameter1>
+      <_Parameter2>Lemoine-OR</_Parameter2>
+    </AssemblyAttribute>
+    <AssemblyAttribute Include="System.Reflection.AssemblyMetadataAttribute">
+      <_Parameter1>Repository</_Parameter1>
+      <_Parameter2>https://github.com/Lemoine-OR/LotSizingDataModel</_Parameter2>
+    </AssemblyAttribute>
+  </ItemGroup>
+</Project>

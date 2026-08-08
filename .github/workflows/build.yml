@@ -13,123 +13,43 @@ permissions:
   contents: read
 
 jobs:
-  build-and-test:
-    name: Build and test .NET 10
+  build:
+    name: Version, build, test and validate binaries
     runs-on: windows-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout full Git history
         uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
 
       - name: Setup .NET 10
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v6
         with:
           dotnet-version: '10.0.x'
 
-      - name: Display .NET information
-        run: dotnet --info
-
-      # ------------------------------------------------------------
-      # BatchConverter
-      # Builds Core, Solution, Instance and Import transitively.
-      # ------------------------------------------------------------
-
-      - name: Restore BatchConverter
-        run: >
-          dotnet restore
-          ./LotSizingDataModel.BatchConverter/LotSizingDataModel.BatchConverter.csproj
-
-      - name: Build BatchConverter
-        run: >
-          dotnet build
-          ./LotSizingDataModel.BatchConverter/LotSizingDataModel.BatchConverter.csproj
-          --configuration Release
-          --no-restore
-
-      # ------------------------------------------------------------
-      # Generic solver / checker stack
-      # CPLEX-specific projects are intentionally excluded from
-      # this public GitHub-hosted workflow.
-      # ------------------------------------------------------------
-
-      - name: Restore Checker tests
-        run: >
-          dotnet restore
-          ./LotSizingDataModel.Checker.Tests/LotSizingDataModel.Checker.Tests.csproj
-
-      - name: Build Checker tests
-        run: >
-          dotnet build
-          ./LotSizingDataModel.Checker.Tests/LotSizingDataModel.Checker.Tests.csproj
-          --configuration Release
-          --no-restore
-
-      - name: Run Checker tests
-        run: >
-          dotnet test
-          ./LotSizingDataModel.Checker.Tests/LotSizingDataModel.Checker.Tests.csproj
-          --configuration Release
-          --no-build
-          --logger "trx;LogFileName=checker-tests.trx"
-          --results-directory ./TestResults/Checker
-      # ------------------------------------------------------------
-      # Validated binary package
-      # Created only after a successful build and successful tests.
-      # ------------------------------------------------------------
-
-      - name: Prepare validated binaries
+      - name: Build, test and validate
         shell: pwsh
         run: |
-          $dist = Join-Path $PWD "dist\LotSizingDataModel"
-
-          New-Item -ItemType Directory -Force $dist | Out-Null
-
-          $projects = @(
-            "LotSizingDataModel.Core",
-            "LotSizingDataModel.Solution",
-            "LotSizingDataModel.Instance",
-            "LotSizingDataModel.Import",
-            "LotSizingDataModel.Solver",
-            "LotSizingDataModel.Checker"
-          )
-
-          foreach ($project in $projects) {
-
-            $source = Join-Path $PWD "$project\bin\Release\net10.0"
-
-            if (-not (Test-Path $source)) {
-              throw "Release output not found for project '$project': $source"
-            }
-
-            $target = Join-Path $dist $project
-            New-Item -ItemType Directory -Force $target | Out-Null
-
-            Copy-Item "$source\$project.dll" $target -Force
-
-            $xml = Join-Path $source "$project.xml"
-            if (Test-Path $xml) {
-              Copy-Item $xml $target -Force
-            }
-
-            $pdb = Join-Path $source "$project.pdb"
-            if (Test-Path $pdb) {
-              Copy-Item $pdb $target -Force
-            }
-          }
-
-      - name: Upload validated binaries
-        uses: actions/upload-artifact@v5
-        with:
-          name: LotSizingDataModel-validated
-          path: dist/LotSizingDataModel
-          if-no-files-found: error
-          retention-days: 30
+          ./build/Build-Validated.ps1
 
       - name: Upload test results
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
-          name: checker-test-results
-          path: TestResults/Checker/**/*.trx
+          name: LotSizingDataModel-TestResults
+          path: Documentation/test-results
           if-no-files-found: warn
-          retention-days: 14
+          retention-days: 30
+
+      - name: Upload validated binaries
+        uses: actions/upload-artifact@v7
+        with:
+          name: LotSizingDataModel-validated
+          path: |
+            Documentation/artifacts/validated
+            Documentation/artifacts/*.zip
+            Documentation/artifacts/*.sha256
+            Documentation/artifacts/solver-adapters.json
+          if-no-files-found: error
+          retention-days: 30

@@ -1,0 +1,75 @@
+{
+  "projects": {
+    "LotSizingDataModel.Core": {
+      "public": true,
+      "order": 10,
+      "category": "Library",
+      "cssClass": "library",
+      "brief": "Core domain model, shared abstractions and XML-serializable entities."
+    },
+    "LotSizingDataModel.Solution": {
+      "public": true,
+      "order": 20,
+      "category": "Library",
+      "cssClass": "library",
+      "brief": "Solution objects for production, setup, inventory and related decisions."
+    },
+    "LotSizingDataModel.Instance": {
+      "public": true,
+      "order": 30,
+      "category": "Library",
+      "cssClass": "library",
+      "brief": "Lot-sizing instance representation, descriptors and problem characterization."
+    },
+    "LotSizingDataModel.Solver": {
+      "public": true,
+      "order": 40,
+      "category": "Library",
+      "cssClass": "library",
+      "brief": "Solver-independent modeling, execution, monitoring and adapter infrastructure."
+    },
+    "LotSizingDataModel.Solver.Cplex": {
+      "public": true,
+      "order": 50,
+      "category": "Solver adapter",
+      "cssClass": "adapter",
+      "brief": "IBM ILOG CPLEX adapter and installation discovery integration."
+    },
+    "LotSizingDataModel.Solver.Console": {
+      "public": true,
+      "order": 80,
+      "category": "Application",
+      "cssClass": "app",
+      "brief": "Console application for executing solvers and validating produced solutions."
+    },
+    "LotSizingDataModel.Checker": {
+      "public": true,
+      "order": 90,
+      "category": "Library",
+      "cssClass": "library",
+      "brief": "Reusable validation engine for structural, mathematical and objective consistency checks."
+    },
+    "LotSizingDataModel.Checker.Cli": {
+      "public": true,
+      "order": 100,
+      "category": "Application",
+      "cssClass": "app",
+      "brief": "Command-line interface for solution checking and validation workflows."
+    },
+    "LotSizingDataModel.Import": {
+      "public": false
+    },
+    "LotSizingDataModel.BatchConverter": {
+      "public": false
+    },
+    "LotSizingDataModel.Checker.Campaign": {
+      "public": false
+    },
+    "LotSizingDataModel.Checker.Tests": {
+      "public": false
+    },
+    "LotSizingDataModel.Solver.Test": {
+      "public": false
+    }
+  }
+}

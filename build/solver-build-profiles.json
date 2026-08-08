@@ -1,0 +1,9 @@
+{
+  "projects": {
+    "LotSizingDataModel.Solver.Cplex": {
+      "ciBuild": false,
+      "external": true,
+      "reason": "Requires a locally installed IBM ILOG CPLEX SDK/runtime. Source and Doxygen documentation remain public."
+    }
+  }
+}
