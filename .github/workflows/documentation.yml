@@ -1,0 +1,73 @@
+name: Build Documentation
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  documentation:
+    name: Build Doxygen documentation
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Install Doxygen and Graphviz
+        shell: pwsh
+        run: |
+          choco install doxygen.install graphviz -y --no-progress
+          doxygen --version
+          dot -V
+
+      - name: Generate Doxygen documentation
+        shell: pwsh
+        run: |
+          doxygen Doxyfile-LotSizingDataModel.Core
+
+      - name: Locate generated HTML
+        shell: pwsh
+        run: |
+          $index = Get-ChildItem `
+            -Path $PWD `
+            -Recurse `
+            -Filter index.html `
+            -File |
+            Where-Object {
+              $_.Directory.Name -eq "html"
+            } |
+            Select-Object -First 1
+
+          if ($null -eq $index) {
+            throw "Doxygen did not generate an html/index.html file."
+          }
+
+          Write-Host "Doxygen index found at:"
+          Write-Host $index.FullName
+
+          $source = $index.Directory.FullName
+          $target = Join-Path $PWD "dist\documentation\html"
+
+          New-Item -ItemType Directory -Force $target | Out-Null
+
+          Copy-Item `
+            -Path "$source\*" `
+            -Destination $target `
+            -Recurse `
+            -Force
+
+      - name: Upload Doxygen HTML
+        uses: actions/upload-artifact@v5
+        with:
+          name: LotSizingDataModel-Doxygen-HTML
+          path: dist/documentation/html
+          if-no-files-found: error
+          retention-days: 30
