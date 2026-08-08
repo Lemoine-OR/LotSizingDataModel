@@ -41,21 +41,48 @@ jobs:
         with:
           dotnet-version: '10.0.x'
 
-      - name: Automation preflight
-        shell: pwsh
-        run: |
-          ./tools/Test-Automation.ps1
-
       - name: Install Graphviz
         shell: pwsh
         run: |
           choco install graphviz -y --no-progress
           cmd /c "dot -V 2>&1"
 
-      - name: Install verified official Doxygen 1.17.0
+      - name: Install official Doxygen 1.17.0
         shell: pwsh
         run: |
-          ./tools/Install-Doxygen.ps1
+          $url = "https://www.doxygen.nl/files/doxygen-1.17.0.windows.x64.bin.zip"
+          $zip = Join-Path $env:RUNNER_TEMP "doxygen-1.17.0.zip"
+          $dir = Join-Path $env:RUNNER_TEMP "doxygen-1.17.0"
+          $expected = "94594407c4cbca3049d76aacbb05d4a6f7d0f4e93c0de410b825d25ca5621c83"
+
+          Invoke-WebRequest -Uri $url -OutFile $zip
+
+          $actual =
+            (Get-FileHash $zip -Algorithm SHA256).
+            Hash.
+            ToLowerInvariant()
+
+          if ($actual -ne $expected) {
+            throw "Doxygen SHA-256 mismatch. Expected $expected, got $actual."
+          }
+
+          Expand-Archive -Path $zip -DestinationPath $dir -Force
+
+          $exe =
+            Get-ChildItem $dir -Recurse -Filter doxygen.exe -File |
+            Select-Object -First 1
+
+          if ($null -eq $exe) {
+            throw "doxygen.exe was not found in the official archive."
+          }
+
+          Add-Content -Path $env:GITHUB_PATH -Value $exe.Directory.FullName
+          & $exe.FullName --version
+
+      - name: Automation preflight
+        shell: pwsh
+        run: |
+          ./tools/Test-Automation.ps1
 
       - name: Full public-release build
         shell: pwsh
@@ -87,26 +114,35 @@ jobs:
       - name: Guard against duplicate tag or release
         shell: pwsh
         env:
-          GH_TOKEN: ${{ github.token }}
           RELEASE_TAG: ${{ steps.release_info.outputs.tag }}
         run: |
-          $existingRelease =
-            & gh release view $env:RELEASE_TAG `
-              --repo $env:GITHUB_REPOSITORY `
-              --json tagName 2>$null
+          # Query the exact remote tag without --exit-code.
+          # Git then returns 0 after a successful remote query whether the
+          # requested ref exists or not; stdout tells us whether it exists.
+          $remoteTag =
+            & git ls-remote `
+              --tags `
+              --refs `
+              origin `
+              "refs/tags/$env:RELEASE_TAG"
 
-          if ($LASTEXITCODE -eq 0) {
-            throw "GitHub Release '$env:RELEASE_TAG' already exists."
+          if ($LASTEXITCODE -ne 0) {
+            throw (
+              "Unable to query remote Git tags for '$env:RELEASE_TAG'. " +
+              "git ls-remote exited with code $LASTEXITCODE."
+            )
           }
 
-          & git ls-remote --exit-code `
-            --tags origin "refs/tags/$env:RELEASE_TAG" *> $null
+          $remoteTagText = ($remoteTag | Out-String).Trim()
 
-          if ($LASTEXITCODE -eq 0) {
+          if (-not [string]::IsNullOrWhiteSpace($remoteTagText)) {
             throw "Git tag '$env:RELEASE_TAG' already exists."
           }
 
           Write-Host "Tag and release are available: $env:RELEASE_TAG"
+
+          # Explicitly terminate this guard step successfully.
+          exit 0
 
       - name: Upload release bundle as workflow artifact
         uses: actions/upload-artifact@v7
