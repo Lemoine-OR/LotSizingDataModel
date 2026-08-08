@@ -17,13 +17,11 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-
   documentation:
     name: Build Doxygen documentation
     runs-on: windows-latest
 
     steps:
-
       - name: Checkout repository
         uses: actions/checkout@v6
 
@@ -42,11 +40,24 @@ jobs:
       - name: Prepare generated HTML
         shell: pwsh
         run: |
-          $source = Join-Path $PWD "Documentation\html"
+          $index = Get-ChildItem `
+            -Path $PWD `
+            -Recurse `
+            -Filter index.html `
+            -File |
+            Where-Object {
+              $_.Directory.Name -eq "html"
+            } |
+            Select-Object -First 1
 
-          if (-not (Test-Path (Join-Path $source "index.html"))) {
-            throw "Doxygen did not generate Documentation/html/index.html."
+          if ($null -eq $index) {
+            throw "Doxygen did not generate an html/index.html file."
           }
+
+          $source = $index.Directory.FullName
+
+          Write-Host "Doxygen HTML directory:"
+          Write-Host $source
 
           $target = Join-Path $PWD "dist\documentation\html"
 
@@ -62,6 +73,9 @@ jobs:
             -ItemType File `
             -Path (Join-Path $target ".nojekyll") `
             -Force | Out-Null
+
+          Write-Host "Prepared GitHub Pages content:"
+          Get-ChildItem $target | Select-Object Name
 
       - name: Upload Doxygen HTML artifact
         uses: actions/upload-artifact@v5
@@ -80,7 +94,6 @@ jobs:
         uses: actions/upload-pages-artifact@v4
         with:
           path: dist/documentation/html
-
 
   deploy:
     name: Deploy documentation to GitHub Pages
@@ -101,7 +114,6 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
 
     steps:
-
       - name: Deploy GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
