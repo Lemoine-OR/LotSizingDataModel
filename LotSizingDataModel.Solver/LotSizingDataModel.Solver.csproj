@@ -1,0 +1,36 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Cplex\**" />
+    <EmbeddedResource Remove="Cplex\**" />
+    <None Remove="Cplex\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Common\" />
+    <Folder Include="Monitoring\" />
+    <Folder Include="Contracts\" />
+    <Folder Include="Events\" />
+    <Folder Include="Configuration\" />
+    <Folder Include="Discovery\" />
+    <Folder Include="Modeling\" />
+    <Folder Include="Building\" />
+    <Folder Include="Formulation\" />
+    <Folder Include="Adapters\" />
+    <Folder Include="Mapping\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\LotSizingDataModel.Core\LotSizingDataModel.Core.csproj" />
+    <ProjectReference Include="..\LotSizingDataModel.Instance\LotSizingDataModel.Instance.csproj" />
+    <ProjectReference Include="..\LotSizingDataModel.Solution\LotSizingDataModel.Solution.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,112 @@
+Lot-sizing global solution validation report
+========================================================================
+Overall status      : VALID
+  Candidates                   : 96
+  Valid                        : 96
+  Invalid                      : 0
+  Execution failures           : 0
+  File load failures           : 0
+
+Candidate validation matrix
+---------------------------
+# | Instance | KnownResult | Exec | Valid | Structure | Domain | Feasibility | Objective | Viol. | Obj diff
+1 | DJ-10 | solver-c10d3bff-4e12-4848-856c-a95d08a74cdb | OK | YES | Passed | Passed | Passed | Passed | 0 | 1.1368683772161603E-13
+2 | DJ-11 | solver-b9fcbbd3-3f57-4c8d-893f-c2372ccb8639 | OK | YES | Passed | Passed | Passed | Passed | 0 | 2.2737367544323206E-13
+3 | DJ-12 | solver-9a8e7323-97ec-4218-99a6-b48098123722 | OK | YES | Passed | Passed | Passed | Passed | 0 | 3.4106051316484809E-13
+4 | DJ-14 | solver-64c3b795-444f-4dae-b700-300a9688ed3b | OK | YES | Passed | Passed | Passed | Passed | 0 | 0
+5 | DJ-15 | solver-6665be81-af61-413b-aeef-35e6bf53de13 | OK | YES | Passed | Passed | Passed | Passed | 0 | 2.2737367544323206E-13
+6 | DJ-16 | solver-89b03c8c-fad6-44c7-9110-1470b5e590b1 | OK | YES | Passed | Passed | Passed | Passed | 0 | 0
+7 | DJ-18 | solver-2dbeff2a-0e54-4ad4-a5bf-de82b01c91d3 | OK | YES | Passed | Passed | Passed | Passed | 0 | 0
+8 | DJ-19 | solver-7cebdc98-62f5-4c90-b9d4-b8cb6b773589 | OK | YES | Passed | Passed | Passed | Passed | 0 | 2.2737367544323206E-13
+9 | DJ-20 | solver-957a0e6b-5614-42a2-a273-fbd475d032f9 | OK | YES | Passed | Passed | Passed | Passed | 0 | 7.9580786405131221E-13
+10 | DJ-22 | solver-9b43ae34-1955-4c58-af45-f925bba90b56 | OK | YES | Passed | Passed | Passed | Passed | 0 | 5.6843418860808015E-14
+11 | DJ-23 | solver-c7516637-58b1-4965-9f47-68e936bc6f3f | OK | YES | Passed | Passed | Passed | Passed | 0 | 0
+12 | DJ-24 | solver-53155814-0961-4f85-8a60-2eff306b50f5 | OK | YES | Passed | Passed | Passed | Passed | 0 | 0
+13 | DJ-26 | solver-a51d9bef-3b64-4d97-bf40-879451fcea20 | OK | YES | Passed | Passed | Passed | Passed | 0 | 1.1368683772161603E-13
+14 | DJ-27 | solver-fd5b6010-e77f-49ad-b4e4-9c943bf763ac | OK | YES | Passed | Passed | Passed | Passed | 0 | 0
+15 | DJ-28 | solver-aa9b2108-2f6e-497d-80a4-102efcdaf3c0 | OK | YES | Passed | Passed | Passed | Passed | 0 | 0
+16 | DJ-2 | solver-0f9c5630-1da8-4451-8411-0dfe8042b1e9 | OK | YES | Passed | Passed | Passed | Passed | 0 | 1.1368683772161603E-13
+17 | DJ-30 | solver-8055d9c1-7333-43fd-828d-bb67745f1e14 | OK | YES | Passed | Passed | Passed | Passed | 0 | 0
+18 | DJ-31 | solver-4a9fee26-afcc-44d5-ac80-b388c31fa15b | OK | YES | Passed | Passed | Passed | Passed | 0 | 0
+19 | DJ-32 | solver-8d98ceab-a653-419a-8c64-3b2a14c7f1b4 | OK | YES | Passed | Passed | Passed | Passed | 0 | 2.2737367544323206E-13
+20 | DJ-34 | solver-b7cb25c0-8b2f-4b30-9d09-ea8872b226d3 | OK | YES | Passed | Passed | Passed | Passed | 0 | 2.2737367544323206E-13
+21 | DJ-35 | solver-8a39ea02-5fd9-4a62-8296-29baeefb4333 | OK | YES | Passed | Passed | Passed | Passed | 0 | 0
+22 | DJ-36 | solver-cefca418-2a98-45bc-abde-bc60cb069379 | OK | YES | Passed | Passed | Passed | Passed | 0 | 1.2505552149377763E-12
+23 | DJ-38 | solver-7e7c7989-e8be-444d-a1d4-32dc3053b6c6 | OK | YES | Passed | Passed | Passed | Passed | 0 | 0
+24 | DJ-39 | solver-527609b6-be50-4857-9fdb-3a228232cb64 | OK | YES | Passed | Passed | Passed | Passed | 0 | 0
+25 | DJ-3 | solver-a1972181-aa1a-4922-b091-c44c1be5f12b | OK | YES | Passed | Passed | Passed | Passed | 0 | 2.2737367544323206E-13
+26 | DJ-40 | solver-86ce94a5-d24f-4000-af8e-0bba58794fe3 | OK | YES | Passed | Passed | Passed | Passed | 0 | 0
+27 | DJ-42 | solver-9ebc093d-6ac3-4a66-8c1f-e1e3e09cee0f | OK | YES | Passed | Passed | Passed | Passed | 0 | 0
+28 | DJ-43 | solver-8d0d74e3-969d-446f-a547-a4096d125b4b | OK | YES | Passed | Passed | Passed | Passed | 0 | 0
+29 | DJ-44 | solver-5325d82c-82ca-486c-a467-039f21fb7540 | OK | YES | Passed | Passed | Passed | Passed | 0 | 1.1368683772161603E-13
+30 | DJ-46 | solver-2015ec77-5597-4af0-818d-fb5282dd7f99 | OK | YES | Passed | Passed | Passed | Passed | 0 | 0
+31 | DJ-47 | solver-c422a82d-2daf-40cb-98e6-07426aa6df82 | OK | YES | Passed | Passed | Passed | Passed | 0 | 0
+32 | DJ-48 | solver-9b52058c-b5d4-47a8-8475-02672a1c42e6 | OK | YES | Passed | Passed | Passed | Passed | 0 | 0
+33 | DJ-4 | solver-b0a956f4-71f7-467c-9db3-42a47e71aa03 | OK | YES | Passed | Passed | Passed | Passed | 0 | 0
+34 | DJ-50 | solver-98782b84-b63c-44b8-9586-7c1aaee863dc | OK | YES | Passed | Passed | Passed | Passed | 0 | 1.1368683772161603E-13
+35 | DJ-51 | solver-30de5454-2c21-489e-8b7f-b6337833a775 | OK | YES | Passed | Passed | Passed | Passed | 0 | 1.2505552149377763E-12
+36 | DJ-52 | solver-8687abdb-44de-4ab9-b303-a50fa54d7b43 | OK | YES | Passed | Passed | Passed | Passed | 0 | 2.2737367544323206E-13
+37 | DJ-54 | solver-77e38c4e-04f8-4fa5-a8b1-b2af792b08fc | OK | YES | Passed | Passed | Passed | Passed | 0 | 0
+38 | DJ-55 | solver-ab264f94-329e-43bb-89d1-21a357543a1d | OK | YES | Passed | Passed | Passed | Passed | 0 | 2.2737367544323206E-13
+39 | DJ-56 | solver-b51c484f-0c06-4057-89e0-bcbfe7810630 | OK | YES | Passed | Passed | Passed | Passed | 0 | 0
+40 | DJ-58 | solver-e3c05f96-b183-449b-b341-ab59b36f0f5c | OK | YES | Passed | Passed | Passed | Passed | 0 | 1.1368683772161603E-13
+41 | DJ-59 | solver-af2f0658-8c64-4b9e-b37e-7cb88244b327 | OK | YES | Passed | Passed | Passed | Passed | 0 | 1.1368683772161603E-13
+42 | DJ-60 | solver-6018d53a-9718-4722-b0ce-9f3ba0875283 | OK | YES | Passed | Passed | Passed | Passed | 0 | 6.8212102632969618E-13
+43 | DJ-62 | solver-6b0f204d-1525-4dd4-81e7-6ffb780bae94 | OK | YES | Passed | Passed | Passed | Passed | 0 | 1.5854766388656572E-09
+44 | DJ-63 | solver-5bf14b5b-d450-4150-b25a-4912b1b6582b | OK | YES | Passed | Passed | Passed | Passed | 0 | 1.1368683772161603E-13
+45 | DJ-64 | solver-a11bffa8-1660-4457-82c3-7cc265cbd6db | OK | YES | Passed | Passed | Passed | Passed | 0 | 2.2737367544323206E-13
+46 | DJ-66 | solver-105d2f06-0152-491c-a807-9e93a85c4541 | OK | YES | Passed | Passed | Passed | Passed | 0 | 0
+47 | DJ-67 | solver-081a6472-aef6-490a-b0ed-dc6743810dbe | OK | YES | Passed | Passed | Passed | Passed | 0 | 1.1368683772161603E-13
+48 | DJ-68 | solver-15dfd701-9c86-49f0-bd72-3739b1d3f5e7 | OK | YES | Passed | Passed | Passed | Passed | 0 | 1.1368683772161603E-13
+49 | DJ-6 | solver-70b15978-32f9-40af-9902-c11a4018f45e | OK | YES | Passed | Passed | Passed | Passed | 0 | 5.6843418860808015E-13
+50 | DJ-70 | solver-c4d36ddd-67df-4fe8-bc51-422a3f333f77 | OK | YES | Passed | Passed | Passed | Passed | 0 | 1.1368683772161603E-13
+51 | DJ-71 | solver-2eed9de4-4469-4fe5-9550-d45ad413e2b2 | OK | YES | Passed | Passed | Passed | Passed | 0 | 0
+52 | DJ-72 | solver-5e0b7505-3a0c-4e86-ba36-d5532da32279 | OK | YES | Passed | Passed | Passed | Passed | 0 | 1.1368683772161603E-13
+53 | DJ-74 | solver-e44a359f-a4b0-4bd8-a8f8-8469fd795a88 | OK | YES | Passed | Passed | Passed | Passed | 0 | 2.2737367544323206E-13
+54 | DJ-75 | solver-0105a6da-ef66-4e22-8740-30e8443ed800 | OK | YES | Passed | Passed | Passed | Passed | 0 | 2.2737367544323206E-13
+55 | DJ-76 | solver-11fea7c6-98f7-4bbe-bb28-8af18e9002f3 | OK | YES | Passed | Passed | Passed | Passed | 0 | 0
+56 | DJ-78 | solver-6a6a75cc-797a-43c1-8657-3edd1f33a81c | OK | YES | Passed | Passed | Passed | Passed | 0 | 0
+57 | DJ-79 | solver-d8a4cc6b-7cf7-434e-854c-45ac946edfaa | OK | YES | Passed | Passed | Passed | Passed | 0 | 1.5916157281026244E-12
+58 | DJ-7 | solver-0e852075-c505-4c6a-9dd4-81cdc7f406c0 | OK | YES | Passed | Passed | Passed | Passed | 0 | 1.1368683772161603E-13
+59 | DJ-80 | solver-57c91a74-7647-4980-b681-5059e71a8960 | OK | YES | Passed | Passed | Passed | Passed | 0 | 4.5474735088646412E-13
+60 | DJ-82 | solver-fdeb9de5-6ba1-4621-924a-559d842f4593 | OK | YES | Passed | Passed | Passed | Passed | 0 | 2.2737367544323206E-13
+61 | DJ-83 | solver-d5791a10-9fcc-440f-8f04-fc16b92e8d26 | OK | YES | Passed | Passed | Passed | Passed | 0 | 0
+62 | DJ-84 | solver-900451c0-e87f-42bd-8b66-a70c6d5f7697 | OK | YES | Passed | Passed | Passed | Passed | 0 | 0
+63 | DJ-86 | solver-7deecc1e-7605-406a-8d15-f05d0d74f741 | OK | YES | Passed | Passed | Passed | Passed | 0 | 4.5474735088646412E-13
+64 | DJ-87 | solver-809c7f6f-dfa3-416b-8275-a518f0af5981 | OK | YES | Passed | Passed | Passed | Passed | 0 | 2.2737367544323206E-13
+65 | DJ-88 | solver-460143df-347e-44dc-9698-af74a00b9fdb | OK | YES | Passed | Passed | Passed | Passed | 0 | 2.2737367544323206E-13
+66 | DJ-8 | solver-837f7c1e-1dd3-409e-84d7-b62e9519435f | OK | YES | Passed | Passed | Passed | Passed | 0 | 7.9580786405131221E-13
+67 | DJ-90 | solver-3260a0e1-160c-4fca-8603-a971286e5c70 | OK | YES | Passed | Passed | Passed | Passed | 0 | 2.2737367544323206E-13
+68 | DJ-91 | solver-c170a588-270a-42b4-bfa2-8acd9c9cc464 | OK | YES | Passed | Passed | Passed | Passed | 0 | 0
+69 | DJ-92 | solver-9379d1a7-f252-437b-b5d3-ffa06dcf0ee2 | OK | YES | Passed | Passed | Passed | Passed | 0 | 0
+70 | DJ-94 | solver-8fb19e31-d22e-4975-803f-a1785d8c48ce | OK | YES | Passed | Passed | Passed | Passed | 0 | 1.1368683772161603E-13
+71 | DJ-95 | solver-bfbf4d25-5aa8-4d47-94b1-58aba73e7972 | OK | YES | Passed | Passed | Passed | Passed | 0 | 0
+72 | DJ-96 | solver-73731785-9fc6-48ba-a7c3-826712bcf1db | OK | YES | Passed | Passed | Passed | Passed | 0 | 0
+73 | DJ-13 | solver-254b4a26-f26d-4f60-ad35-1a3336392a31 | OK | YES | Passed | Passed | Passed | Passed | 0 | 1.1368683772161603E-13
+74 | DJ-17 | solver-25cbb97c-261e-48fe-999d-f932f8d66d5f | OK | YES | Passed | Passed | Passed | Passed | 0 | 5.6843418860808015E-14
+75 | DJ-1 | solver-9a9cf032-9c53-4b6c-aaf8-0e0902f5ec14 | OK | YES | Passed | Passed | Passed | Passed | 0 | 5.6843418860808015E-14
+76 | DJ-21 | solver-31315b0e-7e70-4fd9-bffd-840c50aec610 | OK | YES | Passed | Passed | Passed | Passed | 0 | 5.6843418860808015E-14
+77 | DJ-25 | solver-4bbf4d3d-00ea-4fb2-a479-a5e6c1a9925a | OK | YES | Passed | Passed | Passed | Passed | 0 | 0
+78 | DJ-29 | solver-ada99a8a-5914-4b39-83c9-a6447a6d48b4 | OK | YES | Passed | Passed | Passed | Passed | 0 | 0
+79 | DJ-33 | solver-8175135c-b4d2-4ad6-bfaa-57f5b212628a | OK | YES | Passed | Passed | Passed | Passed | 0 | 0
+80 | DJ-37 | solver-e896af5b-4303-4f19-a5fb-6c73508124a7 | OK | YES | Passed | Passed | Passed | Passed | 0 | 0
+81 | DJ-41 | solver-a528179c-6499-4cc8-8520-d4b573d8fee3 | OK | YES | Passed | Passed | Passed | Passed | 0 | 0
+82 | DJ-45 | solver-9203ed95-fb08-4d29-9308-a8278bdca9a0 | OK | YES | Passed | Passed | Passed | Passed | 0 | 0
+83 | DJ-49 | solver-e047d94f-fc46-4a8b-b827-b4d4c84061ca | OK | YES | Passed | Passed | Passed | Passed | 0 | 0
+84 | DJ-53 | solver-5772dd36-6423-4665-bc22-ef6c40fba327 | OK | YES | Passed | Passed | Passed | Passed | 0 | 1.1368683772161603E-13
+85 | DJ-57 | solver-0f43e80a-3e5b-4cda-b99b-01d55124c283 | OK | YES | Passed | Passed | Passed | Passed | 0 | 5.6843418860808015E-14
+86 | DJ-5 | solver-3f4335d3-fa09-4c1c-a7f2-654dfffe8852 | OK | YES | Passed | Passed | Passed | Passed | 0 | 0
+87 | DJ-61 | solver-a9aa8c35-bab0-4181-8cdc-35eee7714b9b | OK | YES | Passed | Passed | Passed | Passed | 0 | 0
+88 | DJ-65 | solver-740f73e3-b2d5-4bc7-a93b-f90f649a24d5 | OK | YES | Passed | Passed | Passed | Passed | 0 | 1.1368683772161603E-13
+89 | DJ-69 | solver-132ee83a-359a-46fe-b170-24d46e0fffff | OK | YES | Passed | Passed | Passed | Passed | 0 | 5.6843418860808015E-14
+90 | DJ-73 | solver-96c1863b-0d46-4743-ab0f-8e10bbf58b96 | OK | YES | Passed | Passed | Passed | Passed | 0 | 0
+91 | DJ-77 | solver-0a53248f-1422-44dd-9415-43ed29221241 | OK | YES | Passed | Passed | Passed | Passed | 0 | 0
+92 | DJ-81 | solver-3462c163-4427-41d7-b62e-8f3e0cb9ae37 | OK | YES | Passed | Passed | Passed | Passed | 0 | 2.2737367544323206E-13
+93 | DJ-85 | solver-af546a41-7615-4433-a2bd-3366ebba0180 | OK | YES | Passed | Passed | Passed | Passed | 0 | 2.2737367544323206E-13
+94 | DJ-89 | solver-83717bb3-861b-4e54-b974-339758a78b1f | OK | YES | Passed | Passed | Passed | Passed | 0 | 2.2737367544323206E-13
+95 | DJ-93 | solver-71cbee65-ccc4-4a1c-b121-65f8916cb440 | OK | YES | Passed | Passed | Passed | Passed | 0 | 1.1368683772161603E-13
+96 | DJ-9 | solver-fd0f4844-1a08-4044-9860-0186c0c48733 | OK | YES | Passed | Passed | Passed | Passed | 0 | 0
+
+Aggregated diagnostics by kind
+------------------------------
+  Structural : 96

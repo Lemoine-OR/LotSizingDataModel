@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <AssemblyName>checker</AssemblyName>
+    <RootNamespace>LotSizingDataModel.Checker.Cli</RootNamespace>
+    <!-- The CLI is intentionally framework-dependent and is executed as
+         `dotnet checker.dll`. Disabling the native apphost unconditionally
+         prevents CreateAppHost from touching apphost.exe in synchronized
+         or otherwise file-locked working directories. -->
+    <SelfContained>false</SelfContained>
+    <UseAppHost>false</UseAppHost>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\LotSizingDataModel.Checker.Campaign\LotSizingDataModel.Checker.Campaign.csproj" />
+    <ProjectReference Include="..\LotSizingDataModel.Checker\LotSizingDataModel.Checker.csproj" />
+  </ItemGroup>
+
+</Project>

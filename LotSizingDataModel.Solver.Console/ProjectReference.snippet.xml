@@ -1,0 +1,4 @@
+<!-- Add this ProjectReference to the existing ItemGroup containing the
+     LotSizingDataModel project references in
+     LotSizingDataModel.Solver.Console.csproj. -->
+<ProjectReference Include="..\LotSizingDataModel.Checker\LotSizingDataModel.Checker.csproj" />

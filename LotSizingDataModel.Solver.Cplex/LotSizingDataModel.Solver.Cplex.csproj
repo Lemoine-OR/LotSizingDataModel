@@ -1,0 +1,78 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
+  </PropertyGroup>
+
+  <!--
+    Resolution priority:
+      1. Explicit MSBuild property CplexStudioDir
+      2. Explicit MSBuild property CplexManagedDir
+      3. Newest known CPLEX_STUDIO_DIRxxx environment variable
+      4. Older compatible environment variables down to 20.1
+      5. Common Windows installation directories
+
+    IBM documents:
+      20.1   -> CPLEX_STUDIO_DIR201
+      22.1   -> CPLEX_STUDIO_DIR221
+      22.1.1 -> CPLEX_STUDIO_DIR2211
+      22.1.2 -> CPLEX_STUDIO_DIR2212
+
+    For 22.2, both DIR222 and DIR2220 aliases are accepted here so
+    the project remains robust to installer/environment naming.
+  -->
+
+  <PropertyGroup>
+    <CplexStudioDir Condition="'$(CplexStudioDir)' == '' and '$(CPLEX_STUDIO_DIR222)' != ''">$(CPLEX_STUDIO_DIR222)</CplexStudioDir>
+    <CplexStudioDir Condition="'$(CplexStudioDir)' == '' and '$(CPLEX_STUDIO_DIR2220)' != ''">$(CPLEX_STUDIO_DIR2220)</CplexStudioDir>
+    <CplexStudioDir Condition="'$(CplexStudioDir)' == '' and '$(CPLEX_STUDIO_DIR2212)' != ''">$(CPLEX_STUDIO_DIR2212)</CplexStudioDir>
+    <CplexStudioDir Condition="'$(CplexStudioDir)' == '' and '$(CPLEX_STUDIO_DIR2211)' != ''">$(CPLEX_STUDIO_DIR2211)</CplexStudioDir>
+    <CplexStudioDir Condition="'$(CplexStudioDir)' == '' and '$(CPLEX_STUDIO_DIR221)' != ''">$(CPLEX_STUDIO_DIR221)</CplexStudioDir>
+    <CplexStudioDir Condition="'$(CplexStudioDir)' == '' and '$(CPLEX_STUDIO_DIR201)' != ''">$(CPLEX_STUDIO_DIR201)</CplexStudioDir>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(OS)' == 'Windows_NT'">
+    <CplexStudioDir Condition="'$(CplexStudioDir)' == '' and Exists('$(ProgramFiles)\IBM\ILOG\CPLEX_Studio222')">$(ProgramFiles)\IBM\ILOG\CPLEX_Studio222</CplexStudioDir>
+    <CplexStudioDir Condition="'$(CplexStudioDir)' == '' and Exists('$(ProgramFiles)\IBM\ILOG\CPLEX_Studio2220')">$(ProgramFiles)\IBM\ILOG\CPLEX_Studio2220</CplexStudioDir>
+    <CplexStudioDir Condition="'$(CplexStudioDir)' == '' and Exists('$(ProgramFiles)\IBM\ILOG\CPLEX_Studio2212')">$(ProgramFiles)\IBM\ILOG\CPLEX_Studio2212</CplexStudioDir>
+    <CplexStudioDir Condition="'$(CplexStudioDir)' == '' and Exists('$(ProgramFiles)\IBM\ILOG\CPLEX_Studio2211')">$(ProgramFiles)\IBM\ILOG\CPLEX_Studio2211</CplexStudioDir>
+    <CplexStudioDir Condition="'$(CplexStudioDir)' == '' and Exists('$(ProgramFiles)\IBM\ILOG\CPLEX_Studio221')">$(ProgramFiles)\IBM\ILOG\CPLEX_Studio221</CplexStudioDir>
+    <CplexStudioDir Condition="'$(CplexStudioDir)' == '' and Exists('$(ProgramFiles)\IBM\ILOG\CPLEX_Studio201')">$(ProgramFiles)\IBM\ILOG\CPLEX_Studio201</CplexStudioDir>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <CplexManagedDir Condition="'$(CplexManagedDir)' == '' and '$(CplexStudioDir)' != ''">$(CplexStudioDir)\cplex\bin\x64_win64</CplexManagedDir>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\LotSizingDataModel.Solver\LotSizingDataModel.Solver.csproj" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(CplexManagedDir)' != '' and Exists('$(CplexManagedDir)\ILOG.Concert.dll') and Exists('$(CplexManagedDir)\ILOG.CPLEX.dll')">
+    <Reference Include="ILOG.Concert">
+      <HintPath>$(CplexManagedDir)\ILOG.Concert.dll</HintPath>
+      <Private>true</Private>
+    </Reference>
+    <Reference Include="ILOG.CPLEX">
+      <HintPath>$(CplexManagedDir)\ILOG.CPLEX.dll</HintPath>
+      <Private>true</Private>
+    </Reference>
+  </ItemGroup>
+
+  <Target Name="ShowResolvedCplex"
+          BeforeTargets="ResolveReferences"
+          Condition="'$(CplexManagedDir)' != ''">
+    <Message Importance="High"
+             Text="LotSizingDataModel.Solver.Cplex: using CPLEX managed assemblies from '$(CplexManagedDir)'." />
+  </Target>
+
+  <Target Name="ValidateCplexManagedAssemblies"
+          BeforeTargets="ResolveReferences"
+          Condition="'$(CplexManagedDir)' == '' or !Exists('$(CplexManagedDir)\ILOG.Concert.dll') or !Exists('$(CplexManagedDir)\ILOG.CPLEX.dll')">
+    <Error Text="IBM ILOG CPLEX managed assemblies were not found. Supported automatic discovery covers CPLEX 22.2.x, 22.1.2, 22.1.1, 22.1 and 20.1. Set CplexStudioDir to the CPLEX Studio root or CplexManagedDir directly to the directory containing ILOG.Concert.dll and ILOG.CPLEX.dll." />
+  </Target>
+
+</Project>

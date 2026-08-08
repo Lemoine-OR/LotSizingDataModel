@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\LotSizingDataModel.Core\LotSizingDataModel.Core.csproj" />
+    <ProjectReference Include="..\LotSizingDataModel.Instance\LotSizingDataModel.Instance.csproj" />
+    <ProjectReference Include="..\LotSizingDataModel.Solution\LotSizingDataModel.Solution.csproj" />
+  </ItemGroup>
+
+</Project>
