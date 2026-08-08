@@ -62,6 +62,7 @@ namespace LotSizingDataModel
             try
             {
                 bool found = false;
+
                 EnumResNameProc callback = delegate(
                     IntPtr h,
                     IntPtr type,
@@ -72,7 +73,12 @@ namespace LotSizingDataModel
                     return false;
                 };
 
-                EnumResourceNames(module, RT_GROUP_ICON, callback, IntPtr.Zero);
+                EnumResourceNames(
+                    module,
+                    RT_GROUP_ICON,
+                    callback,
+                    IntPtr.Zero);
+
                 GC.KeepAlive(callback);
                 return found;
             }
@@ -86,8 +92,8 @@ namespace LotSizingDataModel
 "@
 }
 
-$errors = New-Object System.Collections.Generic.List[string]
-$results = New-Object System.Collections.Generic.List[object]
+$errors = @()
+$results = @()
 
 foreach ($inputPath in $DllPath) {
     $resolved = Resolve-Path -LiteralPath $inputPath -ErrorAction Stop
@@ -95,36 +101,59 @@ foreach ($inputPath in $DllPath) {
     $info = [System.Diagnostics.FileVersionInfo]::GetVersionInfo($path)
 
     $iconPresent = $true
+
     if (-not $SkipIconCheck) {
-        $iconPresent = [LotSizingDataModel.NativeResourceInspector]::HasGroupIcon($path)
+        $iconPresent =
+            [LotSizingDataModel.NativeResourceInspector]::HasGroupIcon($path)
     }
 
     if ($info.CompanyName -ne $ExpectedCompany) {
-        $errors.Add("$path : CompanyName='$($info.CompanyName)' (expected '$ExpectedCompany').")
+        $errors += (
+            "{0} : CompanyName='{1}' (expected '{2}')." -f
+            $path,
+            $info.CompanyName,
+            $ExpectedCompany
+        )
     }
 
     if ($info.ProductName -ne $ExpectedProduct) {
-        $errors.Add("$path : ProductName='$($info.ProductName)' (expected '$ExpectedProduct').")
+        $errors += (
+            "{0} : ProductName='{1}' (expected '{2}')." -f
+            $path,
+            $info.ProductName,
+            $ExpectedProduct
+        )
     }
 
-    if ([string]::IsNullOrWhiteSpace($info.LegalCopyright) -or
-        $info.LegalCopyright.IndexOf($ExpectedAuthor, [StringComparison]::OrdinalIgnoreCase) -lt 0) {
-        $errors.Add("$path : LegalCopyright does not contain '$ExpectedAuthor'.")
+    if (
+        [string]::IsNullOrWhiteSpace($info.LegalCopyright) -or
+        $info.LegalCopyright.IndexOf(
+            $ExpectedAuthor,
+            [StringComparison]::OrdinalIgnoreCase
+        ) -lt 0
+    ) {
+        $errors += (
+            "{0} : LegalCopyright does not contain '{1}'." -f
+            $path,
+            $ExpectedAuthor
+        )
     }
 
     if ([string]::IsNullOrWhiteSpace($info.FileVersion)) {
-        $errors.Add("$path : FileVersion is empty.")
+        $errors += ("{0} : FileVersion is empty." -f $path)
     }
 
     if ([string]::IsNullOrWhiteSpace($info.ProductVersion)) {
-        $errors.Add("$path : ProductVersion is empty.")
+        $errors += ("{0} : ProductVersion is empty." -f $path)
     }
 
     if (-not $SkipIconCheck -and -not $iconPresent) {
-        $errors.Add("$path : no embedded Win32 group icon was found.")
+        $errors += (
+            "{0} : no embedded Win32 group icon was found." -f $path
+        )
     }
 
-    $results.Add([pscustomobject]@{
+    $results += [pscustomobject]@{
         File = [IO.Path]::GetFileName($path)
         Company = $info.CompanyName
         Product = $info.ProductName
@@ -132,18 +161,32 @@ foreach ($inputPath in $DllPath) {
         ProductVersion = $info.ProductVersion
         Copyright = $info.LegalCopyright
         Icon = $iconPresent
-    })
+    }
 }
 
-$results | Format-Table -AutoSize | Out-Host
+$results |
+    Format-Table -AutoSize |
+    Out-Host
 
 if ($errors.Count -gt 0) {
     Write-Host ""
-    $errors | ForEach-Object { Write-Host $_ -ForegroundColor Red }
-    throw "Assembly metadata verification failed with $($errors.Count) error(s)."
+
+    foreach ($errorMessage in $errors) {
+        Write-Host $errorMessage -ForegroundColor Red
+    }
+
+    throw (
+        "Assembly metadata verification failed with {0} error(s)." -f
+        $errors.Count
+    )
 }
 
-Write-Host "Assembly metadata and version verification passed." -ForegroundColor Green
+Write-Host `
+    "Assembly metadata and version verification passed." `
+    -ForegroundColor Green
+
 if (-not $SkipIconCheck) {
-    Write-Host "Embedded Win32 icon verification passed." -ForegroundColor Green
+    Write-Host `
+        "Embedded Win32 icon verification passed." `
+        -ForegroundColor Green
 }

@@ -43,7 +43,6 @@ function Get-RepoRelativePath([string]$FullPath) {
 Require-Command "doxygen"
 Require-Command "dot"
 Require-Command "dotnet"
-Require-Command "git"
 
 $doxygenVersion = (& doxygen --version).Trim()
 Write-Host "Doxygen version: $doxygenVersion"
@@ -58,7 +57,7 @@ $commitShort = $VersionInfo.GitCommitIdShort
 $overrideFile = Join-Path $RepoRoot "docs\project-overrides.json"
 $overrides = Get-Content -LiteralPath $overrideFile -Raw | ConvertFrom-Json
 
-$projectRecords = New-Object System.Collections.Generic.List[object]
+$projectRecords = @()
 
 $projectDirectories = Get-ChildItem -LiteralPath $RepoRoot -Directory |
     Where-Object { $_.Name -like "LotSizingDataModel.*" } |
@@ -115,7 +114,7 @@ foreach ($directory in $projectDirectories) {
         $slug = $slug.Substring("LotSizingDataModel.".Length)
     }
 
-    $projectRecords.Add([pscustomobject]@{
+    $projectRecords += [pscustomobject]@{
         ProjectName = $projectName
         ProjectFile = $projectFile
         ProjectDirectory = $directory.FullName
@@ -124,7 +123,7 @@ foreach ($directory in $projectDirectories) {
         Category = $category
         CssClass = $cssClass
         Brief = $brief
-    })
+    }
 }
 
 $Projects = @($projectRecords | Sort-Object Order, ProjectName)
@@ -265,15 +264,15 @@ Copy-Item -LiteralPath (Join-Path $RepoRoot "docs\assets\dll-icon.ico") -Destina
 New-Item -ItemType File -Path (Join-Path $Dist ".nojekyll") -Force | Out-Null
 
 # Structural validation.
-$missing = New-Object System.Collections.Generic.List[string]
+$missing = @()
 if (-not (Test-Path -LiteralPath (Join-Path $Dist "index.html"))) {
-    $missing.Add("index.html")
+    $missing += "index.html"
 }
 
 foreach ($project in $Projects) {
     $entry = Join-Path $Dist "$($project.Slug)\index.html"
     if (-not (Test-Path -LiteralPath $entry)) {
-        $missing.Add("$($project.Slug)/index.html")
+        $missing += "$($project.Slug)/index.html"
     }
 }
 

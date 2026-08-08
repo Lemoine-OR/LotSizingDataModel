@@ -17,7 +17,7 @@ Write-Host "Validating local HTML links under:"
 Write-Host $resolvedRoot
 
 $htmlFiles = Get-ChildItem -LiteralPath $resolvedRoot -Recurse -File -Filter "*.html"
-$broken = New-Object System.Collections.Generic.List[object]
+$broken = @()
 
 $attributeRegex = [regex]@'
 (?is)\b(?:href|src)\s*=\s*(["'])(.*?)\1
@@ -75,11 +75,11 @@ foreach ($htmlFile in $htmlFiles) {
             $candidate = [IO.Path]::GetFullPath($candidate)
         }
         catch {
-            $broken.Add([pscustomobject]@{
+            $broken += [pscustomobject]@{
                 Source = $htmlFile.FullName.Substring($rootPrefix.Length)
                 Link   = $rawLink
                 Target = "<invalid path>"
-            })
+            }
             continue
         }
 
@@ -88,11 +88,11 @@ foreach ($htmlFile in $htmlFiles) {
             -not $candidate.StartsWith($rootPrefix, [StringComparison]::OrdinalIgnoreCase) -and
             -not $candidate.Equals($resolvedRoot, [StringComparison]::OrdinalIgnoreCase)
         ) {
-            $broken.Add([pscustomobject]@{
+            $broken += [pscustomobject]@{
                 Source = $htmlFile.FullName.Substring($rootPrefix.Length)
                 Link   = $rawLink
                 Target = "<outside documentation root>"
-            })
+            }
             continue
         }
 
@@ -108,11 +108,11 @@ foreach ($htmlFile in $htmlFiles) {
                 $candidate
             }
 
-            $broken.Add([pscustomobject]@{
+            $broken += [pscustomobject]@{
                 Source = $htmlFile.FullName.Substring($rootPrefix.Length)
                 Link   = $rawLink
                 Target = $targetDisplay
-            })
+            }
         }
     }
 }

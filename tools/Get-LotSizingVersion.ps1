@@ -21,8 +21,9 @@ if (-not $SkipRestore) {
     }
 }
 
+# Create the output directory here. Directory.Build.targets only writes the file.
 $tempRoot = Join-Path $RepoRoot "Documentation\versioning"
-New-Item -ItemType Directory -Force $tempRoot | Out-Null
+New-Item -ItemType Directory -Path $tempRoot -Force | Out-Null
 
 $tempFile = Join-Path $tempRoot "version-info.txt"
 Remove-Item -LiteralPath $tempFile -Force -ErrorAction SilentlyContinue
@@ -33,25 +34,29 @@ $msbuildArgs = @(
     "/t:WriteLotSizingDataModelVersion",
     "/p:LotSizingVersionOutput=$tempFile",
     "/nologo",
-    "/v:q"
+    "/v:minimal"
 )
+
+Write-Host "Extracting version with Nerdbank.GitVersioning..."
 
 & dotnet @msbuildArgs | Out-Host
 if ($LASTEXITCODE -ne 0) {
-    throw "Nerdbank.GitVersioning version extraction failed."
+    throw "Nerdbank.GitVersioning version extraction failed while executing target 'WriteLotSizingDataModelVersion' for '$CoreProject'."
 }
 
-if (-not (Test-Path -LiteralPath $tempFile)) {
+if (-not (Test-Path -LiteralPath $tempFile -PathType Leaf)) {
     throw "Version information file was not generated: $tempFile"
 }
 
 $values = @{}
+
 Get-Content -LiteralPath $tempFile | ForEach-Object {
     $line = $_
     $separator = $line.IndexOf("=")
+
     if ($separator -gt 0) {
-        $key = $line.Substring(0, $separator)
-        $value = $line.Substring($separator + 1)
+        $key = $line.Substring(0, $separator).Trim()
+        $value = $line.Substring($separator + 1).Trim()
         $values[$key] = $value
     }
 }
@@ -68,8 +73,9 @@ $required = @(
 )
 
 foreach ($key in $required) {
-    if (-not $values.ContainsKey($key) -or [string]::IsNullOrWhiteSpace($values[$key])) {
-        throw "Missing NBGV property '$key' in generated version information."
+    if (-not $values.ContainsKey($key) -or
+        [string]::IsNullOrWhiteSpace([string]$values[$key])) {
+        throw "Missing NBGV property '$key' in generated version information file '$tempFile'."
     }
 }
 

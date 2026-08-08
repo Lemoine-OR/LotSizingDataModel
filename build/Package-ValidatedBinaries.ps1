@@ -89,12 +89,12 @@ $CoreLibraries = @(
     "LotSizingDataModel.Checker"
 )
 
-$firstPartyDlls = New-Object System.Collections.Generic.List[string]
+$firstPartyDlls = @()
 
 foreach ($project in $CoreLibraries) {
     $assembly = Find-PrimaryAssembly $project
     Copy-AssemblySet $assembly
-    $firstPartyDlls.Add((Join-Path $PackageBin ([IO.Path]::GetFileName($assembly))))
+    $firstPartyDlls += (Join-Path $PackageBin ([IO.Path]::GetFileName($assembly)))
 }
 
 if (Test-Path -LiteralPath $SolverManifestPath) {
@@ -104,7 +104,7 @@ if (Test-Path -LiteralPath $SolverManifestPath) {
             -not [string]::IsNullOrWhiteSpace([string]$adapter.assembly) -and
             (Test-Path -LiteralPath ([string]$adapter.assembly))) {
             Copy-AssemblySet ([string]$adapter.assembly)
-            $firstPartyDlls.Add((Join-Path $PackageBin ([IO.Path]::GetFileName([string]$adapter.assembly))))
+            $firstPartyDlls += (Join-Path $PackageBin ([IO.Path]::GetFileName([string]$adapter.assembly)))
         }
     }
 }
@@ -148,7 +148,7 @@ Proprietary solver runtimes/SDK binaries are never bundled automatically.
 Set-Content -LiteralPath (Join-Path $PackageRoot "README.txt") -Value $readme -Encoding UTF8
 
 # Validate every packaged first-party DLL before producing the ZIP.
-& (Join-Path $RepoRoot "tools\Verify-AssemblyMetadata.ps1") -DllPath @($firstPartyDlls)
+& (Join-Path $RepoRoot "tools\Verify-AssemblyMetadata.ps1") -DllPath $firstPartyDlls
 
 $zipName = "LotSizingDataModel-$($VersionInfo.BuildVersionSimple)-validated.zip"
 $zipPath = Join-Path $ArtifactRoot $zipName

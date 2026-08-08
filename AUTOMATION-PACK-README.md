@@ -23,7 +23,8 @@ Therefore `version.json` must be committed before the first versioned build.
 
 After merging this pack into `D:\Dev\LotSizingDataModel`:
 
-1. Commit and push the automation files **before rebuilding**.
+1. Commit the automation files **before rebuilding**.
+   Pushing is not required for the local version calculation.
    Suggested commit message:
 
    `Add automated versioning and build identity`
@@ -35,8 +36,12 @@ cd "D:\Dev\LotSizingDataModel"
 powershell -ExecutionPolicy Bypass -File ".\build\Build-All.ps1"
 ```
 
-The build intentionally refuses to create misleading DLL versions when
-`version.json` is uncommitted or modified but not committed.
+Nerdbank.GitVersioning reads the repository's `.git` metadata directly through
+MSBuild. `git.exe` does not need to be on the PowerShell PATH.
+
+A change to `version.json` should still be committed before you expect the new
+version-height semantics to become authoritative; the NBGV documentation notes
+that some `version.json` changes only take effect once committed.
 
 ## What changes automatically in Visual Studio?
 
@@ -155,3 +160,19 @@ to be edited.
 The validated ZIP and SHA-256 are already generated automatically under
 `Documentation/artifacts`. A tag-driven GitHub Release workflow can therefore be
 added later without redesigning versioning, documentation or solver discovery.
+
+
+## Git executable and Visual Studio
+
+This automation deliberately does not require `git.exe` on `PATH`.
+
+Requirements are:
+
+- a real repository checkout containing `.git`;
+- full Git history for accurate version height;
+- .NET 10 SDK;
+- NuGet restore access for Nerdbank.GitVersioning.
+
+Visual Studio can therefore build the assemblies even when Git for Windows is
+available only through Visual Studio/Git Bash and not through the user's normal
+PowerShell PATH.

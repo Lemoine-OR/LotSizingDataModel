@@ -103,3 +103,5 @@ embedded Win32-icon verification, Doxygen generation, and exhaustive HTML link c
 
 The Doxygen base, logo/assets and link checker come from the v4 pipeline already
 validated successfully on the user's Windows repository.
+
+[PASS] v1.1 removes all runtime git.exe/PATH requirements from local build scripts and MSBuild targets.

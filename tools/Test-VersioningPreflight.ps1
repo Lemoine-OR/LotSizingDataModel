@@ -11,7 +11,6 @@ function Require-Command([string]$Name) {
     }
 }
 
-Require-Command "git"
 Require-Command "dotnet"
 
 $versionFile = Join-Path $RepoRoot "version.json"
@@ -19,15 +18,11 @@ if (-not (Test-Path -LiteralPath $versionFile)) {
     throw "Missing version.json at repository root."
 }
 
-# The version file must exist in HEAD and must not contain uncommitted edits.
-& git cat-file -e "HEAD:version.json" 2>$null
-if ($LASTEXITCODE -ne 0) {
-    throw "version.json is not committed in HEAD. Commit the automation pack before the first versioned build."
-}
-
-& git diff --quiet HEAD -- version.json
-if ($LASTEXITCODE -ne 0) {
-    throw "version.json has uncommitted changes. Commit it before building so the computed DLL version is reproducible."
+# Nerdbank.GitVersioning requires a real Git checkout (the .git metadata),
+# but it does NOT require git.exe to be available from this PowerShell session.
+$gitMetadata = Join-Path $RepoRoot ".git"
+if (-not (Test-Path -LiteralPath $gitMetadata)) {
+    throw "The repository Git metadata (.git) was not found. Nerdbank.GitVersioning requires a real Git checkout, not a source ZIP."
 }
 
 # Detect nested NBGV version files, which would create multiple version domains.
@@ -44,7 +39,7 @@ if ($nestedVersions.Count -gt 0) {
 
 # SDK-style projects should not carry hand-authored version assembly attributes.
 $assemblyAttributePattern = '\[assembly\s*:\s*(?:System\.Reflection\.)?(?:AssemblyVersion|AssemblyFileVersion|AssemblyInformationalVersion)\s*\('
-$legacyHits = New-Object System.Collections.Generic.List[string]
+$legacyHits = @()
 
 Get-ChildItem -LiteralPath $RepoRoot -Recurse -File -Filter "*.cs" |
     Where-Object {
@@ -53,7 +48,7 @@ Get-ChildItem -LiteralPath $RepoRoot -Recurse -File -Filter "*.cs" |
     ForEach-Object {
         $match = Select-String -LiteralPath $_.FullName -Pattern $assemblyAttributePattern -AllMatches
         if ($null -ne $match) {
-            $legacyHits.Add($_.FullName)
+            $legacyHits += $_.FullName
         }
     }
 
@@ -63,3 +58,4 @@ if ($legacyHits.Count -gt 0) {
 }
 
 Write-Host "Versioning preflight passed." -ForegroundColor Green
+Write-Host "Git metadata detected; no git.exe PATH dependency is required." -ForegroundColor DarkGray

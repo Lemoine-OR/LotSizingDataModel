@@ -88,7 +88,7 @@ $adapterDirs = Get-ChildItem -LiteralPath $RepoRoot -Directory |
     } |
     Sort-Object Name
 
-$results = New-Object System.Collections.Generic.List[object]
+$results = @()
 
 foreach ($directory in $adapterDirs) {
     $projectName = $directory.Name
@@ -133,13 +133,13 @@ foreach ($directory in $adapterDirs) {
             Write-Host "  $reason"
         }
 
-        $results.Add([pscustomobject]@{
+        $results += [pscustomobject]@{
             project = $projectName
             status = "skipped"
             external = $external
             reason = $reason
             assembly = $null
-        })
+        }
         continue
     }
 
@@ -161,13 +161,13 @@ foreach ($directory in $adapterDirs) {
         throw "Could not locate the built primary assembly for solver adapter '$projectName'."
     }
 
-    $results.Add([pscustomobject]@{
+    $results += [pscustomobject]@{
         project = $projectName
         status = "built"
         external = $external
         reason = ""
         assembly = $assembly
-    })
+    }
 }
 
 $manifestDirectory = Split-Path -Parent $ManifestPath
@@ -177,7 +177,7 @@ $manifest = [pscustomobject]@{
     generatedAtUtc = [DateTime]::UtcNow.ToString("o")
     configuration = $Configuration
     includeExternal = [bool]$IncludeExternal
-    adapters = @($results)
+    adapters = $results
 }
 
 $manifest | ConvertTo-Json -Depth 6 |
@@ -187,4 +187,4 @@ Write-Host ""
 Write-Host "Solver adapter manifest: $ManifestPath"
 $results | Format-Table project, status, external, assembly -AutoSize | Out-Host
 
-return @($results)
+return $results

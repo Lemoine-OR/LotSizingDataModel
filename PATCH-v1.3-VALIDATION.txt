@@ -1,0 +1,10 @@
+LotSizingDataModel Automation Patch v1.3 - Validation
+====================================================
+
+PASS - Directory.Build.targets parses as XML.
+PASS - Version target depends on NBGV GetBuildVersion.
+PASS - No path property function remains.
+PASS - No MakeDir remains in the target.
+PASS - Version information is written with WriteLinesToFile.
+PASS - PowerShell creates Documentation\versioning before MSBuild invocation.
+PASS - Version probe calls WriteLotSizingDataModelVersion explicitly.

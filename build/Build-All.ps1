@@ -7,6 +7,10 @@ $ErrorActionPreference = "Stop"
 $RepoRoot = Split-Path -Parent $PSScriptRoot
 Set-Location $RepoRoot
 
+# Parse every automation script before any long-running build step.
+& (Join-Path $RepoRoot "tools\Test-PowerShellSyntax.ps1") -Quiet | Out-Null
+Write-Host "PowerShell automation syntax: OK" -ForegroundColor Green
+
 $validatedArgs = @{}
 if ($IncludeExternalSolverAdapters) {
     $validatedArgs["IncludeExternalSolverAdapters"] = $true
