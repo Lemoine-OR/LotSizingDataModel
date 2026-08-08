@@ -1,3 +1,0 @@
-# Compatibility entry point. The maintained configuration now lives under docs/doxygen.
-@INCLUDE_PATH = docs/doxygen/Core
-@INCLUDE = Doxyfile
