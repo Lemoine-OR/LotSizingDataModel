@@ -1,0 +1,9 @@
+@INCLUDE_PATH = docs/doxygen
+@INCLUDE = Doxyfile.common
+
+PROJECT_NAME            = "LotSizingDataModel.Import"
+PROJECT_BRIEF           = "Import and conversion services for external lot-sizing data formats."
+INPUT                   = LotSizingDataModel.Import docs/projects/Import/mainpage.md
+OUTPUT_DIRECTORY        = Documentation/Import
+GENERATE_TAGFILE        = Documentation/tags/Import.tag
+USE_MDFILE_AS_MAINPAGE  = docs/projects/Import/mainpage.md

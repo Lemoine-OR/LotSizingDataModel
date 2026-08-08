@@ -1,0 +1,9 @@
+@INCLUDE_PATH = docs/doxygen
+@INCLUDE = Doxyfile.common
+
+PROJECT_NAME            = "LotSizingDataModel.Checker.Campaign"
+PROJECT_BRIEF           = "Batch regression-campaign orchestration for the solution checker."
+INPUT                   = LotSizingDataModel.Checker.Campaign docs/projects/Checker.Campaign/mainpage.md
+OUTPUT_DIRECTORY        = Documentation/Checker.Campaign
+GENERATE_TAGFILE        = Documentation/tags/Checker.Campaign.tag
+USE_MDFILE_AS_MAINPAGE  = docs/projects/Checker.Campaign/mainpage.md

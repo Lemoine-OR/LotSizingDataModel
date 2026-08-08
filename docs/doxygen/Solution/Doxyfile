@@ -1,0 +1,9 @@
+@INCLUDE_PATH = docs/doxygen
+@INCLUDE = Doxyfile.common
+
+PROJECT_NAME            = "LotSizingDataModel.Solution"
+PROJECT_BRIEF           = "Solution objects for production, setup, inventory and related decisions."
+INPUT                   = LotSizingDataModel.Solution docs/projects/Solution/mainpage.md
+OUTPUT_DIRECTORY        = Documentation/Solution
+GENERATE_TAGFILE        = Documentation/tags/Solution.tag
+USE_MDFILE_AS_MAINPAGE  = docs/projects/Solution/mainpage.md

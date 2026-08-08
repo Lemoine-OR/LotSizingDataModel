@@ -1,0 +1,9 @@
+@INCLUDE_PATH = docs/doxygen
+@INCLUDE = Doxyfile.common
+
+PROJECT_NAME            = "LotSizingDataModel.Checker.Cli"
+PROJECT_BRIEF           = "Command-line interface for solution checking and regression campaigns."
+INPUT                   = LotSizingDataModel.Checker.Cli docs/projects/Checker.Cli/mainpage.md
+OUTPUT_DIRECTORY        = Documentation/Checker.Cli
+GENERATE_TAGFILE        = Documentation/tags/Checker.Cli.tag
+USE_MDFILE_AS_MAINPAGE  = docs/projects/Checker.Cli/mainpage.md

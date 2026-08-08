@@ -1,0 +1,9 @@
+@INCLUDE_PATH = docs/doxygen
+@INCLUDE = Doxyfile.common
+
+PROJECT_NAME            = "LotSizingDataModel.Core"
+PROJECT_BRIEF           = "Core domain model, shared abstractions and XML-serializable entities."
+INPUT                   = LotSizingDataModel.Core docs/projects/Core/mainpage.md
+OUTPUT_DIRECTORY        = Documentation/Core
+GENERATE_TAGFILE        = Documentation/tags/Core.tag
+USE_MDFILE_AS_MAINPAGE  = docs/projects/Core/mainpage.md

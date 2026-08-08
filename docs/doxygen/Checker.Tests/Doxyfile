@@ -1,0 +1,9 @@
+@INCLUDE_PATH = docs/doxygen
+@INCLUDE = Doxyfile.common
+
+PROJECT_NAME            = "LotSizingDataModel.Checker.Tests"
+PROJECT_BRIEF           = "Automated test suite for checker components and regression behavior."
+INPUT                   = LotSizingDataModel.Checker.Tests docs/projects/Checker.Tests/mainpage.md
+OUTPUT_DIRECTORY        = Documentation/Checker.Tests
+GENERATE_TAGFILE        = Documentation/tags/Checker.Tests.tag
+USE_MDFILE_AS_MAINPAGE  = docs/projects/Checker.Tests/mainpage.md

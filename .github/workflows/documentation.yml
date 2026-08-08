@@ -18,70 +18,56 @@ concurrency:
 
 jobs:
   documentation:
-    name: Build Doxygen documentation
+    name: Build and validate public Doxygen documentation
     runs-on: windows-latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
 
-      - name: Install Doxygen and Graphviz
+      - name: Install Graphviz
         shell: pwsh
         run: |
-          choco install doxygen.install graphviz -y --no-progress
-          doxygen --version
-          dot -V
+          choco install graphviz -y --no-progress
+          cmd /c "dot -V 2>&1"
 
-      - name: Generate Doxygen documentation
+      - name: Install official Doxygen 1.17.0
         shell: pwsh
         run: |
-          doxygen Doxyfile-LotSizingDataModel.Core
+          $url = "https://www.doxygen.nl/files/doxygen-1.17.0.windows.x64.bin.zip"
+          $zip = Join-Path $env:RUNNER_TEMP "doxygen-1.17.0.zip"
+          $dir = Join-Path $env:RUNNER_TEMP "doxygen-1.17.0"
+          $expected = "94594407c4cbca3049d76aacbb05d4a6f7d0f4e93c0de410b825d25ca5621c83"
 
-      - name: Prepare generated HTML
-        shell: pwsh
-        run: |
-          $index = Get-ChildItem `
-            -Path $PWD `
-            -Recurse `
-            -Filter index.html `
-            -File |
-            Where-Object {
-              $_.Directory.Name -eq "html"
-            } |
-            Select-Object -First 1
+          Invoke-WebRequest -Uri $url -OutFile $zip
 
-          if ($null -eq $index) {
-            throw "Doxygen did not generate an html/index.html file."
+          $actual = (Get-FileHash $zip -Algorithm SHA256).Hash.ToLowerInvariant()
+          if ($actual -ne $expected) {
+            throw "Doxygen SHA-256 mismatch. Expected $expected, got $actual."
           }
 
-          $source = $index.Directory.FullName
+          Expand-Archive -Path $zip -DestinationPath $dir -Force
 
-          Write-Host "Doxygen HTML directory:"
-          Write-Host $source
+          $exe = Get-ChildItem $dir -Recurse -Filter doxygen.exe -File |
+            Select-Object -First 1
 
-          $target = Join-Path $PWD "dist\documentation\html"
+          if ($null -eq $exe) {
+            throw "doxygen.exe was not found in the official archive."
+          }
 
-          New-Item -ItemType Directory -Force $target | Out-Null
+          Add-Content -Path $env:GITHUB_PATH -Value $exe.Directory.FullName
+          & $exe.FullName --version
 
-          Copy-Item `
-            -Path "$source\*" `
-            -Destination $target `
-            -Recurse `
-            -Force
+      - name: Build and validate documentation portal
+        shell: pwsh
+        run: |
+          ./docs/build-documentation.ps1
 
-          New-Item `
-            -ItemType File `
-            -Path (Join-Path $target ".nojekyll") `
-            -Force | Out-Null
-
-          Write-Host "Prepared GitHub Pages content:"
-          Get-ChildItem $target | Select-Object Name
-
-      - name: Upload Doxygen HTML artifact
+      - name: Upload complete documentation artifact
         uses: actions/upload-artifact@v5
         with:
-          name: LotSizingDataModel-Doxygen-HTML
-          path: dist/documentation/html
+          name: LotSizingDataModel-Documentation
+          path: Documentation/site
           if-no-files-found: error
           retention-days: 30
 
@@ -93,16 +79,13 @@ jobs:
         if: github.event_name != 'pull_request'
         uses: actions/upload-pages-artifact@v4
         with:
-          path: dist/documentation/html
+          path: Documentation/site
 
   deploy:
     name: Deploy documentation to GitHub Pages
-
     if: github.event_name != 'pull_request'
-
     needs:
       - documentation
-
     runs-on: ubuntu-latest
 
     permissions:

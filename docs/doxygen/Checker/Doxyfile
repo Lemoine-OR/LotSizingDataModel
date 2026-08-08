@@ -1,0 +1,9 @@
+@INCLUDE_PATH = docs/doxygen
+@INCLUDE = Doxyfile.common
+
+PROJECT_NAME            = "LotSizingDataModel.Checker"
+PROJECT_BRIEF           = "Reusable validation engine for structural, mathematical and objective consistency checks."
+INPUT                   = LotSizingDataModel.Checker docs/projects/Checker/mainpage.md
+OUTPUT_DIRECTORY        = Documentation/Checker
+GENERATE_TAGFILE        = Documentation/tags/Checker.tag
+USE_MDFILE_AS_MAINPAGE  = docs/projects/Checker/mainpage.md

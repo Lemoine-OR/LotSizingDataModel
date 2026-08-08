@@ -1,0 +1,9 @@
+@INCLUDE_PATH = docs/doxygen
+@INCLUDE = Doxyfile.common
+
+PROJECT_NAME            = "LotSizingDataModel.Instance"
+PROJECT_BRIEF           = "Lot-sizing instance representation, descriptors and problem characterization."
+INPUT                   = LotSizingDataModel.Instance docs/projects/Instance/mainpage.md
+OUTPUT_DIRECTORY        = Documentation/Instance
+GENERATE_TAGFILE        = Documentation/tags/Instance.tag
+USE_MDFILE_AS_MAINPAGE  = docs/projects/Instance/mainpage.md

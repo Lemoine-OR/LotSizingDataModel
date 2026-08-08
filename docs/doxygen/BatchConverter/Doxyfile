@@ -1,0 +1,9 @@
+@INCLUDE_PATH = docs/doxygen
+@INCLUDE = Doxyfile.common
+
+PROJECT_NAME            = "LotSizingDataModel.BatchConverter"
+PROJECT_BRIEF           = "Batch conversion utility for lot-sizing instance and solution datasets."
+INPUT                   = LotSizingDataModel.BatchConverter docs/projects/BatchConverter/mainpage.md
+OUTPUT_DIRECTORY        = Documentation/BatchConverter
+GENERATE_TAGFILE        = Documentation/tags/BatchConverter.tag
+USE_MDFILE_AS_MAINPAGE  = docs/projects/BatchConverter/mainpage.md

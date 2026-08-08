@@ -1,0 +1,9 @@
+@INCLUDE_PATH = docs/doxygen
+@INCLUDE = Doxyfile.common
+
+PROJECT_NAME            = "LotSizingDataModel.Solver"
+PROJECT_BRIEF           = "Solver-independent modeling, execution, monitoring and adapter infrastructure."
+INPUT                   = LotSizingDataModel.Solver docs/projects/Solver/mainpage.md
+OUTPUT_DIRECTORY        = Documentation/Solver
+GENERATE_TAGFILE        = Documentation/tags/Solver.tag
+USE_MDFILE_AS_MAINPAGE  = docs/projects/Solver/mainpage.md

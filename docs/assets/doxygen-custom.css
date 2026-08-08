@@ -1,0 +1,126 @@
+/* LotSizingDataModel Doxygen theme */
+:root {
+  --lsdm-navy: #0b2d63;
+  --lsdm-blue: #145aa6;
+  --lsdm-cyan: #3bc6d4;
+  --lsdm-orange: #ff8a25;
+  --lsdm-ink: #172033;
+  --lsdm-muted: #667085;
+  --lsdm-bg: #f6f8fb;
+  --lsdm-border: #dbe3ee;
+}
+
+body {
+  font-family: Inter, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  color: var(--lsdm-ink);
+  background: #fff;
+}
+
+#titlearea {
+  background: linear-gradient(110deg, #071d43 0%, #0b2d63 58%, #145aa6 100%);
+  border-bottom: 0;
+  padding: 7px 12px;
+}
+
+#projectlogo img {
+  max-width: 200px !important;
+  max-height: 55px !important;
+  border-radius: 4px;
+}
+
+#projectname {
+  color: #fff;
+  font-size: 26px;
+  font-weight: 650;
+  letter-spacing: -0.35px;
+}
+
+#projectnumber {
+  color: #cae0fb;
+}
+
+#projectbrief {
+  color: #e7f1ff;
+  font-size: 13px;
+}
+
+#side-nav, #nav-tree {
+  background: var(--lsdm-bg);
+}
+
+#nav-tree {
+  border-right: 1px solid var(--lsdm-border);
+}
+
+#nav-tree .selected {
+  background: linear-gradient(90deg, var(--lsdm-navy), var(--lsdm-blue));
+  text-shadow: none;
+}
+
+div.header {
+  background: #fff;
+  border-bottom: 1px solid var(--lsdm-border);
+}
+
+div.headertitle {
+  padding: 18px 28px 12px 28px;
+}
+
+.title {
+  color: var(--lsdm-navy);
+  font-size: 27px;
+  font-weight: 650;
+}
+
+div.contents {
+  max-width: 1420px;
+  padding: 24px 34px 48px 34px;
+}
+
+h1, h2, h3, h4 {
+  color: var(--lsdm-navy);
+}
+
+h2 {
+  border-bottom: 1px solid var(--lsdm-border);
+  padding-bottom: 6px;
+  margin-top: 30px;
+}
+
+a {
+  color: var(--lsdm-blue);
+}
+
+a:hover {
+  color: var(--lsdm-orange);
+}
+
+div.fragment, pre.fragment {
+  background: #f8fafc;
+  border: 1px solid var(--lsdm-border);
+  border-radius: 7px;
+}
+
+.memitem, .memproto, .memdoc {
+  border-color: var(--lsdm-border);
+}
+
+.memproto {
+  background: #f3f7fc;
+}
+
+table.memberdecls {
+  border-spacing: 0;
+}
+
+.directory tr.even {
+  background-color: #f8fafc;
+}
+
+.ui-resizable-e {
+  background: transparent;
+}
+
+.footer {
+  color: var(--lsdm-muted);
+}

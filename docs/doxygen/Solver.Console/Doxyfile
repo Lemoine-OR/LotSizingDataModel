@@ -1,0 +1,9 @@
+@INCLUDE_PATH = docs/doxygen
+@INCLUDE = Doxyfile.common
+
+PROJECT_NAME            = "LotSizingDataModel.Solver.Console"
+PROJECT_BRIEF           = "Console application for executing solvers and validating produced solutions."
+INPUT                   = LotSizingDataModel.Solver.Console docs/projects/Solver.Console/mainpage.md
+OUTPUT_DIRECTORY        = Documentation/Solver.Console
+GENERATE_TAGFILE        = Documentation/tags/Solver.Console.tag
+USE_MDFILE_AS_MAINPAGE  = docs/projects/Solver.Console/mainpage.md

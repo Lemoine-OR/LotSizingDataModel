@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>LotSizingDataModel Documentation</title>
+  <meta name="description" content="Documentation portal for the LotSizingDataModel C# solution.">
+  <link rel="icon" href="assets/dll-icon-32.png" type="image/png">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="hero">
+    <div class="hero-copy">
+      <div class="eyebrow">Lemoine-OR &middot; C# / .NET</div>
+      <h1>LotSizingDataModel</h1>
+      <p>A modular framework for modeling, solving and validating lot-sizing problems.</p>
+      <div class="hero-actions">
+        <a class="button primary" href="https://github.com/Lemoine-OR/LotSizingDataModel">GitHub repository</a>
+        <a class="button secondary" href="Core/index.html">Start with Core</a>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <img src="assets/project-hero.webp" alt="Lot-sizing production and inventory illustration">
+    </div>
+  </header>
+
+  <main>
+    <section class="intro">
+      <h2>API documentation</h2>
+      <p>
+        Public libraries and user-facing tools are listed below.
+        Auxiliary import, regression and test projects are still documented and cross-linked
+        internally, but are intentionally omitted from the main portal.
+      </p>
+    </section>
+
+    <section class="grid">
+      <a class="project-card library" href="Core/index.html">
+        <div class="card-icon"><img src="assets/dll-icon-64.png" alt=""></div>
+        <div class="card-body">
+          <div class="card-meta">Library</div>
+          <h3>LotSizingDataModel.Core</h3>
+          <p>Core domain model, shared abstractions and XML-serializable entities.</p>
+        </div>
+        <span class="arrow" aria-hidden="true">&rarr;</span>
+      </a>
+
+      <a class="project-card library" href="Solution/index.html">
+        <div class="card-icon"><img src="assets/dll-icon-64.png" alt=""></div>
+        <div class="card-body">
+          <div class="card-meta">Library</div>
+          <h3>LotSizingDataModel.Solution</h3>
+          <p>Solution objects for production, setup, inventory and related decisions.</p>
+        </div>
+        <span class="arrow" aria-hidden="true">&rarr;</span>
+      </a>
+
+      <a class="project-card library" href="Instance/index.html">
+        <div class="card-icon"><img src="assets/dll-icon-64.png" alt=""></div>
+        <div class="card-body">
+          <div class="card-meta">Library</div>
+          <h3>LotSizingDataModel.Instance</h3>
+          <p>Lot-sizing instance representation, descriptors and problem characterization.</p>
+        </div>
+        <span class="arrow" aria-hidden="true">&rarr;</span>
+      </a>
+
+      <a class="project-card library" href="Solver/index.html">
+        <div class="card-icon"><img src="assets/dll-icon-64.png" alt=""></div>
+        <div class="card-body">
+          <div class="card-meta">Library</div>
+          <h3>LotSizingDataModel.Solver</h3>
+          <p>Solver-independent modeling, execution, monitoring and adapter infrastructure.</p>
+        </div>
+        <span class="arrow" aria-hidden="true">&rarr;</span>
+      </a>
+
+      <a class="project-card library" href="Solver.Cplex/index.html">
+        <div class="card-icon"><img src="assets/dll-icon-64.png" alt=""></div>
+        <div class="card-body">
+          <div class="card-meta">Solver adapter</div>
+          <h3>LotSizingDataModel.Solver.Cplex</h3>
+          <p>IBM ILOG CPLEX adapter and installation discovery integration.</p>
+        </div>
+        <span class="arrow" aria-hidden="true">&rarr;</span>
+      </a>
+
+      <a class="project-card app" href="Solver.Console/index.html">
+        <div class="card-icon"><img src="assets/dll-icon-64.png" alt=""></div>
+        <div class="card-body">
+          <div class="card-meta">Application</div>
+          <h3>LotSizingDataModel.Solver.Console</h3>
+          <p>Console application for executing solvers and validating produced solutions.</p>
+        </div>
+        <span class="arrow" aria-hidden="true">&rarr;</span>
+      </a>
+
+      <a class="project-card library" href="Checker/index.html">
+        <div class="card-icon"><img src="assets/dll-icon-64.png" alt=""></div>
+        <div class="card-body">
+          <div class="card-meta">Library</div>
+          <h3>LotSizingDataModel.Checker</h3>
+          <p>Reusable validation engine for structural, mathematical and objective consistency checks.</p>
+        </div>
+        <span class="arrow" aria-hidden="true">&rarr;</span>
+      </a>
+
+      <a class="project-card app" href="Checker.Cli/index.html">
+        <div class="card-icon"><img src="assets/dll-icon-64.png" alt=""></div>
+        <div class="card-body">
+          <div class="card-meta">Application</div>
+          <h3>LotSizingDataModel.Checker.Cli</h3>
+          <p>Command-line interface for solution checking and validation workflows.</p>
+        </div>
+        <span class="arrow" aria-hidden="true">&rarr;</span>
+      </a>
+    </section>
+
+    <section class="legend">
+      <span><i class="dot library"></i> Libraries and solver adapters</span>
+      <span><i class="dot app"></i> User-facing applications</span>
+    </section>
+  </main>
+
+  <footer>
+    <span>LotSizingDataModel &middot; Lemoine-OR</span>
+    <a href="https://github.com/Lemoine-OR/LotSizingDataModel/actions">Continuous integration</a>
+  </footer>
+</body>
+</html>

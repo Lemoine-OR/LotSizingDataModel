@@ -1,0 +1,9 @@
+@INCLUDE_PATH = docs/doxygen
+@INCLUDE = Doxyfile.common
+
+PROJECT_NAME            = "LotSizingDataModel.Solver.Test"
+PROJECT_BRIEF           = "Automated tests and native smoke tests for the solver stack."
+INPUT                   = LotSizingDataModel.Solver.Test docs/projects/Solver.Test/mainpage.md
+OUTPUT_DIRECTORY        = Documentation/Solver.Test
+GENERATE_TAGFILE        = Documentation/tags/Solver.Test.tag
+USE_MDFILE_AS_MAINPAGE  = docs/projects/Solver.Test/mainpage.md

@@ -1,0 +1,9 @@
+@INCLUDE_PATH = docs/doxygen
+@INCLUDE = Doxyfile.common
+
+PROJECT_NAME            = "LotSizingDataModel.Solver.Cplex"
+PROJECT_BRIEF           = "IBM ILOG CPLEX adapter and installation discovery integration."
+INPUT                   = LotSizingDataModel.Solver.Cplex docs/projects/Solver.Cplex/mainpage.md
+OUTPUT_DIRECTORY        = Documentation/Solver.Cplex
+GENERATE_TAGFILE        = Documentation/tags/Solver.Cplex.tag
+USE_MDFILE_AS_MAINPAGE  = docs/projects/Solver.Cplex/mainpage.md
