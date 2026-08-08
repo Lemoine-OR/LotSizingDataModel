@@ -1,0 +1,83 @@
+name: Build and Test
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-test:
+    name: Build and test .NET 10
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Setup .NET 10
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Display .NET information
+        run: dotnet --info
+
+      # ------------------------------------------------------------
+      # BatchConverter
+      # Builds Core, Solution, Instance and Import transitively.
+      # ------------------------------------------------------------
+
+      - name: Restore BatchConverter
+        run: >
+          dotnet restore
+          ./LotSizingDataModel.BatchConverter/LotSizingDataModel.BatchConverter.csproj
+
+      - name: Build BatchConverter
+        run: >
+          dotnet build
+          ./LotSizingDataModel.BatchConverter/LotSizingDataModel.BatchConverter.csproj
+          --configuration Release
+          --no-restore
+
+      # ------------------------------------------------------------
+      # Generic solver / checker stack
+      # CPLEX-specific projects are intentionally excluded from
+      # this public GitHub-hosted workflow.
+      # ------------------------------------------------------------
+
+      - name: Restore Checker tests
+        run: >
+          dotnet restore
+          ./LotSizingDataModel.Checker.Tests/LotSizingDataModel.Checker.Tests.csproj
+
+      - name: Build Checker tests
+        run: >
+          dotnet build
+          ./LotSizingDataModel.Checker.Tests/LotSizingDataModel.Checker.Tests.csproj
+          --configuration Release
+          --no-restore
+
+      - name: Run Checker tests
+        run: >
+          dotnet test
+          ./LotSizingDataModel.Checker.Tests/LotSizingDataModel.Checker.Tests.csproj
+          --configuration Release
+          --no-build
+          --logger "trx;LogFileName=checker-tests.trx"
+          --results-directory ./TestResults/Checker
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: checker-test-results
+          path: TestResults/Checker/**/*.trx
+          if-no-files-found: warn
+          retention-days: 14
