@@ -384,3 +384,5 @@ LotSizingDataModel.Checker.Package16.BaselineRegression.zip
 # Local backup / obsolete files
 *.old
 *.bak
+# Generated Doxygen documentation
+Documentation/
