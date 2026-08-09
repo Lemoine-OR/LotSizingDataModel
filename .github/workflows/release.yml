@@ -203,15 +203,22 @@ jobs:
           }
 
       - name: Release summary
-        shell: pwsh
-        run: |
-          @"
-          ## LotSizingDataModel ${{ steps.release_info.outputs.version }}
+  shell: pwsh
+  env:
+    RELEASE_VERSION: ${{ steps.release_info.outputs.version }}
+    RELEASE_TAG: ${{ steps.release_info.outputs.tag }}
+    BUILD_VERSION: ${{ steps.release_info.outputs.build_version }}
+    RELEASE_COMMIT: ${{ steps.release_info.outputs.commit }}
+    RELEASE_PRERELEASE: ${{ steps.release_info.outputs.prerelease }}
+  run: |
+    @"
+    ## LotSizingDataModel $env:RELEASE_VERSION
 
-          - Tag: `${{ steps.release_info.outputs.tag }}`
-          - Build version: `${{ steps.release_info.outputs.build_version }}`
-          - Commit: `${{ steps.release_info.outputs.commit }}`
-          - Prerelease: `${{ steps.release_info.outputs.prerelease }}`
-          - Binary ZIP, documentation ZIP, build metadata, solver manifest,
-            release manifest and SHA-256 checksums were validated before publication.
-          "@ | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append -Encoding utf8
+    - Tag: $env:RELEASE_TAG
+    - Build version: $env:BUILD_VERSION
+    - Commit: $env:RELEASE_COMMIT
+    - Prerelease: $env:RELEASE_PRERELEASE
+
+    - Binary ZIP, documentation ZIP, build metadata, solver manifest,
+      release manifest and SHA-256 checksums were validated before publication.
+    "@ | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append -Encoding utf8
