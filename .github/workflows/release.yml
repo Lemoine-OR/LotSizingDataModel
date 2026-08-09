@@ -196,29 +196,28 @@ jobs:
             $arguments += "--latest=false"
           }
 
-          & gh @arguments
-
+                    & gh @arguments
           if ($LASTEXITCODE -ne 0) {
             throw "GitHub Release publication failed."
           }
 
-            - name: Release summary
-              shell: pwsh
-              env:
-                RELEASE_VERSION: ${{ steps.release_info.outputs.version }}
-                RELEASE_TAG: ${{ steps.release_info.outputs.tag }}
-                BUILD_VERSION: ${{ steps.release_info.outputs.build_version }}
-                RELEASE_COMMIT: ${{ steps.release_info.outputs.commit }}
-                RELEASE_PRERELEASE: ${{ steps.release_info.outputs.prerelease }}
-              run: |
-                @"
-                ## LotSizingDataModel $env:RELEASE_VERSION
+      - name: Release summary
+        shell: pwsh
+        env:
+          RELEASE_VERSION: ${{ steps.release_info.outputs.version }}
+          RELEASE_TAG: ${{ steps.release_info.outputs.tag }}
+          BUILD_VERSION: ${{ steps.release_info.outputs.build_version }}
+          RELEASE_COMMIT: ${{ steps.release_info.outputs.commit }}
+          RELEASE_PRERELEASE: ${{ steps.release_info.outputs.prerelease }}
+        run: |
+          @"
+          ## LotSizingDataModel $env:RELEASE_VERSION
 
-                - Tag: $env:RELEASE_TAG
-                - Build version: $env:BUILD_VERSION
-                - Commit: $env:RELEASE_COMMIT
-                - Prerelease: $env:RELEASE_PRERELEASE
+          - Tag: $env:RELEASE_TAG
+          - Build version: $env:BUILD_VERSION
+          - Commit: $env:RELEASE_COMMIT
+          - Prerelease: $env:RELEASE_PRERELEASE
 
-                - Binary ZIP, documentation ZIP, build metadata, solver manifest,
-                  release manifest and SHA-256 checksums were validated before publication.
-                "@ | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append -Encoding utf8
+          - Binary ZIP, documentation ZIP, build metadata, solver manifest,
+            release manifest and SHA-256 checksums were validated before publication.
+          "@ | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append -Encoding utf8
