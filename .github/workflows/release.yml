@@ -196,7 +196,7 @@ jobs:
             $arguments += "--latest=false"
           }
 
-                    & gh @arguments
+          & gh @arguments
           if ($LASTEXITCODE -ne 0) {
             throw "GitHub Release publication failed."
           }
