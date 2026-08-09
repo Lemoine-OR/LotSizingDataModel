@@ -50,7 +50,7 @@ jobs:
       - name: Install official Doxygen 1.17.0
         shell: pwsh
         run: |
-          $url = "https://www.doxygen.nl/files/doxygen-1.17.0.windows.x64.bin.zip"
+          $url = "https://github.com/doxygen/doxygen/releases/download/Release_1_17_0/doxygen-1.17.0.windows.x64.bin.zip"
           $zip = Join-Path $env:RUNNER_TEMP "doxygen-1.17.0.zip"
           $dir = Join-Path $env:RUNNER_TEMP "doxygen-1.17.0"
           $expected = "94594407c4cbca3049d76aacbb05d4a6f7d0f4e93c0de410b825d25ca5621c83"
