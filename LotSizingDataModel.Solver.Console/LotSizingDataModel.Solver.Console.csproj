@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -15,4 +15,10 @@
     <ProjectReference Include="..\LotSizingDataModel.Solver.Cplex\LotSizingDataModel.Solver.Cplex.csproj" />
   </ItemGroup>
 
+
+  <ItemGroup>
+    <ProjectReference Include="..\LotSizingDataModel.Solver.Gurobi\LotSizingDataModel.Solver.Gurobi.csproj" />
+    <ProjectReference Include="..\LotSizingDataModel.Solver.Xpress\LotSizingDataModel.Solver.Xpress.csproj" />
+    <ProjectReference Include="..\LotSizingDataModel.Solver.CoinOrCbc\LotSizingDataModel.Solver.CoinOrCbc.csproj" />
+  </ItemGroup>
 </Project>

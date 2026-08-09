@@ -8,8 +8,11 @@
   <Project Path="LotSizingDataModel.Import/LotSizingDataModel.Import.csproj" Id="d1d3eaad-e565-46e6-9c05-33c79af5696e" />
   <Project Path="LotSizingDataModel.Instance/LotSizingDataModel.Instance.csproj" Id="5063199c-b9c8-4b13-92d0-a8fac3354a72" />
   <Project Path="LotSizingDataModel.Solution/LotSizingDataModel.Solution.csproj" Id="0540452e-81b7-4691-9a42-260ff36baa09" />
+  <Project Path="LotSizingDataModel.Solver.CoinOrCbc/LotSizingDataModel.Solver.CoinOrCbc.csproj" />
   <Project Path="LotSizingDataModel.Solver.Console/LotSizingDataModel.Solver.Console.csproj" />
   <Project Path="LotSizingDataModel.Solver.Cplex/LotSizingDataModel.Solver.Cplex.csproj" Id="ba124dee-96a1-4fd6-a1e6-4c7b4a4ca5f4" />
+  <Project Path="LotSizingDataModel.Solver.Gurobi/LotSizingDataModel.Solver.Gurobi.csproj" />
   <Project Path="LotSizingDataModel.Solver.Test/LotSizingDataModel.Solver.Test.csproj" Id="e996fd6e-a5c2-4838-8506-37457f3be0fe" />
+  <Project Path="LotSizingDataModel.Solver.Xpress/LotSizingDataModel.Solver.Xpress.csproj" />
   <Project Path="LotSizingDataModel.Solver/LotSizingDataModel.Solver.csproj" Id="abdd2210-d26b-4767-a64f-3fbe8e9ea49c" />
 </Solution>

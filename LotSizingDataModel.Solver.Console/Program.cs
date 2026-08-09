@@ -1,4 +1,4 @@
-﻿using System.Text;
+using System.Text;
 using LotSizingDataModel.Checker.Common;
 using LotSizingDataModel.Checker.Configuration;
 using LotSizingDataModel.Checker.Facade;
@@ -21,27 +21,44 @@ using LotSizingDataModel.Solver.Modeling;
 Console.OutputEncoding =
     Encoding.UTF8;
 
-const string InputDirectory =
+const string DefaultInputDirectory =
     @"C:\Users\david\Documents\test\NouveauFormat\Petit";
+
+SolverKind preferredSolver =
+    ParsePreferredSolver(args);
+
+string solverDisplayName =
+    GetSolverDisplayName(preferredSolver);
+
+string inputDirectory =
+    GetOptionValue(args, "--input") ??
+    DefaultInputDirectory;
+
+string resolvedDirectoryName =
+    preferredSolver == SolverKind.Cplex
+        ? "résolu"
+        : $"résolu-{GetSolverSlug(preferredSolver)}";
 
 string resolvedDirectory =
     Path.Combine(
-        InputDirectory,
-        "résolu");
+        inputDirectory,
+        resolvedDirectoryName);
 
 Console.WriteLine(
-    "LotSizingDataModel - CPLEX batch solver + solution checker");
+    "LotSizingDataModel - multi-solver batch + independent checker");
 Console.WriteLine(
-    "==========================================================");
+    "============================================================");
 Console.WriteLine();
 Console.WriteLine(
-    $"Répertoire d'entrée : {InputDirectory}");
+    $"Solveur demandé      : {solverDisplayName}");
+Console.WriteLine(
+    $"Répertoire d'entrée : {inputDirectory}");
 Console.WriteLine(
     $"Répertoire résolu    : {resolvedDirectory}");
 Console.WriteLine();
 
 if (!Directory.Exists(
-        InputDirectory))
+        inputDirectory))
 {
     Console.Error.WriteLine(
         "ERREUR : le répertoire d'entrée n'existe pas.");
@@ -62,7 +79,7 @@ Directory.CreateDirectory(
 string[] inputFiles =
     Directory
         .EnumerateFiles(
-            InputDirectory,
+            inputDirectory,
             "*.xml",
             SearchOption.TopDirectoryOnly)
         .OrderBy(
@@ -138,7 +155,7 @@ var reportOptions =
     };
 
 Console.WriteLine(
-    "Initialisation du solveur CPLEX...");
+    $"Initialisation du solveur {solverDisplayName}...");
 
 StandardLotSizingSolverBootstrapResult bootstrap;
 
@@ -188,7 +205,7 @@ if (!bootstrap.CanSolve)
 }
 
 Console.WriteLine(
-    "CPLEX prêt.");
+    $"Infrastructure prête pour {solverDisplayName}.");
 Console.WriteLine(
     "Checker indépendant prêt.");
 Console.WriteLine();
@@ -328,7 +345,7 @@ for (int fileIndex = 0;
             $"      Dump : {mathematicalModelPath}");
 
         Console.WriteLine(
-            "3/7 - Solveur CPLEX déjà initialisé.");
+            $"3/7 - Solveur demandé : {solverDisplayName}.");
 
         Console.WriteLine(
             "4/7 - Résolution...");
@@ -338,13 +355,13 @@ for (int fileIndex = 0;
                 instance)
             {
                 PreferredSolver =
-                    SolverKind.Cplex,
+                    preferredSolver,
 
                 FormulationName =
                     StandardLotSizingFormulation.StandardFormulationId,
 
                 RunName =
-                    $"CPLEX - {instanceStem}",
+                    $"{solverDisplayName} - {instanceStem}",
 
                 Parameters =
                     new SolverParameters()
@@ -636,6 +653,99 @@ Environment.ExitCode =
         ? 0
         : 10;
 
+static SolverKind ParsePreferredSolver(
+    string[] arguments)
+{
+    string? value =
+        GetOptionValue(
+            arguments,
+            "--solver");
+
+    if (string.IsNullOrWhiteSpace(value))
+    {
+        return SolverKind.Cplex;
+    }
+
+    return value.Trim().ToLowerInvariant() switch
+    {
+        "cplex" => SolverKind.Cplex,
+        "gurobi" => SolverKind.Gurobi,
+        "xpress" => SolverKind.Xpress,
+        "xpressmp" => SolverKind.Xpress,
+        "cbc" => SolverKind.CoinOrCbc,
+        "coinorcbc" => SolverKind.CoinOrCbc,
+        "coin-or-cbc" => SolverKind.CoinOrCbc,
+        _ => throw new ArgumentException(
+            $"Solveur inconnu '{value}'. Valeurs admises : " +
+            "cplex, gurobi, xpress, cbc.")
+    };
+}
+
+static string? GetOptionValue(
+    string[] arguments,
+    string optionName)
+{
+    for (int index = 0;
+         index < arguments.Length;
+         index++)
+    {
+        string argument =
+            arguments[index];
+
+        if (string.Equals(
+                argument,
+                optionName,
+                StringComparison.OrdinalIgnoreCase))
+        {
+            if (index + 1 >= arguments.Length)
+            {
+                throw new ArgumentException(
+                    $"L'option '{optionName}' attend une valeur.");
+            }
+
+            return arguments[index + 1];
+        }
+
+        string prefix =
+            optionName + "=";
+
+        if (argument.StartsWith(
+                prefix,
+                StringComparison.OrdinalIgnoreCase))
+        {
+            return argument[prefix.Length..];
+        }
+    }
+
+    return null;
+}
+
+static string GetSolverDisplayName(
+    SolverKind solverKind)
+{
+    return solverKind switch
+    {
+        SolverKind.Cplex => "IBM ILOG CPLEX",
+        SolverKind.Gurobi => "Gurobi Optimizer",
+        SolverKind.Xpress => "FICO Xpress MP",
+        SolverKind.CoinOrCbc => "COIN-OR CBC",
+        _ => solverKind.ToString()
+    };
+}
+
+static string GetSolverSlug(
+    SolverKind solverKind)
+{
+    return solverKind switch
+    {
+        SolverKind.Cplex => "cplex",
+        SolverKind.Gurobi => "gurobi",
+        SolverKind.Xpress => "xpress",
+        SolverKind.CoinOrCbc => "cbc",
+        _ => solverKind.ToString().ToLowerInvariant()
+    };
+}
+
 static void DisplayCheckerSummary(
     SolutionCheckResult result,
     string reportPath)
@@ -667,7 +777,7 @@ static void DisplayCheckerSummary(
     if (result.ReportedObjectiveValue.HasValue)
     {
         Console.WriteLine(
-            $"      Objectif reporté CPLEX : {result.ReportedObjectiveValue.Value:G17}");
+            $"      Objectif reporté solveur : {result.ReportedObjectiveValue.Value:G17}");
     }
 
     if (result.RecomputedObjectiveValue.HasValue)

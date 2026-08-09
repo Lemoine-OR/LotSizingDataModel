@@ -1,4 +1,4 @@
-﻿using LotSizingDataModel.Checker.Common;
+using LotSizingDataModel.Checker.Common;
 using LotSizingDataModel.Checker.Configuration;
 using LotSizingDataModel.Checker.Contracts;
 using LotSizingDataModel.Checker.Results;
@@ -156,17 +156,26 @@ public sealed class SolutionStructuralChecker :
         }
 
         /*
-         * SOL001-SOL005 describe solution identity, horizon,
-         * presence of decisions and declared completeness.
-         * SOL006-SOL007 concern evaluation semantics and are
-         * deliberately not treated as structural issues here.
+         * SOL001-SOL004 describe solution identity, horizon and
+         * presence of decisions. SOL005 is deliberately NOT copied
+         * from the legacy solution validator: this checker evaluates
+         * completeness itself by comparing every mandatory decision
+         * key with LotSizingSolution.CreateFor. At feasibility/full
+         * level, MathematicalSolutionValueProjector additionally
+         * requires a value for every variable of the generated
+         * mathematical model, including optional capacity extensions.
+         *
+         * Consequently, propagating SOL005 ("completeness has not
+         * been evaluated") would be incorrect and would duplicate a
+         * check that is actually performed by this independent checker.
+         * SOL006-SOL007 concern evaluation semantics and are deliberately
+         * not treated as structural issues here.
          */
         if (code is
             "SOL001" or
             "SOL002" or
             "SOL003" or
             "SOL004" or
-            "SOL005" or
             "INS001" or
             "DEC001")
         {

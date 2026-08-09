@@ -34,4 +34,10 @@
     <None Include="Baselines\*.txt" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
+
+  <ItemGroup>
+    <ProjectReference Include="..\LotSizingDataModel.Solver.Gurobi\LotSizingDataModel.Solver.Gurobi.csproj" />
+    <ProjectReference Include="..\LotSizingDataModel.Solver.Xpress\LotSizingDataModel.Solver.Xpress.csproj" />
+    <ProjectReference Include="..\LotSizingDataModel.Solver.CoinOrCbc\LotSizingDataModel.Solver.CoinOrCbc.csproj" />
+  </ItemGroup>
 </Project>
