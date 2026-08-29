@@ -620,6 +620,30 @@
       "notation": "Positive matching distinguishes stale-compatible from contradiction",
       "checker": "Missing/Coherent/Stale/Incomplete/Contradiction/Invalid with LSDM-PROV diagnostics",
       "notes": "Orthogonal to feasibility and objective checking."
+    },
+    {
+      "id": "end-to-end-scientific-solve-pipeline",
+      "domain": "solver-orchestration",
+      "scientificStatus": "implemented",
+      "implementationStatus": "implemented",
+      "core": "No Core mutation",
+      "instance": "ScientificClassificationEngine runs before technical solve",
+      "mathematics": "Scientifically compatible formulation is pinned into delegated SolverRequest",
+      "notation": "Detected notation flows into automatically captured solution provenance",
+      "checker": "Existing numerical verification and scientific provenance verification run as separate requested channels",
+      "notes": "Actual SolverRunResult.FormulationName must match the scientific selection."
+    },
+    {
+      "id": "scientific-formulation-identity-invariant",
+      "domain": "solver-orchestration",
+      "scientificStatus": "implemented",
+      "implementationStatus": "implemented",
+      "core": "not applicable",
+      "instance": "Selection is based on current scientific classification",
+      "mathematics": "Selected formulation ID constrains actual model-build request",
+      "notation": "not applicable",
+      "checker": "LSDM-PIPE-011 blocks provenance capture on formulation drift",
+      "notes": "Caller SolverRequest remains unchanged; a delegated request is pinned."
     }
   ]
 }

@@ -424,6 +424,42 @@
       "correctiveAction": "Revalidate recorded notation as a positive universal specification; Compatible becomes Stale.",
       "permanentGuard": "Raw notation-string inequality alone cannot establish provenance contradiction.",
       "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-048",
+      "category": "scientific-formulation-request-pinning",
+      "symptom": "Scientific preflight selects one formulation but the delegated technical SolverRequest remains automatic or names another formulation.",
+      "rootCause": "Scientific selection is advisory rather than constraining the actual technical solve request.",
+      "correctiveAction": "Create a separate delegated SolverRequest whose FormulationName is pinned to the scientifically selected formulation ID.",
+      "permanentGuard": "ScientificSelectedFormulationId must equal DelegatedSolverRequest.FormulationName before solver execution.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-049",
+      "category": "solution-provenance-capture-timing",
+      "symptom": "Scientific provenance is written before a normalized LotSizingSolution exists or after a solve that produced no solution.",
+      "rootCause": "Provenance capture is tied to solve invocation rather than successful solution mapping.",
+      "correctiveAction": "Capture provenance only after SolverRunResult.HasSolution is true and formulation identity has been verified.",
+      "permanentGuard": "No normalized solution means no scientific solution provenance.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-050",
+      "category": "solve-evidence-channel-separation",
+      "symptom": "Scientific preflight, solver execution, numerical feasibility and provenance verification are collapsed into one boolean success flag.",
+      "rootCause": "Independent evidence channels are not retained in the orchestration result.",
+      "correctiveAction": "ScientificSolvePipelineResult stores classification, formulation selection, SolverRunResult, numerical verification and provenance verification separately.",
+      "permanentGuard": "End-to-end coherence is derived from requested channels; no channel substitutes for another.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-051",
+      "category": "scientific-actual-formulation-drift",
+      "symptom": "A solution is attributed to the scientifically selected formulation although SolverRunResult reports a different formulation.",
+      "rootCause": "Actual formulation identity is not rechecked after technical solver execution.",
+      "correctiveAction": "Compare SolverRunResult.FormulationName with scientific selection before provenance capture.",
+      "permanentGuard": "Formulation drift is blocking for provenance capture and returns LSDM-PIPE-011.",
+      "status": "active"
     }
   ]
 }

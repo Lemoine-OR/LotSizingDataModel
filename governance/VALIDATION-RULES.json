@@ -118,6 +118,11 @@
       "prefix": "LSDM-PROV",
       "owner": "Checker.ScientificSolutionProvenance",
       "status": "active"
+    },
+    {
+      "prefix": "LSDM-PIPE",
+      "owner": "Checker.Pipeline.Scientific",
+      "status": "active"
     }
   ]
 }
