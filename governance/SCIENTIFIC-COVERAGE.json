@@ -155,15 +155,15 @@
     },
     {
       "id": "maximum-lot-size",
-      "domain": "lot-size",
-      "scientificStatus": "planned",
-      "implementationStatus": "unsupported",
-      "core": "missing",
-      "instance": "HasMaximumLotSizes exists but cannot be extracted from Core",
-      "mathematics": "missing",
-      "notation": "planned",
-      "checker": "missing",
-      "notes": "P0 extension."
+      "domain": "production-lot-restriction",
+      "scientificStatus": "implemented",
+      "implementationStatus": "implemented",
+      "core": "MaximumLotSize period parameter on ProductionRouting",
+      "instance": "HasMaximumLotSizes extracted from actual Core data",
+      "mathematics": "x[r,t] <= Qmax[r,t]",
+      "notation": "MaxLot and TP:MaxLot=<pattern>",
+      "checker": "Generic MathematicalFeasibilityChecker evaluates generated constraints",
+      "notes": "Zero maximum is active; null is absence."
     },
     {
       "id": "supplier-capacity",
@@ -704,6 +704,18 @@
       "notation": "VAR.SL remains explicitly unrepresented",
       "checker": "Tests ensure SL is not mapped to LostSales",
       "notes": "SellingPrice alone is insufficient under Wolsey's definition."
+    },
+    {
+      "id": "supplier-delivery-capacity",
+      "domain": "procurement-capacity",
+      "scientificStatus": "implemented",
+      "implementationStatus": "implemented",
+      "core": "CapacityConstraint on SupplierDelivery",
+      "instance": "HasSupplierCapacityConstraints extracted from actual Core data",
+      "mathematics": "P[f,i,w,t] <= supplier-item-destination capacity",
+      "notation": "Cap:S and TP:CapS=<pattern>",
+      "checker": "Existing procurement projection plus generic mathematical feasibility checker",
+      "notes": "Shared aggregate supplier capacity remains future work."
     }
   ]
 }

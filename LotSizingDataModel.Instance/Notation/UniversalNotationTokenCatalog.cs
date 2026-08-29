@@ -168,6 +168,8 @@ internal static class UniversalNotationTokenCatalog
             UniversalTemporalParameter.ProductionCapacity => "CapP",
             UniversalTemporalParameter.MinimumLotSize => "MinLot",
             UniversalTemporalParameter.StartUpTime => "SUT",
+            UniversalTemporalParameter.MaximumLotSize => "MaxLot",
+            UniversalTemporalParameter.SupplierCapacity => "CapS",
             _ => throw new ArgumentOutOfRangeException(
                 nameof(parameter),
                 parameter,
@@ -187,6 +189,8 @@ internal static class UniversalNotationTokenCatalog
             "CAPP" => UniversalTemporalParameter.ProductionCapacity,
             "MINLOT" => UniversalTemporalParameter.MinimumLotSize,
             "SUT" => UniversalTemporalParameter.StartUpTime,
+            "MAXLOT" => UniversalTemporalParameter.MaximumLotSize,
+            "CAPS" => UniversalTemporalParameter.SupplierCapacity,
             _ => throw new FormatException(
                 $"Unknown temporal-parameter token '{code}'.")
         };

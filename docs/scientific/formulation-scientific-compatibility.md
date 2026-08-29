@@ -89,3 +89,22 @@ corresponding parameters, but the standard formulation does not yet contain a
 binary transition variable for "a sequence of setups starts in period t".
 Consequently scientific formulation selection rejects such an instance before
 technical model construction instead of silently ignoring the extension.
+
+
+## alpha.22 verified support
+
+The standard formulation now has verified support for:
+
+- `MaximumLotSize`;
+- `SupplierCapacity`.
+
+Evidence:
+
+- `MaximumLotSizeConstraintFamilyBuilder`;
+- `SupplierCapacityConstraintFamilyBuilder`;
+- registration in `StandardLotSizingFormulationFactory`.
+
+Both extensions move from `KnownUnsupported` to `supportedExtensions`.
+
+Supplier capacity at this stage is supplier-item-destination capacity, not
+aggregate shared supplier capacity.

@@ -152,6 +152,7 @@ public static class StandardLotSizingFormulationFactory
         [
             new ProductionSetupLinkConstraintFamilyBuilder(),
             new MinimumLotSizeConstraintFamilyBuilder(),
+            new MaximumLotSizeConstraintFamilyBuilder(),
             new LotSizeMultipleConstraintFamilyBuilder(),
             new GroupingConstraintFamilyBuilder(),
 
@@ -163,6 +164,7 @@ public static class StandardLotSizingFormulationFactory
             new InventoryCapacityConstraintFamilyBuilder(),
             new WorkCenterCapacityConstraintFamilyBuilder(),
             new WarehouseCapacityConstraintFamilyBuilder(),
+            new SupplierCapacityConstraintFamilyBuilder(),
             new TransportSpecificCapacityConstraintFamilyBuilder(),
             new TransportResourceCapacityConstraintFamilyBuilder(),
 

@@ -275,12 +275,13 @@ public static class LotSizingProblemFeatureExtractor
                                 routing.MinimumLotSize
                                     is not null),
 
-                /*
-                 * The current Core model does not yet contain
-                 * a MaximumLotSize parameter.
-                 */
                 HasMaximumLotSizes =
-                    false,
+                    supplyChain
+                        .ProductionRoutings
+                        .Any(
+                            routing =>
+                                routing.MaximumLotSize
+                                    is not null),
 
                 HasLotSizeMultiples =
                     supplyChain
@@ -301,13 +302,13 @@ public static class LotSizingProblemFeatureExtractor
                         .SupplierDeliveries
                         .Count > 0,
 
-                /*
-                 * Supplier capacity is not represented by
-                 * Supplier or SupplierDelivery in the current
-                 * Core model.
-                 */
                 HasSupplierCapacityConstraints =
-                    false,
+                    supplyChain
+                        .SupplierDeliveries
+                        .Any(
+                            delivery =>
+                                delivery.CapacityConstraint
+                                    is not null),
 
                 HasSupplierLeadTimes =
                     supplyChain

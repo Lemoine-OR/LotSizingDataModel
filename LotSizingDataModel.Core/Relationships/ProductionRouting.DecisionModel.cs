@@ -16,6 +16,7 @@ public sealed partial class ProductionRouting :
     IPlanningHorizonAware
 {
     private MinimumLotSize? _minimumLotSize;
+    private MaximumLotSize? _maximumLotSize;
     private LotSizeMultiple? _lotSizeMultiple;
     private GroupingConstraint? _groupingConstraint;
 
@@ -34,6 +35,20 @@ public sealed partial class ProductionRouting :
             ref _minimumLotSize,
             value,
             nameof(MinimumLotSize));
+    }
+
+    /// <summary>
+    /// Gets or sets the maximum production-lot size
+    /// for each planning period.
+    /// </summary>
+    [XmlElement("maximumLotSize")]
+    public MaximumLotSize? MaximumLotSize
+    {
+        get => _maximumLotSize;
+        set => SetDecisionParameter(
+            ref _maximumLotSize,
+            value,
+            nameof(MaximumLotSize));
     }
 
     /// <summary>
@@ -97,6 +112,7 @@ public sealed partial class ProductionRouting :
     [XmlIgnore]
     public bool HasLotSizingConstraints =>
         MinimumLotSize is not null ||
+        MaximumLotSize is not null ||
         LotSizeMultiple is not null ||
         GroupingConstraint is not null;
 
@@ -175,6 +191,7 @@ public sealed partial class ProductionRouting :
     public void ClearLotSizingConstraints()
     {
         MinimumLotSize = null;
+        MaximumLotSize = null;
         LotSizeMultiple = null;
         GroupingConstraint = null;
     }
@@ -223,6 +240,11 @@ public sealed partial class ProductionRouting :
             yield return MinimumLotSize;
         }
 
+        if (MaximumLotSize is not null)
+        {
+            yield return MaximumLotSize;
+        }
+
         if (LotSizeMultiple is not null)
         {
             yield return LotSizeMultiple;
@@ -242,6 +264,10 @@ public sealed partial class ProductionRouting :
         if (ReferenceEquals(sender, MinimumLotSize))
         {
             OnPropertyChanged(nameof(MinimumLotSize));
+        }
+        else if (ReferenceEquals(sender, MaximumLotSize))
+        {
+            OnPropertyChanged(nameof(MaximumLotSize));
         }
         else if (ReferenceEquals(sender, LotSizeMultiple))
         {

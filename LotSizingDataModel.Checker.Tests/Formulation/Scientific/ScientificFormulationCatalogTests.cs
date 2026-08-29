@@ -36,8 +36,10 @@ public sealed class ScientificFormulationCatalogTests
     [InlineData(LotSizingProblemClassExtensionKind.SetupTimes)]
     [InlineData(LotSizingProblemClassExtensionKind.ProductionLeadTimes)]
     [InlineData(LotSizingProblemClassExtensionKind.MinimumLotSize)]
+    [InlineData(LotSizingProblemClassExtensionKind.MaximumLotSize)]
     [InlineData(LotSizingProblemClassExtensionKind.LotSizeMultiple)]
     [InlineData(LotSizingProblemClassExtensionKind.Purchasing)]
+    [InlineData(LotSizingProblemClassExtensionKind.SupplierCapacity)]
     [InlineData(LotSizingProblemClassExtensionKind.Transportation)]
     [InlineData(LotSizingProblemClassExtensionKind.TransportLeadTime)]
     public void VerifiedSupportedExtensions_AreExplicit(
@@ -51,8 +53,6 @@ public sealed class ScientificFormulationCatalogTests
     [Theory]
     [InlineData(LotSizingProblemClassExtensionKind.StartUpCosts)]
     [InlineData(LotSizingProblemClassExtensionKind.StartUpTimes)]
-    [InlineData(LotSizingProblemClassExtensionKind.MaximumLotSize)]
-    [InlineData(LotSizingProblemClassExtensionKind.SupplierCapacity)]
     [InlineData(LotSizingProblemClassExtensionKind.FinancialConstraints)]
     [InlineData(LotSizingProblemClassExtensionKind.MultipleObjectives)]
     public void KnownUnsupportedExtensions_AreExplicit(

@@ -541,6 +541,42 @@
       "correctiveAction": "Parameter-list edits in pack automation must target the exact named function block and the final script must be audited for duplicate formal parameters across every function.",
       "permanentGuard": "Before delivery, enumerate every function param(...) block, reject duplicate formal parameter names case-insensitively, and explicitly assert the intended formal parameter set for transformed functions such as Apply-LsdmPayload and Assert-LsdmBaseline.",
       "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-061",
+      "category": "maximum-lot-zero-semantics",
+      "symptom": "A represented maximum lot size equal to zero is skipped as structural zero.",
+      "rootCause": "Minimum-bound filtering is incorrectly reused for upper bounds.",
+      "correctiveAction": "Always emit x<=Qmax for represented MaximumLotSize, including Qmax=0.",
+      "permanentGuard": "Null means absent; zero maximum means production forbidden.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-062",
+      "category": "supplier-capacity-scope",
+      "symptom": "Relation-specific procurement capacity is described as supplier-wide shared capacity.",
+      "rootCause": "Physical resource scope is left implicit.",
+      "correctiveAction": "Define alpha.22 CapacityConstraint on SupplierDelivery as supplier-item-destination capacity.",
+      "permanentGuard": "Aggregate shared supplier capacity requires its own future semantic and formulation family.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-063",
+      "category": "checker-constraint-single-source",
+      "symptom": "A new linear formulation constraint is reimplemented separately in SolutionChecker.",
+      "rootCause": "Feasibility equations are duplicated between formulation and checker.",
+      "correctiveAction": "Reuse MathematicalFeasibilityChecker over the generated model whenever business decisions already project to the constrained mathematical variables.",
+      "permanentGuard": "Do not duplicate maximum-lot or supplier-capacity equations in the checker.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-064",
+      "category": "scientific-profile-test-parity",
+      "symptom": "An extension moves from KnownUnsupported to supportedExtensions but legacy catalog tests still assert the old support state.",
+      "rootCause": "Capability metadata and its contract tests are edited independently.",
+      "correctiveAction": "Move each promoted extension in both the scientific profile and the support-state theory data in the same pack.",
+      "permanentGuard": "Pack fabrication audits that promoted extensions occur exactly once in the profile and in VerifiedSupported test data, and not in KnownUnsupported test data.",
+      "status": "active"
     }
   ]
 }

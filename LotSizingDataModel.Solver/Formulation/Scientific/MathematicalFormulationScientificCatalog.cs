@@ -38,6 +38,7 @@ public static class MathematicalFormulationScientificCatalog
                     LotSizingProblemClassExtensionKind.SetupTimes,
                     LotSizingProblemClassExtensionKind.ProductionLeadTimes,
                     LotSizingProblemClassExtensionKind.MinimumLotSize,
+                    LotSizingProblemClassExtensionKind.MaximumLotSize,
                     LotSizingProblemClassExtensionKind.LotSizeMultiple,
                     LotSizingProblemClassExtensionKind
                         .AdditionalProductionCapacity,
@@ -46,6 +47,7 @@ public static class MathematicalFormulationScientificCatalog
                     LotSizingProblemClassExtensionKind
                         .AdditionalTransportCapacity,
                     LotSizingProblemClassExtensionKind.Purchasing,
+                    LotSizingProblemClassExtensionKind.SupplierCapacity,
                     LotSizingProblemClassExtensionKind.SupplierLeadTime,
                     LotSizingProblemClassExtensionKind.Transportation,
                     LotSizingProblemClassExtensionKind.TransportCapacity,
@@ -59,8 +61,6 @@ public static class MathematicalFormulationScientificCatalog
                 {
                     LotSizingProblemClassExtensionKind.StartUpCosts,
                     LotSizingProblemClassExtensionKind.StartUpTimes,
-                    LotSizingProblemClassExtensionKind.MaximumLotSize,
-                    LotSizingProblemClassExtensionKind.SupplierCapacity,
                     LotSizingProblemClassExtensionKind.FinancialConstraints,
                     LotSizingProblemClassExtensionKind.MultipleObjectives
                 },
@@ -76,8 +76,10 @@ public static class MathematicalFormulationScientificCatalog
                     "SafetyStockConstraintFamilyBuilder",
                     "BacklogVariableFamilyBuilder",
                     "MinimumLotSizeConstraintFamilyBuilder",
+                    "MaximumLotSizeConstraintFamilyBuilder",
                     "LotSizeMultipleConstraintFamilyBuilder",
                     "ProcurementVariableFamilyBuilder",
+                    "SupplierCapacityConstraintFamilyBuilder",
                     "TransportVariableFamilyBuilder",
                     "WarehouseCapacityConstraintFamilyBuilder"
                 });

@@ -16,5 +16,7 @@ public enum UniversalTemporalParameter
     ProductionCost = 12,
     ProductionCapacity = 13,
     MinimumLotSize = 14,
-    StartUpTime = 15
+    StartUpTime = 15,
+    MaximumLotSize = 16,
+    SupplierCapacity = 17
 }

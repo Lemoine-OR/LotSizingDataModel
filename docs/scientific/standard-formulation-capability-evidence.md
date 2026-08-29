@@ -37,3 +37,16 @@ consumption when setup variables exist.
 The capability profile should be updated whenever the standard formulation
 factory gains or loses a builder family. Scientific support must never drift
 away from implementation support.
+
+
+## alpha.22
+
+Additional verified constraint builders:
+
+- `MaximumLotSizeConstraintFamilyBuilder`;
+- `SupplierCapacityConstraintFamilyBuilder`.
+
+The first constrains the existing production variable.
+The second constrains the existing procurement variable.
+
+No new normalized Solution decision category is required.
