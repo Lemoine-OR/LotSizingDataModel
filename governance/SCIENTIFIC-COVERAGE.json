@@ -596,6 +596,30 @@
       "notation": "not applicable",
       "checker": "Concrete instance overload additionally checks CanBuild(instance)",
       "notes": "Undetermined candidates are never auto-selected."
+    },
+    {
+      "id": "scientific-solution-provenance",
+      "domain": "solution",
+      "scientificStatus": "implemented",
+      "implementationStatus": "implemented",
+      "core": "not applicable",
+      "instance": "Consumes detected notation and unique canonical problem class",
+      "mathematics": "Records scientifically selected mathematical formulation identity",
+      "notation": "Canonical detected notation scheme/id/version is captured",
+      "checker": "Independent provenance checker revalidates notation, problem class and formulation compatibility",
+      "notes": "Persisted through existing optional generation parameters; no XML schema break."
+    },
+    {
+      "id": "scientific-solution-provenance-checker",
+      "domain": "solution-checking",
+      "scientificStatus": "implemented",
+      "implementationStatus": "implemented",
+      "core": "not applicable",
+      "instance": "Reruns ScientificClassificationEngine on current instance",
+      "mathematics": "Reassesses recorded formulation against current scientific capability profile",
+      "notation": "Positive matching distinguishes stale-compatible from contradiction",
+      "checker": "Missing/Coherent/Stale/Incomplete/Contradiction/Invalid with LSDM-PROV diagnostics",
+      "notes": "Orthogonal to feasibility and objective checking."
     }
   ]
 }

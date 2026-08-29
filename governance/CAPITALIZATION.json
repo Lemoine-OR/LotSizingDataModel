@@ -388,6 +388,42 @@
       "correctiveAction": "Ground profile support in concrete builder families and keep evidence with the profile.",
       "permanentGuard": "Changes to standard formulation builder families require scientific capability-profile review and tests.",
       "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-044",
+      "category": "solution-scientific-provenance",
+      "symptom": "A stored solution cannot identify the canonical problem class and scientific formulation context under which it was generated.",
+      "rootCause": "Generation metadata records algorithm/solver execution but not scientific classification/formulation evidence.",
+      "correctiveAction": "Persist dependency-neutral scientific provenance through reserved solution-generation parameters.",
+      "permanentGuard": "Solver provenance capture requires detected classification and successful scientifically compatible formulation selection.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-045",
+      "category": "solution-schema-compatibility",
+      "symptom": "Scientific provenance creates a Solution->Instance/Solver dependency or a mandatory XML schema break.",
+      "rootCause": "Cross-layer provenance is represented by direct domain-object references.",
+      "correctiveAction": "Store neutral string snapshot fields in the existing optional Parameters collection.",
+      "permanentGuard": "Solution remains independent from Instance/Solver and existing solution XML stays readable.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-046",
+      "category": "provenance-vs-feasibility",
+      "symptom": "Scientific provenance state is confused with mathematical feasibility.",
+      "rootCause": "Traceability evidence and constraint/objective evidence are collapsed.",
+      "correctiveAction": "Keep scientific provenance checking orthogonal to the numerical SolutionChecker.",
+      "permanentGuard": "Provenance states never substitute for feasibility/objective/constraint verification.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-047",
+      "category": "provenance-forward-compatibility",
+      "symptom": "A newer classifier detecting additional compatible semantics makes older provenance appear contradictory.",
+      "rootCause": "Recorded notation is compared by raw string equality.",
+      "correctiveAction": "Revalidate recorded notation as a positive universal specification; Compatible becomes Stale.",
+      "permanentGuard": "Raw notation-string inequality alone cannot establish provenance contradiction.",
+      "status": "active"
     }
   ]
 }

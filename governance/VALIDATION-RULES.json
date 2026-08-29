@@ -113,6 +113,11 @@
       "prefix": "LSDM-FORM",
       "owner": "Solver.Formulation.Scientific",
       "status": "active"
+    },
+    {
+      "prefix": "LSDM-PROV",
+      "owner": "Checker.ScientificSolutionProvenance",
+      "status": "active"
     }
   ]
 }
