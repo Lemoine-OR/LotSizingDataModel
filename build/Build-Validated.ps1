@@ -26,10 +26,32 @@ Remove-Item -LiteralPath $Artifacts -Recurse -Force -ErrorAction SilentlyContinu
 New-Item -ItemType Directory -Force $TestResults | Out-Null
 New-Item -ItemType Directory -Force $Artifacts | Out-Null
 
-$batchConverter = Join-Path $RepoRoot "LotSizingDataModel.BatchConverter\LotSizingDataModel.BatchConverter.csproj"
-$checkerTests = Join-Path $RepoRoot "LotSizingDataModel.Checker.Tests\LotSizingDataModel.Checker.Tests.csproj"
+$batchConverter =
+    Join-Path `
+        $RepoRoot `
+        "LotSizingDataModel.BatchConverter\LotSizingDataModel.BatchConverter.csproj"
 
-foreach ($requiredProject in @($batchConverter, $checkerTests)) {
+$coreTests =
+    Join-Path `
+        $RepoRoot `
+        "LotSizingDataModel.Core.Tests\LotSizingDataModel.Core.Tests.csproj"
+
+$instanceTests =
+    Join-Path `
+        $RepoRoot `
+        "LotSizingDataModel.Instance.Tests\LotSizingDataModel.Instance.Tests.csproj"
+
+$checkerTests =
+    Join-Path `
+        $RepoRoot `
+        "LotSizingDataModel.Checker.Tests\LotSizingDataModel.Checker.Tests.csproj"
+
+foreach ($requiredProject in @(
+    $batchConverter,
+    $coreTests,
+    $instanceTests,
+    $checkerTests
+)) {
     if (-not (Test-Path -LiteralPath $requiredProject)) {
         throw "Required project not found: $requiredProject"
     }
@@ -38,27 +60,69 @@ foreach ($requiredProject in @($batchConverter, $checkerTests)) {
 Write-Host ""
 Write-Host "=== Restore/build core dependency chain ===" -ForegroundColor Cyan
 & dotnet restore $batchConverter | Out-Host
-if ($LASTEXITCODE -ne 0) { throw "Restore failed for BatchConverter." }
+if ($LASTEXITCODE -ne 0) {
+    throw "Restore failed for BatchConverter."
+}
 
 & dotnet build $batchConverter -c Release --no-restore | Out-Host
-if ($LASTEXITCODE -ne 0) { throw "Release build failed for BatchConverter." }
+if ($LASTEXITCODE -ne 0) {
+    throw "Release build failed for BatchConverter."
+}
 
-Write-Host ""
-Write-Host "=== Restore/build checker test chain ===" -ForegroundColor Cyan
-& dotnet restore $checkerTests | Out-Host
-if ($LASTEXITCODE -ne 0) { throw "Restore failed for Checker.Tests." }
+function Invoke-LsdmTestProject {
+    param(
+        [Parameter(Mandatory = $true)]
+        [string]$ProjectPath,
 
-& dotnet build $checkerTests -c Release --no-restore | Out-Host
-if ($LASTEXITCODE -ne 0) { throw "Release build failed for Checker.Tests." }
+        [Parameter(Mandatory = $true)]
+        [string]$DisplayName,
 
-Write-Host ""
-Write-Host "=== Tests ===" -ForegroundColor Cyan
-& dotnet test $checkerTests `
-    -c Release `
-    --no-build `
-    --logger "trx;LogFileName=LotSizingDataModel.Checker.Tests.trx" `
-    --results-directory $TestResults | Out-Host
-if ($LASTEXITCODE -ne 0) { throw "Checker test suite failed." }
+        [Parameter(Mandatory = $true)]
+        [string]$TrxName
+    )
+
+    Write-Host ""
+    Write-Host "=== Restore/build $DisplayName ===" -ForegroundColor Cyan
+
+    & dotnet restore $ProjectPath | Out-Host
+    if ($LASTEXITCODE -ne 0) {
+        throw "Restore failed for $DisplayName."
+    }
+
+    & dotnet build $ProjectPath -c Release --no-restore | Out-Host
+    if ($LASTEXITCODE -ne 0) {
+        throw "Release build failed for $DisplayName."
+    }
+
+    Write-Host ""
+    Write-Host "=== Test $DisplayName ===" -ForegroundColor Cyan
+
+    & dotnet test $ProjectPath `
+        -c Release `
+        --no-build `
+        --logger "trx;LogFileName=$TrxName" `
+        --results-directory $TestResults |
+        Out-Host
+
+    if ($LASTEXITCODE -ne 0) {
+        throw "$DisplayName test suite failed."
+    }
+}
+
+Invoke-LsdmTestProject `
+    -ProjectPath $coreTests `
+    -DisplayName "Core.Tests" `
+    -TrxName "LotSizingDataModel.Core.Tests.trx"
+
+Invoke-LsdmTestProject `
+    -ProjectPath $instanceTests `
+    -DisplayName "Instance.Tests" `
+    -TrxName "LotSizingDataModel.Instance.Tests.trx"
+
+Invoke-LsdmTestProject `
+    -ProjectPath $checkerTests `
+    -DisplayName "Checker.Tests" `
+    -TrxName "LotSizingDataModel.Checker.Tests.trx"
 
 Write-Host ""
 Write-Host "=== Solver adapter discovery/build ===" -ForegroundColor Cyan
@@ -73,11 +137,13 @@ if ($IncludeExternalSolverAdapters) {
 
 Write-Host ""
 Write-Host "=== Package + metadata/icon verification ===" -ForegroundColor Cyan
-$package = & (Join-Path $RepoRoot "build\Package-ValidatedBinaries.ps1") `
-    -Configuration "Release" `
-    -SolverManifestPath $SolverManifest
+$package =
+    & (Join-Path $RepoRoot "build\Package-ValidatedBinaries.ps1") `
+        -Configuration "Release" `
+        -SolverManifestPath $SolverManifest
 
-$version = & (Join-Path $RepoRoot "tools\Get-LotSizingVersion.ps1") -SkipRestore
+$version =
+    & (Join-Path $RepoRoot "tools\Get-LotSizingVersion.ps1") -SkipRestore
 
 Write-Host ""
 Write-Host "============================================================"

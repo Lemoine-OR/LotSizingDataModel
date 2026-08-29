@@ -4,8 +4,10 @@
   <Project Path="LotSizingDataModel.Checker.Cli/LotSizingDataModel.Checker.Cli.csproj" />
   <Project Path="LotSizingDataModel.Checker.Tests/LotSizingDataModel.Checker.Tests.csproj" />
   <Project Path="LotSizingDataModel.Checker/LotSizingDataModel.Checker.csproj" />
+  <Project Path="LotSizingDataModel.Core.Tests/LotSizingDataModel.Core.Tests.csproj" />
   <Project Path="LotSizingDataModel.Core/LotSizingDataModel.Core.csproj" />
   <Project Path="LotSizingDataModel.Import/LotSizingDataModel.Import.csproj" Id="d1d3eaad-e565-46e6-9c05-33c79af5696e" />
+  <Project Path="LotSizingDataModel.Instance.Tests/LotSizingDataModel.Instance.Tests.csproj" />
   <Project Path="LotSizingDataModel.Instance/LotSizingDataModel.Instance.csproj" Id="5063199c-b9c8-4b13-92d0-a8fac3354a72" />
   <Project Path="LotSizingDataModel.Solution/LotSizingDataModel.Solution.csproj" Id="0540452e-81b7-4691-9a42-260ff36baa09" />
   <Project Path="LotSizingDataModel.Solver.CoinOrCbc/LotSizingDataModel.Solver.CoinOrCbc.csproj" />
