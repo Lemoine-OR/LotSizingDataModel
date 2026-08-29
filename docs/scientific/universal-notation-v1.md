@@ -72,3 +72,30 @@ explicit analysis:
 
 When used as a specification these tokens are not inferred from omission.
 Their actual state is supplied through `UniversalDerivedSemantics`.
+
+
+## alpha.21 start-up semantics
+
+Start-up semantics are distinct from ordinary setup semantics.
+
+New generic beta token:
+
+- `SUT`: start-up time, i.e. capacity consumed when a new sequence of
+  production setups starts.
+
+Existing generic token:
+
+- `SU`: start-up cost.
+
+The historical Wolsey acronym `ST` means **start-up time** and therefore maps
+to generic `SUT`; it must never be confused with universal `ST`, which means
+ordinary setup time.
+
+Start-up time can be temporally qualified. Example:
+
+`TP:SUT=C`
+
+means constant start-up time.
+
+Existing numeric values of previously published `UniversalNotationFeature`
+members are preserved; `StartUpTime` is appended as a new semantic value.

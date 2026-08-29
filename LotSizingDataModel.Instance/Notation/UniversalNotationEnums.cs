@@ -51,6 +51,7 @@ public enum UniversalNotationFeature
     SetupTime = 21,
     StartUpCost = 22,
     ProductionLeadTime = 23,
+    StartUpTime = 24,
 
     MinimumLotSize = 30,
     MaximumLotSize = 31,

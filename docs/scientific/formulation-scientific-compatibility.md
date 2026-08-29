@@ -77,3 +77,15 @@ The instance overload additionally checks the formulation's existing
 This service does not remove or replace the existing technical formulation
 selection service. It is a scientific preflight/filter layered before actual
 model construction.
+
+
+## alpha.21 start-up extensions
+
+The standard formulation explicitly reports both `StartUpCosts` and
+`StartUpTimes` as `KnownUnsupported`.
+
+This is intentional. Core/Instance can now represent and detect the
+corresponding parameters, but the standard formulation does not yet contain a
+binary transition variable for "a sequence of setups starts in period t".
+Consequently scientific formulation selection rejects such an instance before
+technical model construction instead of silently ignoring the extension.

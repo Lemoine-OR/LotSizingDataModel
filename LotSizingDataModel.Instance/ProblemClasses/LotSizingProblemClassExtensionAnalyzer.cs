@@ -47,6 +47,11 @@ public sealed class LotSizingProblemClassExtensionAnalyzer
             extensions);
 
         Add(
+            descriptor.Setup.HasStartUpTimes,
+            LotSizingProblemClassExtensionKind.StartUpTimes,
+            extensions);
+
+        Add(
             descriptor.Production.HasLeadTimes,
             LotSizingProblemClassExtensionKind.ProductionLeadTimes,
             extensions);

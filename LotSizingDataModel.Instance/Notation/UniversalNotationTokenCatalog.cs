@@ -31,6 +31,7 @@ internal static class UniversalNotationTokenCatalog
                 [UniversalNotationFeature.SetupTime] = "ST",
                 [UniversalNotationFeature.StartUpCost] = "SU",
                 [UniversalNotationFeature.ProductionLeadTime] = "LT:P",
+                [UniversalNotationFeature.StartUpTime] = "SUT",
 
                 [UniversalNotationFeature.MinimumLotSize] = "MinLot",
                 [UniversalNotationFeature.MaximumLotSize] = "MaxLot",
@@ -166,6 +167,7 @@ internal static class UniversalNotationTokenCatalog
             UniversalTemporalParameter.ProductionCost => "PC",
             UniversalTemporalParameter.ProductionCapacity => "CapP",
             UniversalTemporalParameter.MinimumLotSize => "MinLot",
+            UniversalTemporalParameter.StartUpTime => "SUT",
             _ => throw new ArgumentOutOfRangeException(
                 nameof(parameter),
                 parameter,
@@ -184,6 +186,7 @@ internal static class UniversalNotationTokenCatalog
             "PC" => UniversalTemporalParameter.ProductionCost,
             "CAPP" => UniversalTemporalParameter.ProductionCapacity,
             "MINLOT" => UniversalTemporalParameter.MinimumLotSize,
+            "SUT" => UniversalTemporalParameter.StartUpTime,
             _ => throw new FormatException(
                 $"Unknown temporal-parameter token '{code}'.")
         };

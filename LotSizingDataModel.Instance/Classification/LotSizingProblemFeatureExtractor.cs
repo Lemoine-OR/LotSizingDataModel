@@ -244,12 +244,21 @@ public static class LotSizingProblemFeatureExtractor
                                 characteristic.SetupTime
                                     is not null),
 
-                /*
-                 * Start-up costs are not represented by a
-                 * dedicated type in the current Core model.
-                 */
                 HasStartUpCosts =
-                    false,
+                    supplyChain
+                        .ProductionCharacteristics
+                        .Any(
+                            characteristic =>
+                                characteristic.StartUpCost
+                                    is not null),
+
+                HasStartUpTimes =
+                    supplyChain
+                        .ProductionCharacteristics
+                        .Any(
+                            characteristic =>
+                                characteristic.StartUpTime
+                                    is not null),
 
                 HasProductionLeadTimes =
                     supplyChain

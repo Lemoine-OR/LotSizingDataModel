@@ -50,6 +50,7 @@ public sealed class ScientificFormulationCatalogTests
 
     [Theory]
     [InlineData(LotSizingProblemClassExtensionKind.StartUpCosts)]
+    [InlineData(LotSizingProblemClassExtensionKind.StartUpTimes)]
     [InlineData(LotSizingProblemClassExtensionKind.MaximumLotSize)]
     [InlineData(LotSizingProblemClassExtensionKind.SupplierCapacity)]
     [InlineData(LotSizingProblemClassExtensionKind.FinancialConstraints)]

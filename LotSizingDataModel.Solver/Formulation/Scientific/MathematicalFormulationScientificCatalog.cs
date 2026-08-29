@@ -58,6 +58,7 @@ public static class MathematicalFormulationScientificCatalog
                 new[]
                 {
                     LotSizingProblemClassExtensionKind.StartUpCosts,
+                    LotSizingProblemClassExtensionKind.StartUpTimes,
                     LotSizingProblemClassExtensionKind.MaximumLotSize,
                     LotSizingProblemClassExtensionKind.SupplierCapacity,
                     LotSizingProblemClassExtensionKind.FinancialConstraints,

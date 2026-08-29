@@ -6,4 +6,5 @@ public sealed class SetupDescriptor
     public bool HasSetupCosts { get; init; }
     public bool HasSetupTimes { get; init; }
     public bool HasStartUpCosts { get; init; }
+    public bool HasStartUpTimes { get; init; }
 }

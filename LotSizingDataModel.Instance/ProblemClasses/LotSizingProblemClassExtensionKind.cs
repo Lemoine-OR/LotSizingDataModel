@@ -12,6 +12,7 @@ public enum LotSizingProblemClassExtensionKind
 
     SetupTimes,
     StartUpCosts,
+    StartUpTimes,
     ProductionLeadTimes,
 
     MinimumLotSize,

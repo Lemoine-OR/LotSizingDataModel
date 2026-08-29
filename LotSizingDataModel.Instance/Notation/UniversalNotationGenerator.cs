@@ -187,6 +187,11 @@ public sealed class UniversalNotationGenerator
             yield return UniversalNotationFeature.StartUpCost;
         }
 
+        if (descriptor.Setup.HasStartUpTimes)
+        {
+            yield return UniversalNotationFeature.StartUpTime;
+        }
+
         if (descriptor.Production.HasLeadTimes)
         {
             yield return UniversalNotationFeature.ProductionLeadTime;

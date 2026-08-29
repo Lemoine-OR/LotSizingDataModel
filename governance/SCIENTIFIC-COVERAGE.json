@@ -668,6 +668,42 @@
       "notation": "not applicable",
       "checker": "Resolution plan explicitly selects solution method and compatible backend family",
       "notes": "Automatic backend remains delegated to technical availability."
+    },
+    {
+      "id": "production-start-up-cost-time",
+      "domain": "production-extension",
+      "scientificStatus": "implemented",
+      "implementationStatus": "partial",
+      "core": "Dedicated StartUpCost and StartUpTime period parameters on ProductionCharacteristic",
+      "instance": "HasStartUpCosts/HasStartUpTimes detected and preserved by typed setup descriptor",
+      "mathematics": "Transition/start-of-setup-sequence decision variable not yet implemented",
+      "notation": "SU, SUT and TP:SUT=<pattern>",
+      "checker": "Scientific formulation compatibility blocks standard formulation for both extensions",
+      "notes": "Core/Instance/notation/historical mapping complete; mathematical formulation/Solution feasibility semantics remain future work."
+    },
+    {
+      "id": "wolsey-start-up-mapping",
+      "domain": "historical-classification",
+      "scientificStatus": "implemented",
+      "implementationStatus": "implemented",
+      "core": "StartUpCost/StartUpTime now have dedicated Core types",
+      "instance": "Generic start-up features exist",
+      "mathematics": "Historical representation is independent of current solver support",
+      "notation": "SC->SU; ST->SUT; ST(C)->SUT+TP:SUT=C; Machines.ST->SUT",
+      "checker": "Mapping tests assert exact closure of ST/ST(C)",
+      "notes": "No acronym-by-similarity mapping."
+    },
+    {
+      "id": "wolsey-sales-additional-demand-gap",
+      "domain": "historical-classification",
+      "scientificStatus": "documented",
+      "implementationStatus": "partial",
+      "core": "SellingPrice exists, but no separate additional-sales bound u_t",
+      "instance": "No AdditionalSales feature",
+      "mathematics": "No distinct decision for sales above mandatory demand",
+      "notation": "VAR.SL remains explicitly unrepresented",
+      "checker": "Tests ensure SL is not mapped to LostSales",
+      "notes": "SellingPrice alone is insufficient under Wolsey's definition."
     }
   ]
 }

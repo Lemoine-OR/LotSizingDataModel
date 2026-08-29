@@ -96,6 +96,8 @@ Examples:
 - `CAP=U` -> `Uncap:P`;
 - `VAR=B` -> `BL`;
 - Wolsey `VAR=SC` -> universal `SU` (start-up cost);
+- Wolsey `VAR=ST` -> universal `SUT` (start-up time);
+- Wolsey `VAR=ST(C)` -> `SUT,TP:SUT=C`;
 - `VAR=LB` -> `MinLot`;
 - `VAR=LB(C)` -> `MinLot,TP:MinLot=C`;
 - `VAR=SS` -> `SS`.
@@ -104,10 +106,7 @@ A dimension is never guessed merely because an acronym looks similar.
 
 Current explicitly unrepresented examples include:
 
-- the Wagner-Whitin cost condition;
-- zero-or-full-capacity production of DLSI/DLS;
 - variable/no-variable initial-stock decision;
-- start-up times;
 - additional sales;
 - exact machine/bucket/count information;
 - sequence-dependent changeover time/cost.
@@ -131,3 +130,31 @@ remains explicitly unrepresented.
 
 The mapping stays dimension-by-dimension: representable source semantics are
 projected, while remaining source semantics stay named as gaps.
+
+
+## alpha.21 start-up closure
+
+The start-up dimensions now have generic representations:
+
+- `VAR=SC` -> `SU`;
+- `VAR=ST` -> `SUT`;
+- `VAR=ST(C)` -> `SUT,TP:SUT=C`;
+- machine feature `ST` -> `SUT`.
+
+Core also has explicit `StartUpCost` and `StartUpTime` period parameters on
+production characteristics. They are intentionally distinct from
+`FixedSetupCost` and `SetupTime`.
+
+This closes the historical **representation** gaps for Wolsey start-up
+cost/time. It does not claim that the current standard MILP formulation can
+solve those extensions: the transition variable identifying the start of a
+sequence of setups is not yet implemented, so both extensions remain
+scientifically unsupported by the standard formulation.
+
+`SL` remains unrepresented. Wolsey defines sales as an additional quantity,
+above mandatory demand, bounded by `u_t` and sold at price `c_t`. The current
+presence of `SellingPrice` on delivery arcs is not sufficient to represent
+that extension because the distinct additional-sales bound/decision is absent.
+
+Likewise the DLSI/DLS initial-stock distinction remains open: current initial
+inventory is input data, not Wolsey's variable initial stock decision.

@@ -505,6 +505,42 @@
       "correctiveAction": "After changing an internal helper signature, enumerate every call site and verify that every invocation carries the new argument in the intended semantic position.",
       "permanentGuard": "Pack fabrication must statically audit all ScientificLotSizingSolvePipeline.Result(...) call sites against the helper contract before delivery; Build-Validated remains the final committed-candidate compiler gate.",
       "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-057",
+      "category": "startup-vs-setup-semantics",
+      "symptom": "Start-up time/cost is represented with ordinary setup time/cost because the terms look similar.",
+      "rootCause": "Resource setup activation and the transition that starts a sequence of setups are conflated.",
+      "correctiveAction": "Use dedicated StartUpCost/StartUpTime Core parameters and distinct universal tokens SU/SUT.",
+      "permanentGuard": "Wolsey ST maps to universal SUT, never universal ST; start-up parameters remain separate from setup parameters in Core and descriptors.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-058",
+      "category": "historical-sales-semantics",
+      "symptom": "Wolsey SL is mapped to LostSales or to the mere presence of SellingPrice.",
+      "rootCause": "Additional optional sales above mandatory demand are confused with unmet demand or delivery revenue.",
+      "correctiveAction": "Keep VAR.SL:AdditionalSales as an explicit mapping gap until a separate additional-sales quantity/upper-bound decision exists.",
+      "permanentGuard": "SellingPrice alone cannot close Wolsey SL.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-059",
+      "category": "initial-stock-parameter-vs-decision",
+      "symptom": "A fixed initial-inventory input value is used to claim support for Wolsey DLSI's variable initial stock decision.",
+      "rootCause": "Input data and optimization decision variables are conflated.",
+      "correctiveAction": "Keep DLSI/DLS initial-stock gaps open until a real initial-stock decision semantic exists where scientifically appropriate.",
+      "permanentGuard": "HasInitialInventory never implies VariableInitialStockDecision.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-060",
+      "category": "named-function-parameter-transform",
+      "symptom": "Pack fabrication injects a required parameter into the first textually matching param(...) block instead of the intended function, causing duplicate formal parameters in one function and a missing formal parameter in another.",
+      "rootCause": "A broad textual replacement targets a generic parameter-list shape rather than a named function contract.",
+      "correctiveAction": "Parameter-list edits in pack automation must target the exact named function block and the final script must be audited for duplicate formal parameters across every function.",
+      "permanentGuard": "Before delivery, enumerate every function param(...) block, reject duplicate formal parameter names case-insensitively, and explicitly assert the intended formal parameter set for transformed functions such as Apply-LsdmPayload and Assert-LsdmBaseline.",
+      "status": "active"
     }
   ]
 }

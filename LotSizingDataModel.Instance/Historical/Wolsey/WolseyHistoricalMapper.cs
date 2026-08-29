@@ -243,13 +243,17 @@ public sealed class WolseyHistoricalMapper
                     break;
 
                 case WolseyVariant.ST:
-                    missing.Add(
-                        "VAR.ST:StartUpTime");
+                    features.Add(
+                        UniversalNotationFeature.StartUpTime);
                     break;
 
                 case WolseyVariant.STConstant:
-                    missing.Add(
-                        "VAR.ST(C):ConstantStartUpTime");
+                    features.Add(
+                        UniversalNotationFeature.StartUpTime);
+                    temporalQualifiers.Add(
+                        new UniversalTemporalQualifier(
+                            UniversalTemporalParameter.StartUpTime,
+                            TemporalPatternType.Constant));
                     break;
 
                 case WolseyVariant.SL:
@@ -322,8 +326,8 @@ public sealed class WolseyHistoricalMapper
                         break;
 
                     case WolseyMachineFeature.ST:
-                        missing.Add(
-                            "Machines.ST:StartUpTime");
+                        features.Add(
+                            UniversalNotationFeature.StartUpTime);
                         break;
 
                     case WolseyMachineFeature.SQT:

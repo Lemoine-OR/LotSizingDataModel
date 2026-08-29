@@ -51,6 +51,7 @@ public sealed class LotSizingProblemFeatures : ModelObject
     private bool _hasSetupCosts;
     private bool _hasSetupTimes;
     private bool _hasStartUpCosts;
+    private bool _hasStartUpTimes;
 
     private bool _hasProductionLeadTimes;
     private bool _hasMinimumLotSizes;
@@ -440,6 +441,19 @@ public sealed class LotSizingProblemFeatures : ModelObject
         get => _hasStartUpCosts;
         set => SetProperty(
             ref _hasStartUpCosts,
+            value);
+    }
+
+    /// <summary>
+    /// Gets or sets a value indicating whether the model
+    /// contains start-up times distinct from setup times.
+    /// </summary>
+    [XmlAttribute("hasStartUpTimes")]
+    public bool HasStartUpTimes
+    {
+        get => _hasStartUpTimes;
+        set => SetProperty(
+            ref _hasStartUpTimes,
             value);
     }
 

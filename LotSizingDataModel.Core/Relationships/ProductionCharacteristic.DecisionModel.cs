@@ -18,7 +18,9 @@ public sealed partial class ProductionCharacteristic :
 {
     private UnitCapacityConsumption? _unitCapacityConsumption;
     private SetupTime? _setupTime;
+    private StartUpTime? _startUpTime;
     private FixedSetupCost? _fixedSetupCost;
+    private StartUpCost? _startUpCost;
     private UnitUsageCost? _unitUsageCost;
 
     /// <summary>
@@ -53,6 +55,20 @@ public sealed partial class ProductionCharacteristic :
     }
 
     /// <summary>
+    /// Gets or sets the capacity consumed when a new sequence of
+    /// production setups starts during each planning period.
+    /// </summary>
+    [XmlElement("startUpTime")]
+    public StartUpTime? StartUpTime
+    {
+        get => _startUpTime;
+        set => SetDecisionParameter(
+            ref _startUpTime,
+            value,
+            nameof(StartUpTime));
+    }
+
+    /// <summary>
     /// Gets or sets the fixed cost incurred when the work center
     /// is prepared to produce the item during a planning period.
     /// </summary>
@@ -64,6 +80,20 @@ public sealed partial class ProductionCharacteristic :
             ref _fixedSetupCost,
             value,
             nameof(FixedSetupCost));
+    }
+
+    /// <summary>
+    /// Gets or sets the cost incurred when a new sequence of
+    /// production setups starts during each planning period.
+    /// </summary>
+    [XmlElement("startUpCost")]
+    public StartUpCost? StartUpCost
+    {
+        get => _startUpCost;
+        set => SetDecisionParameter(
+            ref _startUpCost,
+            value,
+            nameof(StartUpCost));
     }
 
     /// <summary>
@@ -111,7 +141,9 @@ public sealed partial class ProductionCharacteristic :
     public bool HasDecisionParameters =>
         UnitCapacityConsumption is not null ||
         SetupTime is not null ||
+        StartUpTime is not null ||
         FixedSetupCost is not null ||
+        StartUpCost is not null ||
         UnitUsageCost is not null;
 
     /// <summary>
@@ -124,7 +156,8 @@ public sealed partial class ProductionCharacteristic :
     [XmlIgnore]
     public bool RequiresCapacityConstrainedWorkCenter =>
         UnitCapacityConsumption is not null ||
-        SetupTime is not null;
+        SetupTime is not null ||
+        StartUpTime is not null;
 
     /// <summary>
     /// Gets a value indicating whether all active parameters
@@ -199,7 +232,9 @@ public sealed partial class ProductionCharacteristic :
     {
         UnitCapacityConsumption = null;
         SetupTime = null;
+        StartUpTime = null;
         FixedSetupCost = null;
+        StartUpCost = null;
         UnitUsageCost = null;
     }
 
@@ -253,9 +288,19 @@ public sealed partial class ProductionCharacteristic :
             yield return SetupTime;
         }
 
+        if (StartUpTime is not null)
+        {
+            yield return StartUpTime;
+        }
+
         if (FixedSetupCost is not null)
         {
             yield return FixedSetupCost;
+        }
+
+        if (StartUpCost is not null)
+        {
+            yield return StartUpCost;
         }
 
         if (UnitUsageCost is not null)
@@ -280,9 +325,17 @@ public sealed partial class ProductionCharacteristic :
         {
             OnPropertyChanged(nameof(SetupTime));
         }
+        else if (ReferenceEquals(sender, StartUpTime))
+        {
+            OnPropertyChanged(nameof(StartUpTime));
+        }
         else if (ReferenceEquals(sender, FixedSetupCost))
         {
             OnPropertyChanged(nameof(FixedSetupCost));
+        }
+        else if (ReferenceEquals(sender, StartUpCost))
+        {
+            OnPropertyChanged(nameof(StartUpCost));
         }
         else if (ReferenceEquals(sender, UnitUsageCost))
         {

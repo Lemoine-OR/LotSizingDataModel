@@ -97,7 +97,8 @@ public sealed class LotSizingProblemDescriptor
             {
                 HasSetupCosts = features.HasSetupCosts,
                 HasSetupTimes = features.HasSetupTimes,
-                HasStartUpCosts = features.HasStartUpCosts
+                HasStartUpCosts = features.HasStartUpCosts,
+                HasStartUpTimes = features.HasStartUpTimes
             },
             InventoryService = new InventoryServiceDescriptor
             {
@@ -177,6 +178,7 @@ public sealed class LotSizingProblemDescriptor
             HasSetupCosts = Setup.HasSetupCosts,
             HasSetupTimes = Setup.HasSetupTimes,
             HasStartUpCosts = Setup.HasStartUpCosts,
+            HasStartUpTimes = Setup.HasStartUpTimes,
 
             HasProductionLeadTimes = Production.HasLeadTimes,
             HasMinimumLotSizes = Production.HasMinimumLotSizes,
