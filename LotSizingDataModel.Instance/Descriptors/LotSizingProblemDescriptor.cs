@@ -1,4 +1,6 @@
+using LotSizingDataModel.Core;
 using LotSizingDataModel.Instance.Classification;
+using LotSizingDataModel.Instance.Descriptors.Network;
 
 namespace LotSizingDataModel.Instance.Descriptors;
 
@@ -23,6 +25,9 @@ public sealed class LotSizingProblemDescriptor
     public ProcurementDescriptor Procurement { get; init; } = new();
     public TransportationDistributionDescriptor TransportationDistribution { get; init; } = new();
     public ObjectiveFinanceDescriptor ObjectiveFinance { get; init; } = new();
+
+    /// <summary>Gets the physical supply-flow network descriptor.</summary>
+    public SupplyNetworkDescriptor SupplyNetwork { get; private set; } = new();
 
     public static LotSizingProblemDescriptor FromLegacyFeatures(
         LotSizingProblemFeatures features)
@@ -105,6 +110,25 @@ public sealed class LotSizingProblemDescriptor
                 HasMultipleObjectives = features.HasMultipleObjectives
             }
         };
+    }
+
+    /// <summary>
+    /// Creates the typed descriptor and enriches it with physical-network
+    /// analysis derived directly from Core data.
+    /// </summary>
+    public static LotSizingProblemDescriptor FromLegacyFeatures(
+        LotSizingProblemFeatures features,
+        SupplyChain supplyChain)
+    {
+        ArgumentNullException.ThrowIfNull(supplyChain);
+
+        LotSizingProblemDescriptor descriptor =
+            FromLegacyFeatures(features);
+
+        descriptor.SupplyNetwork =
+            new SupplyNetworkAnalyzer().Analyze(supplyChain);
+
+        return descriptor;
     }
 
     public LotSizingProblemFeatures ToLegacyFeatures()

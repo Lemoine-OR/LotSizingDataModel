@@ -203,15 +203,15 @@
     },
     {
       "id": "supply-network-topology",
-      "domain": "network-structure",
-      "scientificStatus": "planned",
-      "implementationStatus": "partial",
-      "core": "Physical nodes and transport/sourcing relations exist",
-      "instance": "Only coarse multi-site/network flags; no typed topology descriptor",
-      "mathematics": "Current network flows exist for supported transport/distribution semantics",
-      "notation": "planned as alpha structural dimension",
-      "checker": "Partial reachability/referential checks only",
-      "notes": "Must distinguish forward/reverse topology, echelons and DRP-compatible structures."
+      "domain": "network",
+      "scientificStatus": "implemented",
+      "implementationStatus": "implemented",
+      "core": "SupplierDelivery, TransportLane and DistributionCenterSourcing define forward physical arcs",
+      "instance": "SupplyNetworkDescriptor + SupplyNetworkAnalyzer detect topology, sources/sinks, echelons, multisourcing, transshipment and physical cycles",
+      "mathematics": "No new formulation semantics; analysis describes existing Core relationships",
+      "notation": "planned alpha structural token source",
+      "checker": "invalid physical references remain owned by SupplyChainValidator",
+      "notes": "BOM and physical supply network are strictly separate graphs."
     },
     {
       "id": "closed-loop-supply-chain",
@@ -308,6 +308,30 @@
       "notation": "planned consumer",
       "checker": "Compatible with InstanceModelChecker",
       "notes": "Lossless bridge to LotSizingProblemFeatures proven by tests; source extraction migrates incrementally later."
+    },
+    {
+      "id": "closed-loop-network",
+      "domain": "network",
+      "scientificStatus": "planned",
+      "implementationStatus": "partial",
+      "core": "Forward flows only in current Core",
+      "instance": "SupplyNetworkDescriptor exposes ForwardNetwork, nullable ReverseNetwork and NetworkCouplingType; analyzer emits ForwardOnly",
+      "mathematics": "Reverse balances are not yet implemented",
+      "notation": "future Net:CL(F:...,R:...)",
+      "checker": "reverse-network semantic rules pending Core support",
+      "notes": "Architecture prepared without inventing reverse-flow source data."
+    },
+    {
+      "id": "drp-structural-signature",
+      "domain": "classification",
+      "scientificStatus": "implemented",
+      "implementationStatus": "partial",
+      "core": "existing demand and distribution-sourcing relationships",
+      "instance": "IsClassicalDrpTopologyCandidate detects acyclic single-sourcing serial/divergent/tree distribution structures with a demand record",
+      "mathematics": "full DRP formulation/classification mapping pending",
+      "notation": "future historical alias mapping",
+      "checker": "structural candidate only",
+      "notes": "Conservatively named candidate to avoid overclaiming a full DRP problem class."
     }
   ]
 }

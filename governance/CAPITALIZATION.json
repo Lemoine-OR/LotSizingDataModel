@@ -172,6 +172,15 @@
       "correctiveAction": "Use explicit helper functions with named parameters for executable, repository path and string-array arguments.",
       "permanentGuard": "Transactional pack engines must not use compact positional wrappers for array-valued arguments; validated explicit wrappers are the canonical implementation.",
       "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-020",
+      "category": "network-semantics",
+      "symptom": "BOM dependencies and physical supply-flow arcs are conflated into one topology.",
+      "rootCause": "Product structure and logistics topology are both directed graphs but have different semantics and cycle rules.",
+      "correctiveAction": "Maintain separate ProductStructureDescriptor and SupplyNetworkDescriptor analyses; BOM cycles remain invalid while physical supply cycles are represented by HasCycles.",
+      "permanentGuard": "No physical-network classifier or notation token may derive topology from ComponentRequirements, and no BOM validator may reject a transport-flow cycle solely because it is cyclic.",
+      "status": "active"
     }
   ]
 }
