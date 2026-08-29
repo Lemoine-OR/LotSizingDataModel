@@ -105,9 +105,8 @@
       "status": "reserved"
     },
     {
-      "prefix": "LSDM-MATCH",
-      "owner": "LotSizingDataModel.Instance.Notation.Matching",
-      "purpose": "Stable universal-notation specification matching diagnostics",
+      "prefix": "LSDM-SCI",
+      "owner": "Instance.ScientificClassificationEngine",
       "status": "active"
     }
   ]

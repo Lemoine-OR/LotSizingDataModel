@@ -524,6 +524,42 @@
       "notation": "No executable universal specification is emitted yet",
       "checker": "Assessment returns NotRepresentable with capability gaps",
       "notes": "Prevents nominal scheduling tokens before full propagation."
+    },
+    {
+      "id": "scientific-classification-engine",
+      "domain": "classification-architecture",
+      "scientificStatus": "implemented",
+      "implementationStatus": "implemented",
+      "core": "No Core mutation; SupplyChain is consumed through existing analyzers",
+      "instance": "ScientificClassificationEngine consolidates validation, descriptors, notation, problem classes and historical capability",
+      "mathematics": "No new mathematical model semantics; service composes existing validated scientific analyses",
+      "notation": "DeclaredNotation and DetectedNotation are explicitly separated and compared",
+      "checker": "LotSizingInstance overload composes InstanceModelChecker before classification",
+      "notes": "Planning paradigms, formulations and solution methods are explicitly NotInferred."
+    },
+    {
+      "id": "declared-detected-notation-separation",
+      "domain": "classification-notation",
+      "scientificStatus": "implemented",
+      "implementationStatus": "implemented",
+      "core": "not applicable",
+      "instance": "ScientificNotationComparison preserves source declaration independently from generated notation",
+      "mathematics": "not applicable",
+      "notation": "Exact/Compatible/Incomplete/Contradiction/InvalidDeclaredNotation comparison",
+      "checker": "LSDM-SCI diagnostics expose disagreement without overwriting source evidence",
+      "notes": "No XML format change in alpha.16; separation lives in non-serialized analysis result."
+    },
+    {
+      "id": "historical-classification-capability-report",
+      "domain": "historical-classification",
+      "scientificStatus": "implemented",
+      "implementationStatus": "implemented",
+      "core": "not applicable",
+      "instance": "Bitran-Yanasse applicability and Wolsey mapping-only readiness are reported",
+      "mathematics": "Complete historical-code detection is not claimed when required source analyses are absent",
+      "notation": "Historical mappings remain separate from universal detected notation",
+      "checker": "Capability distinguishes mapping from complete historical detection",
+      "notes": "Bitran-Yanasse requires explicit temporal profile; Wolsey inverse detection remains future work."
     }
   ]
 }

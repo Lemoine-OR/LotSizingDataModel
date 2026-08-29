@@ -325,6 +325,42 @@
       "correctiveAction": "Distinguish ExactCore from CompatibleExtension and enumerate modeled extensions separately.",
       "permanentGuard": "Canonical class assessment uses positive core specifications; supported extra features must be reported as extensions rather than false contradictions.",
       "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-037",
+      "category": "declared-vs-detected-notation",
+      "symptom": "Detected notation overwrites, reuses or silently trusts notation declared by a source instance or publication.",
+      "rootCause": "Source claims and computed scientific evidence are stored as one field.",
+      "correctiveAction": "Keep DeclaredNotation and DetectedNotation as separate objects and compare them explicitly through the universal matcher.",
+      "permanentGuard": "Detected notation must always be generated from descriptors/analyses; a declaration may only be parsed and compared, never used as detected evidence.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-038",
+      "category": "multi-axis-scientific-classification",
+      "symptom": "Detecting a problem class implicitly assigns a planning paradigm, mathematical formulation or solution method.",
+      "rootCause": "Orthogonal scientific taxonomy axes are collapsed in one classifier.",
+      "correctiveAction": "ScientificClassificationCoverage declares which axes are analyzed, capability-only or not inferred.",
+      "permanentGuard": "Problem-class detection may not infer MRP/DRP, formulations or solving methods unless a dedicated axis analyzer is explicitly implemented.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-039",
+      "category": "classification-validation-composition",
+      "symptom": "Scientific classification runs on an instance with blocking structural/model diagnostics.",
+      "rootCause": "Classification bypasses InstanceModelChecker.",
+      "correctiveAction": "LotSizingInstance analysis composes InstanceModelChecker and honors CanClassify before extracting scientific classification.",
+      "permanentGuard": "Blocking instance validation must produce LSDM-SCI-001 and no detected notation/problem-class claim.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-040",
+      "category": "historical-mapping-vs-detection",
+      "symptom": "The existence of a historical-to-universal mapper is reported as automatic detection of the complete historical source code.",
+      "rootCause": "Mapping capability and inverse historical classification are conflated.",
+      "correctiveAction": "HistoricalClassificationCapability reports mapping and complete-code detection independently.",
+      "permanentGuard": "CanMapDeclaredClassification never implies CanDetectCompleteHistoricalCode.",
+      "status": "active"
     }
   ]
 }
