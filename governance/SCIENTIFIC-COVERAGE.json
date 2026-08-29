@@ -488,6 +488,42 @@
       "notation": "ProdMode:0F",
       "checker": "Tri-state semantic matcher support",
       "notes": "Closes the zero/full-capacity dimension of Wolsey DLSI/DLS, but initial-stock decision semantics remain separate gaps."
+    },
+    {
+      "id": "canonical-lot-sizing-problem-class-catalog",
+      "domain": "problem-classification",
+      "scientificStatus": "implemented",
+      "implementationStatus": "implemented",
+      "core": "No Core mutation; classes are assessed from typed descriptor semantics",
+      "instance": "Six executable canonical core classes plus four catalog-only lot-sizing+scheduling classes",
+      "mathematics": "Capacity, item cardinality, BOM level and shared-capacity distinctions define current core signatures",
+      "notation": "Each executable class has a positive universal core specification",
+      "checker": "Problem-class analyzer reports ExactCore/CompatibleExtension/Incomplete/NotApplicable/NotRepresentable",
+      "notes": "Canonical LSDM codes disambiguate literature acronyms."
+    },
+    {
+      "id": "problem-class-alias-resolution",
+      "domain": "problem-classification",
+      "scientificStatus": "implemented",
+      "implementationStatus": "implemented",
+      "core": "not applicable",
+      "instance": "Alias resolver returns Unknown/Unique/Ambiguous",
+      "mathematics": "No semantic collapse of ambiguous literature labels",
+      "notation": "Canonical codes are separate from aliases",
+      "checker": "Tests protect CLSP/ULSP/MLLS ambiguity and MRP/DRP exclusion",
+      "notes": "MLLP uniquely maps to UMLSP under the project convention."
+    },
+    {
+      "id": "integrated-lot-sizing-scheduling-problem-classes",
+      "domain": "problem-classification",
+      "scientificStatus": "implemented",
+      "implementationStatus": "partial",
+      "core": "Required scheduling semantics are not yet fully represented",
+      "instance": "DLSP/CSLP/PLSP/GLSP are catalogued as CatalogOnly",
+      "mathematics": "Small-bucket and sequencing semantics remain future model extensions",
+      "notation": "No executable universal specification is emitted yet",
+      "checker": "Assessment returns NotRepresentable with capability gaps",
+      "notes": "Prevents nominal scheduling tokens before full propagation."
     }
   ]
 }

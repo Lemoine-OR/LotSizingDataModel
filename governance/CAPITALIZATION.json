@@ -298,6 +298,33 @@
       "correctiveAction": "Tests for Exact must include every characteristic emitted by Generate(descriptor, derivedSemantics); tests with omitted satisfied characteristics must assert Compatible.",
       "permanentGuard": "Matcher tests must separately prove Exact for canonical equality and Compatible for positive partial specifications, even when all explicit semantic-condition requirements are satisfied.",
       "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-034",
+      "category": "problem-class-alias-ambiguity",
+      "symptom": "An acronym such as CLSP, ULSP or MLLS is silently resolved to one canonical class even though literature usage is cardinality/capacity ambiguous.",
+      "rootCause": "Aliases are treated as unique identifiers rather than many-to-many literature labels.",
+      "correctiveAction": "Use a resolver returning Unknown/Unique/Ambiguous and canonical LSDM class codes that explicitly encode item cardinality/capacity where needed.",
+      "permanentGuard": "Ambiguous aliases must never be auto-resolved to the first catalog entry.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-035",
+      "category": "catalog-vs-executable-support",
+      "symptom": "A scientifically known problem class receives an executable universal specification before its actual decision semantics exist in the model.",
+      "rootCause": "Scientific inventory and implementation support are conflated.",
+      "correctiveAction": "Separate Executable from CatalogOnly problem-class support; catalog-only classes carry explicit capability gaps and no universal core specification.",
+      "permanentGuard": "A class can become Executable only after all defining semantics required for membership are represented and testable.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-036",
+      "category": "problem-class-core-vs-extension",
+      "symptom": "An instance with backlogging, safety stock, lead time or another industrial extension is rejected from its underlying lot-sizing core class.",
+      "rootCause": "Problem-class membership is treated as closed-world equality rather than core-plus-extension classification.",
+      "correctiveAction": "Distinguish ExactCore from CompatibleExtension and enumerate modeled extensions separately.",
+      "permanentGuard": "Canonical class assessment uses positive core specifications; supported extra features must be reported as extensions rather than false contradictions.",
+      "status": "active"
     }
   ]
 }
