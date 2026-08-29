@@ -416,6 +416,30 @@
       "notation": "Generic TP:<parameter>=<Z|C|NI|ND|G> grammar supported by parser, renderer and generator",
       "checker": "Matcher reports missing actual temporal analysis as Incomplete and differing known pattern as Contradiction",
       "notes": "Initial reusable parameters: demand, setup cost, holding cost, production cost, production capacity."
+    },
+    {
+      "id": "wolsey-2002-historical-classification",
+      "domain": "historical-classification",
+      "scientificStatus": "implemented",
+      "implementationStatus": "implemented",
+      "core": "No Core change; classification is historical metadata",
+      "instance": "Typed PROB-CAP-VAR classification plus machine and multi-level extension blocks",
+      "mathematics": "Source problem meanings are preserved; unsupported distinctions are not approximated",
+      "notation": "Historical codes are preserved separately from universal notation",
+      "checker": "Unit tests protect token semantics including SC=start-up cost and SL=sales",
+      "notes": "Based on Wolsey 2002 Management Science classification."
+    },
+    {
+      "id": "wolsey-2002-universal-mapping",
+      "domain": "historical-classification",
+      "scientificStatus": "implemented",
+      "implementationStatus": "partial",
+      "core": "not applicable",
+      "instance": "WolseyHistoricalMapper projects representable dimensions and enumerates every unsupported dimension",
+      "mathematics": "C and CC capacity regimes plus B/SC/LB/SS variants are projectable; WW, DLSI/DLS and several extensions require further generic semantics",
+      "notation": "Uses existing generic universal features and TP:CapP=C; never inserts Wolsey-specific tokens",
+      "checker": "Coverage Exact only when no source dimension remains unrepresented",
+      "notes": "U, WW, DLSI/DLS, start-up times, sales, constant lower-bound qualifier, exact machine/bucket/count dimensions and sequence-dependent changeovers remain explicit gaps."
     }
   ]
 }
