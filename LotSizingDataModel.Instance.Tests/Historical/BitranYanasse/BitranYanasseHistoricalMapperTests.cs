@@ -29,26 +29,34 @@ public sealed class BitranYanasseHistoricalMapperTests
             mapping.HistoricalCode);
 
         Assert.Equal(
-            HistoricalMappingCoverage.Partial,
+            HistoricalMappingCoverage.Exact,
             mapping.Coverage);
 
-        Assert.Equal(
-            4,
-            mapping.UnrepresentedHistoricalDimensions.Count);
+        Assert.Empty(
+            mapping.UnrepresentedHistoricalDimensions);
     }
 
     [Fact]
-    public void Map_UsesConservativeUniversalDomainProjection()
+    public void Map_ProjectsConstructedHistoricalProfileExactly()
     {
         BitranYanasseTemporalProfile profile =
             CreateProfile();
+
+        Assert.Equal(
+            "C/C/Z/C",
+            profile.HistoricalCode);
 
         BitranYanasseHistoricalMapping mapping =
             new BitranYanasseHistoricalMapper()
                 .Map(profile);
 
         Assert.Equal(
-            "1,SL,Net:UNK | Dem,Det,Prod,Cap:P | Obj:Econ",
+            HistoricalMappingCoverage.Exact,
+            mapping.Coverage);
+
+        Assert.Equal(
+            "1,SL,Net:UNK | Dem,Det,Prod,Cap:P," +
+            "TP:SC=C,TP:HC=C,TP:PC=Z,TP:CapP=C | Obj:Econ",
             mapping.UniversalDomainSpecification.CanonicalText);
     }
 
@@ -142,6 +150,59 @@ public sealed class BitranYanasseHistoricalMapperTests
         Assert.Equal(
             UniversalNotationMatchKind.Compatible,
             match.Kind);
+    }
+
+    [Fact]
+    public void ExactHistoricalSpecification_IsMatchableWhenPatternsAreSupplied()
+    {
+        BitranYanasseTemporalProfile profile =
+            CreateProfile();
+
+        BitranYanasseHistoricalMapping mapping =
+            new BitranYanasseHistoricalMapper()
+                .Map(profile);
+
+        UniversalNotationMatchResult match =
+            new UniversalNotationMatcher()
+                .Match(
+                    CreateClassicalDescriptor(),
+                    mapping.UniversalDomainSpecification,
+                    BitranYanasseHistoricalMapper
+                        .CreateTemporalQualifiers(profile));
+
+        Assert.Equal(
+            UniversalNotationMatchKind.Compatible,
+            match.Kind);
+
+        Assert.DoesNotContain(
+            match.Issues,
+            issue =>
+                issue.Code == "LSDM-MATCH-031" ||
+                issue.Code == "LSDM-MATCH-032");
+    }
+
+    [Fact]
+    public void HistoricalSpecificationWithoutActualPatterns_IsIncomplete()
+    {
+        BitranYanasseHistoricalMapping mapping =
+            new BitranYanasseHistoricalMapper()
+                .Map(
+                    CreateProfile());
+
+        UniversalNotationMatchResult match =
+            new UniversalNotationMatcher()
+                .Match(
+                    CreateClassicalDescriptor(),
+                    mapping.UniversalDomainSpecification);
+
+        Assert.Equal(
+            UniversalNotationMatchKind.Incomplete,
+            match.Kind);
+
+        Assert.Contains(
+            match.Issues,
+            issue =>
+                issue.Code == "LSDM-MATCH-031");
     }
 
     [Fact]

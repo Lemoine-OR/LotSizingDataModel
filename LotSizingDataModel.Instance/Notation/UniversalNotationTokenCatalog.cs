@@ -1,5 +1,6 @@
 using LotSizingDataModel.Instance.Common;
 using LotSizingDataModel.Instance.Descriptors.Network;
+using LotSizingDataModel.Instance.Descriptors.Temporal;
 
 namespace LotSizingDataModel.Instance.Notation;
 
@@ -152,4 +153,123 @@ internal static class UniversalNotationTokenCatalog
                 $"Unknown supply-network topology token '{code}'.")
         };
     }
+
+    public static string GetTemporalParameterCode(
+        UniversalTemporalParameter parameter)
+    {
+        return parameter switch
+        {
+            UniversalTemporalParameter.Demand => "Dem",
+            UniversalTemporalParameter.SetupCost => "SC",
+            UniversalTemporalParameter.HoldingCost => "HC",
+            UniversalTemporalParameter.ProductionCost => "PC",
+            UniversalTemporalParameter.ProductionCapacity => "CapP",
+            _ => throw new ArgumentOutOfRangeException(
+                nameof(parameter),
+                parameter,
+                "Unknown temporal-parameter family.")
+        };
+    }
+
+    public static UniversalTemporalParameter ParseTemporalParameterCode(
+        string code)
+    {
+        return code.ToUpperInvariant() switch
+        {
+            "DEM" => UniversalTemporalParameter.Demand,
+            "SC" => UniversalTemporalParameter.SetupCost,
+            "HC" => UniversalTemporalParameter.HoldingCost,
+            "PC" => UniversalTemporalParameter.ProductionCost,
+            "CAPP" => UniversalTemporalParameter.ProductionCapacity,
+            _ => throw new FormatException(
+                $"Unknown temporal-parameter token '{code}'.")
+        };
+    }
+
+    public static string GetTemporalPatternCode(
+        TemporalPatternType pattern)
+    {
+        return pattern switch
+        {
+            TemporalPatternType.Zero => "Z",
+            TemporalPatternType.Constant => "C",
+            TemporalPatternType.NonIncreasing => "NI",
+            TemporalPatternType.NonDecreasing => "ND",
+            TemporalPatternType.General => "G",
+            _ => throw new ArgumentOutOfRangeException(
+                nameof(pattern),
+                pattern,
+                "Unknown temporal pattern.")
+        };
+    }
+
+    public static TemporalPatternType ParseTemporalPatternCode(
+        string code)
+    {
+        return code.ToUpperInvariant() switch
+        {
+            "Z" => TemporalPatternType.Zero,
+            "C" => TemporalPatternType.Constant,
+            "NI" => TemporalPatternType.NonIncreasing,
+            "ND" => TemporalPatternType.NonDecreasing,
+            "G" => TemporalPatternType.General,
+            _ => throw new FormatException(
+                $"Unknown temporal-pattern token '{code}'.")
+        };
+    }
+
+    public static string GetTemporalQualifierToken(
+        UniversalTemporalQualifier qualifier)
+    {
+        ArgumentNullException.ThrowIfNull(qualifier);
+
+        return
+            "TP:" +
+            GetTemporalParameterCode(
+                qualifier.Parameter) +
+            "=" +
+            GetTemporalPatternCode(
+                qualifier.Pattern);
+    }
+
+    public static bool TryParseTemporalQualifier(
+        string token,
+        out UniversalTemporalQualifier? qualifier)
+    {
+        qualifier = null;
+
+        if (!token.StartsWith(
+                "TP:",
+                StringComparison.OrdinalIgnoreCase))
+        {
+            return false;
+        }
+
+        string body = token[3..];
+
+        int separatorIndex = body.IndexOf('=');
+
+        if (separatorIndex <= 0 ||
+            separatorIndex >= body.Length - 1)
+        {
+            throw new FormatException(
+                $"Invalid temporal qualifier '{token}'.");
+        }
+
+        string parameterCode =
+            body[..separatorIndex];
+
+        string patternCode =
+            body[(separatorIndex + 1)..];
+
+        qualifier =
+            new UniversalTemporalQualifier(
+                ParseTemporalParameterCode(
+                    parameterCode),
+                ParseTemporalPatternCode(
+                    patternCode));
+
+        return true;
+    }
+
 }

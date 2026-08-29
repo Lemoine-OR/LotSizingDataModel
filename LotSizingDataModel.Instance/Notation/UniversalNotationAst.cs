@@ -1,4 +1,5 @@
 using LotSizingDataModel.Instance.Common;
+using LotSizingDataModel.Instance.Descriptors.Temporal;
 
 namespace LotSizingDataModel.Instance.Notation;
 
@@ -26,22 +27,83 @@ public sealed class UniversalNotationAlpha
 public sealed class UniversalNotationBeta
 {
     private readonly IReadOnlyCollection<UniversalNotationFeature> _features;
+    private readonly IReadOnlyCollection<UniversalTemporalQualifier>
+        _temporalQualifiers;
 
     public UniversalNotationBeta(
-        IEnumerable<UniversalNotationFeature>? features = null)
+        IEnumerable<UniversalNotationFeature>? features = null,
+        IEnumerable<UniversalTemporalQualifier>? temporalQualifiers = null)
     {
         _features =
             (features ?? Array.Empty<UniversalNotationFeature>())
                 .Distinct()
                 .OrderBy(feature => (int)feature)
                 .ToArray();
+
+        UniversalTemporalQualifier[] qualifierArray =
+            (temporalQualifiers ??
+             Array.Empty<UniversalTemporalQualifier>())
+                .ToArray();
+
+        var canonicalQualifiers =
+            new List<UniversalTemporalQualifier>();
+
+        foreach (
+            IGrouping<
+                UniversalTemporalParameter,
+                UniversalTemporalQualifier> group
+            in qualifierArray.GroupBy(
+                qualifier => qualifier.Parameter))
+        {
+            TemporalPatternType[] patterns =
+                group
+                    .Select(qualifier => qualifier.Pattern)
+                    .Distinct()
+                    .ToArray();
+
+            if (patterns.Length > 1)
+            {
+                throw new ArgumentException(
+                    "A beta field cannot contain conflicting temporal " +
+                    $"patterns for parameter '{group.Key}'.",
+                    nameof(temporalQualifiers));
+            }
+
+            canonicalQualifiers.Add(
+                new UniversalTemporalQualifier(
+                    group.Key,
+                    patterns[0]));
+        }
+
+        _temporalQualifiers =
+            canonicalQualifiers
+                .OrderBy(
+                    qualifier =>
+                        (int)qualifier.Parameter)
+                .ToArray();
     }
 
     public IReadOnlyCollection<UniversalNotationFeature> Features =>
         _features;
 
+    public IReadOnlyCollection<UniversalTemporalQualifier>
+        TemporalQualifiers =>
+            _temporalQualifiers;
+
     public bool Contains(UniversalNotationFeature feature) =>
         _features.Contains(feature);
+
+    public bool TryGetTemporalQualifier(
+        UniversalTemporalParameter parameter,
+        out UniversalTemporalQualifier? qualifier)
+    {
+        qualifier =
+            _temporalQualifiers.FirstOrDefault(
+                candidate =>
+                    candidate.Parameter == parameter);
+
+        return qualifier is not null;
+    }
 }
 
 /// <summary>

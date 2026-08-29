@@ -1,5 +1,6 @@
 using LotSizingDataModel.Instance.Descriptors;
 using LotSizingDataModel.Instance.Descriptors.Temporal;
+using LotSizingDataModel.Instance.Notation;
 using LotSizingDataModel.Instance.Notation.Matching;
 
 namespace LotSizingDataModel.Instance.Historical.BitranYanasse;
@@ -14,22 +15,12 @@ namespace LotSizingDataModel.Instance.Historical.BitranYanasse;
 /// problem and classifies the temporal behavior of setup cost, holding cost,
 /// production cost and capacity.
 ///
-/// Universal notation v1 does not yet encode those four parameterized temporal
-/// patterns. Consequently this mapper preserves the full historical profile
-/// separately and reports Partial coverage instead of silently dropping or
-/// reinterpreting the four dimensions.
+/// Universal notation v1 now represents these historical dimensions through
+/// generic TP temporal qualifiers. The mapping is therefore lossless without
+/// introducing Bitran-Yanasse-specific syntax into the universal grammar.
 /// </remarks>
 public sealed class BitranYanasseHistoricalMapper
 {
-    private static readonly string[]
-        TemporalDimensionsNotYetRepresented =
-        {
-            "setupCostPattern",
-            "holdingCostPattern",
-            "productionCostPattern",
-            "capacityPattern"
-        };
-
     /// <summary>
     /// Gets the universal v1 domain specification shared by the classical
     /// Bitran-Yanasse problem family, excluding temporal-pattern qualifiers
@@ -47,9 +38,9 @@ public sealed class BitranYanasseHistoricalMapper
 
         return new BitranYanasseHistoricalMapping(
             profile,
-            ClassicalDomainSpecification,
-            HistoricalMappingCoverage.Partial,
-            TemporalDimensionsNotYetRepresented,
+            CreateUniversalSpecification(profile),
+            HistoricalMappingCoverage.Exact,
+            Array.Empty<string>(),
             applicability: null);
     }
 
@@ -62,10 +53,65 @@ public sealed class BitranYanasseHistoricalMapper
 
         return new BitranYanasseHistoricalMapping(
             profile,
-            ClassicalDomainSpecification,
-            HistoricalMappingCoverage.Partial,
-            TemporalDimensionsNotYetRepresented,
+            CreateUniversalSpecification(profile),
+            HistoricalMappingCoverage.Exact,
+            Array.Empty<string>(),
             AssessApplicability(descriptor));
+    }
+
+    /// <summary>
+    /// Converts the four historical temporal positions to generic universal
+    /// TP qualifiers without using historical-specific universal tokens.
+    /// </summary>
+    public static IReadOnlyList<UniversalTemporalQualifier>
+        CreateTemporalQualifiers(
+            BitranYanasseTemporalProfile profile)
+    {
+        ArgumentNullException.ThrowIfNull(profile);
+
+        return new[]
+        {
+            new UniversalTemporalQualifier(
+                UniversalTemporalParameter.SetupCost,
+                profile.SetupCost.Pattern),
+            new UniversalTemporalQualifier(
+                UniversalTemporalParameter.HoldingCost,
+                profile.HoldingCost.Pattern),
+            new UniversalTemporalQualifier(
+                UniversalTemporalParameter.ProductionCost,
+                profile.ProductionCost.Pattern),
+            new UniversalTemporalQualifier(
+                UniversalTemporalParameter.ProductionCapacity,
+                profile.Capacity.Pattern)
+        };
+    }
+
+    /// <summary>
+    /// Creates the lossless universal specification corresponding to one
+    /// complete historical profile.
+    /// </summary>
+    public static UniversalProblemSpecification
+        CreateUniversalSpecification(
+            BitranYanasseTemporalProfile profile)
+    {
+        ArgumentNullException.ThrowIfNull(profile);
+
+        UniversalProblemSpecification baseDomain =
+            ClassicalDomainSpecification;
+
+        var notation =
+            new UniversalLotSizingNotation(
+                alpha:
+                    baseDomain.Notation.Alpha,
+                beta:
+                    new UniversalNotationBeta(
+                        baseDomain.Notation.Beta.Features,
+                        CreateTemporalQualifiers(profile)),
+                gamma:
+                    baseDomain.Notation.Gamma);
+
+        return new UniversalProblemSpecification(
+            notation);
     }
 
     public BitranYanasseApplicabilityAssessment

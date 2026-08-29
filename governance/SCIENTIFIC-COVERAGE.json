@@ -397,13 +397,25 @@
       "id": "bitran-yanasse-historical-mapping",
       "domain": "historical-classification",
       "scientificStatus": "implemented",
-      "implementationStatus": "partial",
-      "core": "No Core change; the historical profile consumes explicit temporal series",
-      "instance": "BitranYanasseHistoricalMapper, applicability assessment and lossless historical mapping object",
-      "mathematics": "Classical domain projection requires single-item deterministic capacitated production; extensions are reported separately",
-      "notation": "Universal v1 projects the representable domain as 1,SL,Net:UNK | Dem,Det,Prod,Cap:P | Obj:Econ",
-      "checker": "UniversalNotationMatcher can test the projected universal domain; historical temporal dimensions remain external until generic qualifiers exist",
-      "notes": "Coverage is explicitly Partial because setup/holding/production-cost/capacity temporal patterns are not yet encoded by universal notation v1."
+      "implementationStatus": "implemented",
+      "core": "No Core change; historical profile consumes explicit temporal series",
+      "instance": "BitranYanasseHistoricalMapper maps all four historical positions losslessly to generic temporal qualifiers",
+      "mathematics": "Applicability remains explicit and separate from temporal-code representation",
+      "notation": "Exact representational mapping to TP:SC, TP:HC, TP:PC and TP:CapP qualifiers",
+      "checker": "UniversalNotationMatcher can verify temporal qualifiers when the caller supplies actual temporal analyses",
+      "notes": "HistoricalMappingCoverage is now Exact; no historical dimension remains unrepresented."
+    },
+    {
+      "id": "generic-temporal-notation-qualifiers",
+      "domain": "classification-notation",
+      "scientificStatus": "implemented",
+      "implementationStatus": "implemented",
+      "core": "No Core change; qualifiers consume explicit temporal-pattern analyses",
+      "instance": "UniversalTemporalParameter and UniversalTemporalQualifier integrated in beta AST",
+      "mathematics": "No formulation change; parameter temporal behavior is descriptive metadata over existing series",
+      "notation": "Generic TP:<parameter>=<Z|C|NI|ND|G> grammar supported by parser, renderer and generator",
+      "checker": "Matcher reports missing actual temporal analysis as Incomplete and differing known pattern as Contradiction",
+      "notes": "Initial reusable parameters: demand, setup cost, holding cost, production cost, production capacity."
     }
   ]
 }

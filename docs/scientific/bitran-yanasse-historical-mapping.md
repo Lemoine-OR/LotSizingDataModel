@@ -35,27 +35,25 @@ A historical profile such as:
 
 is preserved exactly by `BitranYanasseTemporalProfile`.
 
-Universal notation scheme v1 can currently represent the classical problem
-domain:
+Universal notation scheme v1 now represents the four temporal dimensions
+with generic `TP` qualifiers. For example:
 
-`1,SL,Net:UNK | Dem,Det,Prod,Cap:P | Obj:Econ`
+`1,SL,Net:UNK | Dem,Det,Prod,Cap:P,TP:SC=NI,TP:HC=G,TP:PC=NI,TP:CapP=ND | Obj:Econ`
 
-but it does not yet contain generic parameterized tokens for the four temporal
-patterns above.
+The mapping is therefore representationally lossless:
 
-Therefore `BitranYanasseHistoricalMapping.Coverage` is deliberately:
+`HistoricalMappingCoverage.Exact`
 
-`Partial`
+and `UnrepresentedHistoricalDimensions` is empty.
 
-and the following source dimensions remain explicitly recorded as
-unrepresented:
+The universal tokens remain semantic rather than historical:
 
-- setupCostPattern;
-- holdingCostPattern;
-- productionCostPattern;
-- capacityPattern.
+- historical alpha -> `TP:SC`;
+- historical beta -> `TP:HC`;
+- historical gamma -> `TP:PC`;
+- historical delta -> `TP:CapP`.
 
-No information is discarded and no exact-equivalence claim is made.
+The original `NI/G/NI/ND` code is still preserved separately.
 
 ## Applicability
 
@@ -82,13 +80,14 @@ production lead times, additional capacity, procurement, transportation,
 distribution, safety stock or financial constraints do not silently become
 part of the historical class. They are reported explicitly.
 
-## Next step
+## Matching against instances
 
-To make the mapping exact in universal notation, the universal grammar needs
-generic temporal qualifiers independent from Bitran-Yanasse, for example a
-typed concept equivalent to:
+Exact representation of the historical classification does not imply that an
+arbitrary `LotSizingProblemDescriptor` already contains the required temporal
+analyses.
 
-`Pattern(parameter, Z|C|NI|ND|G)`
-
-Only after that generic capability exists should this historical mapping be
-upgraded from `Partial` to `Exact`.
+`UniversalNotationMatcher` therefore reports a required `TP` qualifier as
+`Incomplete` when no actual temporal-pattern analysis is supplied. A caller
+that has selected the correct classical projection can provide the four
+generic qualifiers produced by `CreateTemporalQualifiers(profile)` and obtain
+full semantic comparison.

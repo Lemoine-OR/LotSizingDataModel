@@ -235,6 +235,24 @@
       "correctiveAction": "Historical mapping objects must report Exact or Partial coverage and preserve every unmapped historical dimension explicitly instead of silently dropping it.",
       "permanentGuard": "A historical mapping may be marked Exact only when every source classification dimension is represented losslessly in the target universal specification.",
       "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-027",
+      "category": "generic-notation-semantics",
+      "symptom": "A historical mapping introduces special-purpose universal tokens that encode the name or position of one literature classification instead of reusable problem semantics.",
+      "rootCause": "Historical notation is used as the target grammar rather than mapped onto generic semantic concepts.",
+      "correctiveAction": "Represent temporal behavior through generic TP:<parameter>=<pattern> qualifiers and map historical schemes onto them.",
+      "permanentGuard": "Universal notation tokens must describe reusable lot-sizing semantics; historical names/positions remain in mapping layers and may not become canonical universal tokens.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-028",
+      "category": "scientific-test-fixture-consistency",
+      "symptom": "A historical mapping test expects the canonical notation of one temporal profile while constructing a different temporal-profile fixture.",
+      "rootCause": "The expected canonical string was copied from another test case and was not tied explicitly to the fixture's historical code.",
+      "correctiveAction": "Historical mapping tests must first assert the source historical code produced by their fixture, then assert the universal projection of that same profile.",
+      "permanentGuard": "No mapping test may reuse a canonical expected notation from another fixture without first asserting the exact source classification/profile represented by its own input.",
+      "status": "active"
     }
   ]
 }

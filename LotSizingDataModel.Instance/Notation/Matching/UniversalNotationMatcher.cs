@@ -39,7 +39,22 @@ public sealed class UniversalNotationMatcher
         string specificationText,
         string? schemeVersion = null)
     {
+        return Match(
+            descriptor,
+            specificationText,
+            Array.Empty<UniversalTemporalQualifier>(),
+            schemeVersion);
+    }
+
+    public UniversalNotationMatchResult Match(
+        LotSizingProblemDescriptor descriptor,
+        string specificationText,
+        IEnumerable<UniversalTemporalQualifier>
+            actualTemporalQualifiers,
+        string? schemeVersion = null)
+    {
         ArgumentNullException.ThrowIfNull(descriptor);
+        ArgumentNullException.ThrowIfNull(actualTemporalQualifiers);
 
         UniversalProblemSpecification specification =
             UniversalProblemSpecification.Parse(
@@ -48,18 +63,34 @@ public sealed class UniversalNotationMatcher
 
         return Match(
             descriptor,
-            specification);
+            specification,
+            actualTemporalQualifiers);
     }
 
     public UniversalNotationMatchResult Match(
         LotSizingProblemDescriptor descriptor,
         UniversalProblemSpecification specification)
     {
+        return Match(
+            descriptor,
+            specification,
+            Array.Empty<UniversalTemporalQualifier>());
+    }
+
+    public UniversalNotationMatchResult Match(
+        LotSizingProblemDescriptor descriptor,
+        UniversalProblemSpecification specification,
+        IEnumerable<UniversalTemporalQualifier>
+            actualTemporalQualifiers)
+    {
         ArgumentNullException.ThrowIfNull(descriptor);
         ArgumentNullException.ThrowIfNull(specification);
+        ArgumentNullException.ThrowIfNull(actualTemporalQualifiers);
 
         UniversalLotSizingNotation generated =
-            _generator.Generate(descriptor);
+            _generator.Generate(
+                descriptor,
+                actualTemporalQualifiers);
 
         string generatedText =
             generated.Render();
@@ -342,6 +373,42 @@ public sealed class UniversalNotationMatcher
                     requiredFeature.ToString(),
                     "Absent",
                     "A required beta feature is not present in the descriptor.");
+            }
+        }
+
+        foreach (
+            UniversalTemporalQualifier requiredQualifier
+            in expected.TemporalQualifiers)
+        {
+            if (!actual.TryGetTemporalQualifier(
+                    requiredQualifier.Parameter,
+                    out UniversalTemporalQualifier? actualQualifier))
+            {
+                AddIncomplete(
+                    issues,
+                    "LSDM-MATCH-031",
+                    "beta.temporalPatterns." +
+                    requiredQualifier.Parameter,
+                    requiredQualifier.Pattern.ToString(),
+                    "Unknown",
+                    "The requested temporal pattern has not been supplied " +
+                    "by the descriptor/projection analysis.");
+
+                continue;
+            }
+
+            if (
+                actualQualifier!.Pattern !=
+                requiredQualifier.Pattern)
+            {
+                AddContradiction(
+                    issues,
+                    "LSDM-MATCH-032",
+                    "beta.temporalPatterns." +
+                    requiredQualifier.Parameter,
+                    requiredQualifier.Pattern.ToString(),
+                    actualQualifier.Pattern.ToString(),
+                    "The known temporal pattern contradicts the specification.");
             }
         }
     }

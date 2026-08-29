@@ -118,17 +118,27 @@ public static class UniversalNotationRenderer
     private static string RenderBeta(
         UniversalNotationBeta beta)
     {
-        if (beta.Features.Count == 0)
-        {
-            return "None";
-        }
+        var tokens =
+            new List<string>();
 
-        return string.Join(
-            ",",
+        tokens.AddRange(
             beta.Features
                 .OrderBy(feature => (int)feature)
                 .Select(
                     UniversalNotationTokenCatalog.GetFeatureToken));
+
+        tokens.AddRange(
+            beta.TemporalQualifiers
+                .OrderBy(
+                    qualifier =>
+                        (int)qualifier.Parameter)
+                .Select(
+                    UniversalNotationTokenCatalog
+                        .GetTemporalQualifierToken));
+
+        return tokens.Count == 0
+            ? "None"
+            : string.Join(",", tokens);
     }
 
     private static string RenderGamma(

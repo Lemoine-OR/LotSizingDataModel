@@ -378,8 +378,23 @@ public sealed class UniversalNotationParser
         var features =
             new List<UniversalNotationFeature>();
 
+        var temporalQualifiers =
+            new List<UniversalTemporalQualifier>();
+
         foreach (string token in tokens)
         {
+            if (
+                UniversalNotationTokenCatalog
+                    .TryParseTemporalQualifier(
+                        token,
+                        out UniversalTemporalQualifier? qualifier))
+            {
+                temporalQualifiers.Add(
+                    qualifier!);
+
+                continue;
+            }
+
             if (!UniversalNotationTokenCatalog.TryParseFeature(
                     token,
                     out UniversalNotationFeature feature))
@@ -391,7 +406,9 @@ public sealed class UniversalNotationParser
             features.Add(feature);
         }
 
-        return new UniversalNotationBeta(features);
+        return new UniversalNotationBeta(
+            features,
+            temporalQualifiers);
     }
 
     private static UniversalNotationGamma ParseGamma(

@@ -5,7 +5,7 @@ namespace LotSizingDataModel.Instance.Historical.BitranYanasse;
 
 /// <summary>
 /// Represents a lossless historical Bitran-Yanasse profile together with the
-/// portion currently projectable to universal notation scheme v1.
+/// lossless projection to universal notation scheme v1.
 /// </summary>
 public sealed class BitranYanasseHistoricalMapping
 {
@@ -47,8 +47,8 @@ public sealed class BitranYanasseHistoricalMapping
         HistoricalProfile.HistoricalCode;
 
     /// <summary>
-    /// Gets the universal specification for the historical problem domain
-    /// dimensions representable by notation v1.
+    /// Gets the universal specification containing the historical problem
+    /// domain and all four temporal-pattern dimensions.
     /// </summary>
     public UniversalProblemSpecification
         UniversalDomainSpecification { get; }
@@ -56,9 +56,8 @@ public sealed class BitranYanasseHistoricalMapping
     public HistoricalMappingCoverage Coverage { get; }
 
     /// <summary>
-    /// Gets historical dimensions preserved outside the current universal
-    /// grammar because notation v1 does not yet have generic parameterized
-    /// temporal-pattern qualifiers.
+    /// Gets historical dimensions not represented by the universal grammar.
+    /// For the current Bitran-Yanasse mapping this collection is empty.
     /// </summary>
     public IReadOnlyList<string>
         UnrepresentedHistoricalDimensions { get; }

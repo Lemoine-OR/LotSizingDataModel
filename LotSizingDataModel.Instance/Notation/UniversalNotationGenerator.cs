@@ -14,7 +14,24 @@ public sealed class UniversalNotationGenerator
         UniversalObjectiveKind objective =
             UniversalObjectiveKind.Economic)
     {
+        return Generate(
+            descriptor,
+            Array.Empty<UniversalTemporalQualifier>(),
+            objective);
+    }
+
+    /// <summary>
+    /// Generates notation and enriches beta with generic temporal qualifiers
+    /// supplied by an explicit analysis/projection layer.
+    /// </summary>
+    public UniversalLotSizingNotation Generate(
+        LotSizingProblemDescriptor descriptor,
+        IEnumerable<UniversalTemporalQualifier> temporalQualifiers,
+        UniversalObjectiveKind objective =
+            UniversalObjectiveKind.Economic)
+    {
         ArgumentNullException.ThrowIfNull(descriptor);
+        ArgumentNullException.ThrowIfNull(temporalQualifiers);
 
         UniversalItemCardinality itemCardinality =
             descriptor.Structure.ItemCount switch
@@ -62,7 +79,8 @@ public sealed class UniversalNotationGenerator
                 },
             beta:
                 new UniversalNotationBeta(
-                    ExtractFeatures(descriptor)),
+                    ExtractFeatures(descriptor),
+                    temporalQualifiers),
             gamma:
                 new UniversalNotationGamma
                 {
