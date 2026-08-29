@@ -276,14 +276,14 @@
     {
       "id": "universal-notation",
       "domain": "classification-notation",
-      "scientificStatus": "planned",
-      "implementationStatus": "unsupported",
-      "core": "not applicable",
-      "instance": "missing parser/generator/matcher model",
-      "mathematics": "not a formulation artifact",
-      "notation": "alpha|beta|gamma grammar to be designed",
-      "checker": "Declared/Detected notation consistency missing",
-      "notes": "Must generalize Bitran-Yanasse, Wolsey and validated historical family aliases."
+      "scientificStatus": "implemented",
+      "implementationStatus": "partial",
+      "core": "No source-data change; notation consumes typed descriptors",
+      "instance": "UniversalLotSizingNotation typed AST, generator, parser, canonical renderer and scheme version 1",
+      "mathematics": "Gamma v1 exposes current economic objective family or multiple-objective marker; richer objective algebra remains planned",
+      "notation": "alpha | beta | gamma grammar implemented with canonical structural, feature and objective tokens",
+      "checker": "InstanceModelChecker already exposes CanGenerateNotation; exact descriptor/specification matcher remains planned",
+      "notes": "Generator/parser/render round-trip is tested. Historical Bitran-Yanasse notation remains a separate mapping."
     },
     {
       "id": "semantic-instance-model-checker",
@@ -356,6 +356,18 @@
       "notation": "Historical slash-separated codes Z/C/NI/ND/G implemented",
       "checker": "Series validity enforced by TemporalPatternAnalyzer",
       "notes": "Automatic selection of the relevant four Core series for arbitrary multi-item/multi-site instances is deliberately deferred to the historical mapping layer."
+    },
+    {
+      "id": "universal-notation-parser",
+      "domain": "classification-notation",
+      "scientificStatus": "implemented",
+      "implementationStatus": "implemented",
+      "core": "not applicable",
+      "instance": "UniversalNotationParser parses v1 and canonicalizes accepted token order/whitespace",
+      "mathematics": "not applicable",
+      "notation": "strict three-field parser with stable token catalog",
+      "checker": "malformed/unknown tokens rejected with FormatException",
+      "notes": "Reserved closed-loop network syntax Net:CL(F:...;R:...) is parseable even though Core reverse-flow generation is not yet active."
     }
   ]
 }

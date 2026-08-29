@@ -1,0 +1,230 @@
+using LotSizingDataModel.Instance.Common;
+using LotSizingDataModel.Instance.Descriptors;
+using LotSizingDataModel.Instance.Descriptors.Network;
+
+namespace LotSizingDataModel.Instance.Notation;
+
+/// <summary>
+/// Generates notation scheme version 1 from typed problem descriptors.
+/// </summary>
+public sealed class UniversalNotationGenerator
+{
+    public UniversalLotSizingNotation Generate(
+        LotSizingProblemDescriptor descriptor,
+        UniversalObjectiveKind objective =
+            UniversalObjectiveKind.Economic)
+    {
+        ArgumentNullException.ThrowIfNull(descriptor);
+
+        UniversalItemCardinality itemCardinality =
+            descriptor.Structure.ItemCount switch
+            {
+                1 => UniversalItemCardinality.Single,
+                > 1 => UniversalItemCardinality.Multiple,
+                _ => UniversalItemCardinality.Unknown
+            };
+
+        UniversalProblemLevel problemLevel =
+            descriptor.Structure.ProductStructureRelationshipCount switch
+            {
+                0 => UniversalProblemLevel.SingleLevel,
+                > 0 => UniversalProblemLevel.MultiLevel,
+                _ => UniversalProblemLevel.Unknown
+            };
+
+        var network =
+            new UniversalNetworkNotation
+            {
+                Coupling = descriptor.SupplyNetwork.Coupling,
+                ForwardTopology =
+                    descriptor.SupplyNetwork.ForwardNetwork.Topology,
+                ReverseTopology =
+                    descriptor.SupplyNetwork.ReverseNetwork?.Topology,
+                EchelonCount =
+                    descriptor.SupplyNetwork.ForwardNetwork.EchelonCount,
+                HasCycles =
+                    descriptor.SupplyNetwork.ForwardNetwork.HasCycles,
+                HasMultiSourcing =
+                    descriptor.SupplyNetwork.HasMultiSourcing,
+                HasTransshipment =
+                    descriptor.SupplyNetwork.HasTransshipment
+            };
+
+        return new UniversalLotSizingNotation(
+            alpha:
+                new UniversalNotationAlpha
+                {
+                    ItemCardinality = itemCardinality,
+                    ProblemLevel = problemLevel,
+                    ProductStructureType =
+                        descriptor.Structure.ProductStructureType,
+                    Network = network
+                },
+            beta:
+                new UniversalNotationBeta(
+                    ExtractFeatures(descriptor)),
+            gamma:
+                new UniversalNotationGamma
+                {
+                    Objective =
+                        descriptor.ObjectiveFinance.HasMultipleObjectives
+                            ? UniversalObjectiveKind.MultipleObjectives
+                            : objective
+                });
+    }
+
+    private static IEnumerable<UniversalNotationFeature>
+        ExtractFeatures(
+            LotSizingProblemDescriptor descriptor)
+    {
+        if (descriptor.Demand.HasDemand)
+        {
+            yield return UniversalNotationFeature.Demand;
+        }
+
+        if (descriptor.Demand.IsDeterministic)
+        {
+            yield return UniversalNotationFeature.DeterministicDemand;
+        }
+
+        if (descriptor.Demand.IsTimeVarying)
+        {
+            yield return UniversalNotationFeature.TimeVaryingDemand;
+        }
+
+        if (descriptor.Production.HasProduction)
+        {
+            yield return UniversalNotationFeature.Production;
+        }
+
+        if (descriptor.Capacity.HasProductionCapacity)
+        {
+            yield return UniversalNotationFeature.ProductionCapacity;
+        }
+
+        if (descriptor.Capacity.HasSharedProductionCapacity)
+        {
+            yield return UniversalNotationFeature.SharedProductionCapacity;
+        }
+
+        if (descriptor.Capacity.HasTimeVaryingProductionCapacity)
+        {
+            yield return UniversalNotationFeature.TimeVaryingProductionCapacity;
+        }
+
+        if (descriptor.Capacity.HasSupplierCapacity)
+        {
+            yield return UniversalNotationFeature.SupplierCapacity;
+        }
+
+        if (descriptor.Capacity.HasTransportCapacity)
+        {
+            yield return UniversalNotationFeature.TransportCapacity;
+        }
+
+        if (descriptor.Capacity.HasWarehouseCapacity)
+        {
+            yield return UniversalNotationFeature.WarehouseCapacity;
+        }
+
+        if (descriptor.Setup.HasSetupCosts)
+        {
+            yield return UniversalNotationFeature.SetupCost;
+        }
+
+        if (descriptor.Setup.HasSetupTimes)
+        {
+            yield return UniversalNotationFeature.SetupTime;
+        }
+
+        if (descriptor.Setup.HasStartUpCosts)
+        {
+            yield return UniversalNotationFeature.StartUpCost;
+        }
+
+        if (descriptor.Production.HasLeadTimes)
+        {
+            yield return UniversalNotationFeature.ProductionLeadTime;
+        }
+
+        if (descriptor.Production.HasMinimumLotSizes)
+        {
+            yield return UniversalNotationFeature.MinimumLotSize;
+        }
+
+        if (descriptor.Production.HasMaximumLotSizes)
+        {
+            yield return UniversalNotationFeature.MaximumLotSize;
+        }
+
+        if (descriptor.Production.HasLotSizeMultiples)
+        {
+            yield return UniversalNotationFeature.LotSizeMultiple;
+        }
+
+        if (descriptor.Capacity.HasAdditionalProductionCapacity)
+        {
+            yield return UniversalNotationFeature.AdditionalProductionCapacity;
+        }
+
+        if (descriptor.Capacity.HasAdditionalWarehouseCapacity)
+        {
+            yield return UniversalNotationFeature.AdditionalWarehouseCapacity;
+        }
+
+        if (descriptor.Capacity.HasAdditionalTransportCapacity)
+        {
+            yield return UniversalNotationFeature.AdditionalTransportCapacity;
+        }
+
+        if (descriptor.InventoryService.HasInitialInventory)
+        {
+            yield return UniversalNotationFeature.InitialInventory;
+        }
+
+        if (descriptor.InventoryService.HasSafetyStockRequirements)
+        {
+            yield return UniversalNotationFeature.SafetyStock;
+        }
+
+        if (descriptor.InventoryService.HasBacklogging)
+        {
+            yield return UniversalNotationFeature.Backlogging;
+        }
+
+        if (descriptor.InventoryService.HasLostSales)
+        {
+            yield return UniversalNotationFeature.LostSales;
+        }
+
+        if (descriptor.Procurement.HasPurchasing)
+        {
+            yield return UniversalNotationFeature.Purchasing;
+        }
+
+        if (descriptor.Procurement.HasSupplierLeadTimes)
+        {
+            yield return UniversalNotationFeature.SupplierLeadTime;
+        }
+
+        if (descriptor.TransportationDistribution.HasTransportation)
+        {
+            yield return UniversalNotationFeature.Transportation;
+        }
+
+        if (descriptor.TransportationDistribution.HasTransportLeadTimes)
+        {
+            yield return UniversalNotationFeature.TransportLeadTime;
+        }
+
+        if (descriptor.TransportationDistribution.HasDistribution)
+        {
+            yield return UniversalNotationFeature.Distribution;
+        }
+
+        if (descriptor.ObjectiveFinance.HasFinancialConstraints)
+        {
+            yield return UniversalNotationFeature.FinancialConstraint;
+        }
+    }
+}

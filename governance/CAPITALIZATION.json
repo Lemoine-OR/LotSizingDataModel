@@ -190,6 +190,15 @@
       "correctiveAction": "Use an explicit global-scale tolerance and canonical specificity Zero > Constant > one-direction monotonicity > General; tolerance-induced bidirectional ambiguity falls back to General.",
       "permanentGuard": "Historical Bitran-Yanasse alpha/beta/gamma/delta codes remain slash-separated and isolated from the universal alpha|beta|gamma notation.",
       "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-022",
+      "category": "universal-notation-contract",
+      "symptom": "A notation string becomes ambiguous, order-dependent, or impossible to evolve compatibly.",
+      "rootCause": "Human-readable tokens are treated as free text instead of a versioned grammar backed by a typed AST and canonical renderer.",
+      "correctiveAction": "Use a versioned LSDM scheme, typed alpha/beta/gamma AST, stable token catalog, strict parser and deterministic canonical renderer.",
+      "permanentGuard": "Generated notation must satisfy Render(Parse(Render(Generate(descriptor)))) == Render(Generate(descriptor)); historical alias notations remain separate projections.",
+      "status": "active"
     }
   ]
 }
