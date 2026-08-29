@@ -62,7 +62,12 @@ public sealed class SupplyNetworkAnalyzerTests
         Assert.Equal(3, descriptor.ForwardNetwork.EchelonCount);
         Assert.Single(descriptor.ForwardNetwork.SourceKeys);
         Assert.Single(descriptor.ForwardNetwork.SinkKeys);
-        Assert.True(descriptor.IsClassicalDrpTopologyCandidate);
+        Assert.True(descriptor.HasDistributionNetwork);
+        Assert.True(
+            descriptor.HasExternalDemandAtDistributionCenters);
+        Assert.True(descriptor.HasMultiEchelonStructure);
+        Assert.True(
+            descriptor.IsAcyclicSingleSourcingDistributionNetwork);
     }
 
     [Fact]
@@ -125,7 +130,8 @@ public sealed class SupplyNetworkAnalyzerTests
             SupplyNetworkTopologyType.Convergent,
             descriptor.ForwardNetwork.Topology);
         Assert.True(descriptor.HasMultiSourcing);
-        Assert.False(descriptor.IsClassicalDrpTopologyCandidate);
+        Assert.False(
+            descriptor.IsAcyclicSingleSourcingDistributionNetwork);
     }
 
     [Fact]

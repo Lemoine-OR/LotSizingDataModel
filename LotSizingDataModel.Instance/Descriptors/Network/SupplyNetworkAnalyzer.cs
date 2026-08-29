@@ -213,16 +213,11 @@ public sealed class SupplyNetworkAnalyzer
             supplyChain.TransportResources.Any(
                 resource => resource.Lanes.Count > 0);
 
-        bool classicalDrpCandidate =
-            !hasCycles &&
-            !hasMultiSourcing &&
-            supplyChain.Demands.Count > 0 &&
-            supplyChain.DistributionCenterSourcings.Count > 0 &&
-            forward.EchelonCount >= 2 &&
-            topology is
-                SupplyNetworkTopologyType.Serial or
-                SupplyNetworkTopologyType.Divergent or
-                SupplyNetworkTopologyType.Tree;
+        bool hasDistributionNetwork =
+            supplyChain.DistributionCenterSourcings.Count > 0;
+
+        bool hasExternalDemandAtDistributionCenters =
+            supplyChain.Demands.Count > 0;
 
         return new SupplyNetworkDescriptor
         {
@@ -231,8 +226,10 @@ public sealed class SupplyNetworkAnalyzer
             Coupling = NetworkCouplingType.ForwardOnly,
             HasMultiSourcing = hasMultiSourcing,
             HasTransshipment = hasTransshipment,
-            IsClassicalDrpTopologyCandidate =
-                classicalDrpCandidate
+            HasDistributionNetwork =
+                hasDistributionNetwork,
+            HasExternalDemandAtDistributionCenters =
+                hasExternalDemandAtDistributionCenters
         };
     }
 

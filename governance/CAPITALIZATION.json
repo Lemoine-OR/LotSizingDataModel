@@ -208,6 +208,24 @@
       "correctiveAction": "Exact matching uses full canonical generated equality; compatibility matching interprets explicitly present tokens as positive requirements and omitted optional beta/network modifiers as unconstrained.",
       "permanentGuard": "Matcher precedence is Contradiction > Incomplete > Exact > Compatible, and Exact always requires canonical equality with generated notation.",
       "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-024",
+      "category": "scientific-taxonomy",
+      "symptom": "DRP or MRP is described as a lot-sizing model/problem class, or a physical network topology is named after a planning paradigm.",
+      "rootCause": "Structural properties, planning paradigms, problem classes, formulations and solution methods are mixed in one classification vocabulary.",
+      "correctiveAction": "Introduce explicit ScientificConceptCategory dimensions and replace DRP-named topology inference with neutral observable network properties.",
+      "permanentGuard": "DRP and MRP are categorized only as PlanningParadigm; physical topology descriptors must remain paradigm-neutral; mappings may relate concepts but never collapse their categories.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-025",
+      "category": "transactional-pack-scope",
+      "symptom": "A pack fails the staged-path scope check because expectedPaths contains a payload file whose content is identical to the immutable baseline.",
+      "rootCause": "The pack declared intended payload files rather than the exact Git diff that the candidate commit can actually contain.",
+      "correctiveAction": "Compute expectedPaths from files that are provably changed relative to the exact baseline; omit byte-identical baseline files even if they were consulted or copied during pack fabrication.",
+      "permanentGuard": "Before sealing a pack, every expectedPaths entry must differ from the exact baseline or be a genuinely new path; every actual changed path must be listed, and baseline-identical files must be excluded.",
+      "status": "active"
     }
   ]
 }

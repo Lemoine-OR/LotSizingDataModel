@@ -1,7 +1,8 @@
 namespace LotSizingDataModel.Instance.Descriptors.Network;
 
 /// <summary>
-/// Describes the physical supply-flow network independently from the BOM.
+/// Describes the physical supply-flow network independently from the BOM and
+/// independently from any planning paradigm such as MRP or DRP.
 /// </summary>
 public sealed class SupplyNetworkDescriptor
 {
@@ -14,15 +15,41 @@ public sealed class SupplyNetworkDescriptor
         NetworkCouplingType.ForwardOnly;
 
     public bool HasReverseNetwork => ReverseNetwork is not null;
+
     public bool HasMultiSourcing { get; init; }
+
     public bool HasTransshipment { get; init; }
 
     /// <summary>
-    /// Gets whether the graph matches the structural signature of a classical
-    /// single-sourcing, acyclic DRP distribution network.
+    /// Gets whether at least one distribution-center sourcing relationship
+    /// is represented in the physical network.
+    /// </summary>
+    public bool HasDistributionNetwork { get; init; }
+
+    /// <summary>
+    /// Gets whether external demand records are declared at distribution
+    /// centers.
+    /// </summary>
+    public bool HasExternalDemandAtDistributionCenters { get; init; }
+
+    /// <summary>
+    /// Gets whether the forward physical graph has at least two facility
+    /// echelons.
+    /// </summary>
+    public bool HasMultiEchelonStructure =>
+        ForwardNetwork.EchelonCount is >= 2;
+
+    /// <summary>
+    /// Gets whether the represented distribution network is acyclic and has
+    /// no detected supplier/DC multisourcing.
     /// </summary>
     /// <remarks>
-    /// This is only a structural candidate, not a complete problem-class claim.
+    /// This is a neutral structural fact. It is deliberately not named after
+    /// DRP because Distribution Requirements Planning is a planning paradigm,
+    /// not a lot-sizing model or a network-topology type.
     /// </remarks>
-    public bool IsClassicalDrpTopologyCandidate { get; init; }
+    public bool IsAcyclicSingleSourcingDistributionNetwork =>
+        HasDistributionNetwork &&
+        !ForwardNetwork.HasCycles &&
+        !HasMultiSourcing;
 }

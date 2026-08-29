@@ -322,16 +322,16 @@
       "notes": "Architecture prepared without inventing reverse-flow source data."
     },
     {
-      "id": "drp-structural-signature",
-      "domain": "classification",
+      "id": "distribution-network-structural-facts",
+      "domain": "network",
       "scientificStatus": "implemented",
-      "implementationStatus": "partial",
-      "core": "existing demand and distribution-sourcing relationships",
-      "instance": "IsClassicalDrpTopologyCandidate detects acyclic single-sourcing serial/divergent/tree distribution structures with a demand record",
-      "mathematics": "full DRP formulation/classification mapping pending",
-      "notation": "future historical alias mapping",
-      "checker": "structural candidate only",
-      "notes": "Conservatively named candidate to avoid overclaiming a full DRP problem class."
+      "implementationStatus": "implemented",
+      "core": "DistributionCenterSourcing and Demand supply neutral distribution-network facts",
+      "instance": "HasDistributionNetwork, HasExternalDemandAtDistributionCenters, HasMultiEchelonStructure and IsAcyclicSingleSourcingDistributionNetwork",
+      "mathematics": "No model-class claim",
+      "notation": "network topology/echelon tokens only; no DRP model token",
+      "checker": "structural consistency remains owned by SupplyChainValidator",
+      "notes": "DRP is explicitly removed from topology naming and belongs to PlanningParadigm."
     },
     {
       "id": "temporal-pattern-analysis",
@@ -380,6 +380,18 @@
       "notation": "Exact / Compatible / Incomplete / Contradiction semantics implemented",
       "checker": "Structured mismatch issues distinguish proven contradiction from insufficient descriptor information",
       "notes": "Partial specifications are positive constraints. Exact requires canonical equality with generated notation."
+    },
+    {
+      "id": "scientific-taxonomy-dimensions",
+      "domain": "classification-architecture",
+      "scientificStatus": "implemented",
+      "implementationStatus": "implemented",
+      "core": "not applicable",
+      "instance": "ScientificConceptCategory, PlanningParadigmKind and ScientificConceptCatalog",
+      "mathematics": "MathematicalFormulation is a distinct taxonomic category",
+      "notation": "universal notation describes factual structure/features/objective; planning paradigms remain separate metadata/mappings",
+      "checker": "taxonomy unit tests prevent DRP/MRP from being treated as problem classes",
+      "notes": "Dimensions: StructuralProperty, PlanningParadigm, LotSizingProblemClass, MathematicalFormulation, SolutionMethod, HistoricalClassification."
     }
   ]
 }
