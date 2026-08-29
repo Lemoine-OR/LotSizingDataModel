@@ -82,7 +82,7 @@
     {
       "prefix": "LSDM-SEM",
       "owner": "Instance.InstanceModelChecker",
-      "status": "reserved"
+      "status": "active"
     },
     {
       "prefix": "LSDM-NOT",

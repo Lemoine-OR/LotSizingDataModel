@@ -145,6 +145,15 @@
       "correctiveAction": "Pre-build version identity validation performs its own restore. -SkipRestore is allowed only after an explicit successful restore in the same worktree.",
       "permanentGuard": "Any version probe executed before the build restore must not use -SkipRestore; build ordering and restore assumptions are part of the validation contract.",
       "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-017",
+      "category": "validation-layering",
+      "symptom": "Semantic instance validation duplicates structural/referential validation rules already owned by Core.",
+      "rootCause": "Validation responsibilities are not separated by layer.",
+      "correctiveAction": "InstanceModelChecker composes SupplyChainValidator diagnostics and adds only instance-level semantic rules.",
+      "permanentGuard": "Structural/referential truth remains owned by Core.SupplyChainValidator; InstanceModelChecker must not independently reimplement those rules.",
+      "status": "active"
     }
   ]
 }
