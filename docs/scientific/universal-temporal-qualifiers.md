@@ -13,7 +13,8 @@ Initial parameter codes:
 - `SC`: setup cost;
 - `HC`: holding cost;
 - `PC`: production cost;
-- `CapP`: production capacity.
+- `CapP`: production capacity;
+- `MinLot`: minimum production / minimum lot size.
 
 Pattern codes reuse the canonical temporal vocabulary:
 

@@ -93,9 +93,11 @@ Examples:
 
 - `CAP=C` -> `Cap:P,Cap:Var`;
 - `CAP=CC` -> `Cap:P,TP:CapP=C`;
+- `CAP=U` -> `Uncap:P`;
 - `VAR=B` -> `BL`;
 - Wolsey `VAR=SC` -> universal `SU` (start-up cost);
 - `VAR=LB` -> `MinLot`;
+- `VAR=LB(C)` -> `MinLot,TP:MinLot=C`;
 - `VAR=SS` -> `SS`.
 
 A dimension is never guessed merely because an acronym looks similar.
@@ -105,10 +107,8 @@ Current explicitly unrepresented examples include:
 - the Wagner-Whitin cost condition;
 - zero-or-full-capacity production of DLSI/DLS;
 - variable/no-variable initial-stock decision;
-- explicit uncapacitated regime `U` under positive-constraint matching;
 - start-up times;
 - additional sales;
-- constant minimum-production-level qualifier;
 - exact machine/bucket/count information;
 - sequence-dependent changeover time/cost.
 

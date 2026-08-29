@@ -14,5 +14,6 @@ public enum UniversalTemporalParameter
     SetupCost = 10,
     HoldingCost = 11,
     ProductionCost = 12,
-    ProductionCapacity = 13
+    ProductionCapacity = 13,
+    MinimumLotSize = 14
 }

@@ -29,6 +29,19 @@ public sealed class LotSizingProblemDescriptor
     /// <summary>Gets the physical supply-flow network descriptor.</summary>
     public SupplyNetworkDescriptor SupplyNetwork { get; private set; } = new();
 
+    /// <summary>
+    /// Gets the production-capacity regime derived from existing production
+    /// and production-capacity facts.
+    /// </summary>
+    public ProductionCapacityRegime ProductionCapacityRegime =>
+        !Production.HasProduction
+            ? ProductionCapacityRegime.NotApplicable
+            : !Capacity.HasProductionCapacity
+                ? ProductionCapacityRegime.Uncapacitated
+                : Capacity.HasTimeVaryingProductionCapacity
+                    ? ProductionCapacityRegime.TimeVarying
+                    : ProductionCapacityRegime.Constant;
+
     public static LotSizingProblemDescriptor FromLegacyFeatures(
         LotSizingProblemFeatures features)
     {

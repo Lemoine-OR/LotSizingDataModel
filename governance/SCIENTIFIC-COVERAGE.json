@@ -411,11 +411,11 @@
       "scientificStatus": "implemented",
       "implementationStatus": "implemented",
       "core": "No Core change; qualifiers consume explicit temporal-pattern analyses",
-      "instance": "UniversalTemporalParameter and UniversalTemporalQualifier integrated in beta AST",
-      "mathematics": "No formulation change; parameter temporal behavior is descriptive metadata over existing series",
-      "notation": "Generic TP:<parameter>=<Z|C|NI|ND|G> grammar supported by parser, renderer and generator",
-      "checker": "Matcher reports missing actual temporal analysis as Incomplete and differing known pattern as Contradiction",
-      "notes": "Initial reusable parameters: demand, setup cost, holding cost, production cost, production capacity."
+      "instance": "UniversalTemporalParameter now also includes MinimumLotSize",
+      "mathematics": "No formulation change; minimum lot size already exists as a modeled parameter family",
+      "notation": "TP:MinLot supports Z/C/NI/ND/G",
+      "checker": "Generic temporal matcher semantics apply unchanged",
+      "notes": "Closes Wolsey LB(C) representational gap."
     },
     {
       "id": "wolsey-2002-historical-classification",
@@ -436,10 +436,22 @@
       "implementationStatus": "partial",
       "core": "not applicable",
       "instance": "WolseyHistoricalMapper projects representable dimensions and enumerates every unsupported dimension",
-      "mathematics": "C and CC capacity regimes plus B/SC/LB/SS variants are projectable; WW, DLSI/DLS and several extensions require further generic semantics",
-      "notation": "Uses existing generic universal features and TP:CapP=C; never inserts Wolsey-specific tokens",
+      "mathematics": "C/CC/U capacity regimes and B/SC/LB/LB(C)/SS variants are projectable; WW, DLSI/DLS and several real model extensions remain future work",
+      "notation": "Uses Uncap:P and TP:MinLot=C in addition to existing generic tokens",
       "checker": "Coverage Exact only when no source dimension remains unrepresented",
-      "notes": "U, WW, DLSI/DLS, start-up times, sales, constant lower-bound qualifier, exact machine/bucket/count dimensions and sequence-dependent changeovers remain explicit gaps."
+      "notes": "Remaining gaps: WW condition, DLSI/DLS zero-or-full-capacity and initial-stock semantics, start-up times, sales, exact machine/bucket/count dimensions, and sequence-dependent changeovers."
+    },
+    {
+      "id": "production-capacity-regime",
+      "domain": "typed-descriptor",
+      "scientificStatus": "implemented",
+      "implementationStatus": "implemented",
+      "core": "No Core data change; derived from existing production and production-capacity semantics",
+      "instance": "ProductionCapacityRegime = NotApplicable/Uncapacitated/Constant/TimeVarying",
+      "mathematics": "No formulation change; these regimes already follow from the presence/absence/time variation of capacity constraints",
+      "notation": "Uncap:P explicitly represents uncapacitated production",
+      "checker": "Generator and matcher no longer confuse explicit uncapacitated production with omitted/unconstrained capacity information",
+      "notes": "Derived semantic only; no nominal serialized flag."
     }
   ]
 }

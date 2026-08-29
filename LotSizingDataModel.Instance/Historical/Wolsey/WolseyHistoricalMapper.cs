@@ -54,6 +54,7 @@ public sealed class WolseyHistoricalMapper
         MapVariants(
             classification.SingleItem.Variants,
             features,
+            temporalQualifiers,
             missing);
 
         MapExtendedDimensions(
@@ -197,10 +198,8 @@ public sealed class WolseyHistoricalMapper
                 break;
 
             case WolseyCapacityRegime.U:
-                // Absence of Cap:P is not an explicit uncapacitated
-                // requirement under positive-constraint matching.
-                missing.Add(
-                    "CAP.U:ExplicitUncapacitatedProduction");
+                features.Add(
+                    UniversalNotationFeature.UncapacitatedProduction);
                 break;
 
             default:
@@ -214,6 +213,7 @@ public sealed class WolseyHistoricalMapper
     private static void MapVariants(
         IEnumerable<WolseyVariant> variants,
         ICollection<UniversalNotationFeature> features,
+        ICollection<UniversalTemporalQualifier> temporalQualifiers,
         ICollection<string> missing)
     {
         foreach (WolseyVariant variant in variants)
@@ -254,8 +254,10 @@ public sealed class WolseyHistoricalMapper
                 case WolseyVariant.LBConstant:
                     features.Add(
                         UniversalNotationFeature.MinimumLotSize);
-                    missing.Add(
-                        "VAR.LB(C):ConstantMinimumProductionLevel");
+                    temporalQualifiers.Add(
+                        new UniversalTemporalQualifier(
+                            UniversalTemporalParameter.MinimumLotSize,
+                            TemporalPatternType.Constant));
                     break;
 
                 case WolseyVariant.SS:

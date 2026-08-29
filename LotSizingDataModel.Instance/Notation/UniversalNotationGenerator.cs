@@ -115,6 +115,14 @@ public sealed class UniversalNotationGenerator
             yield return UniversalNotationFeature.Production;
         }
 
+        if (
+            descriptor.ProductionCapacityRegime ==
+            ProductionCapacityRegime.Uncapacitated)
+        {
+            yield return
+                UniversalNotationFeature.UncapacitatedProduction;
+        }
+
         if (descriptor.Capacity.HasProductionCapacity)
         {
             yield return UniversalNotationFeature.ProductionCapacity;

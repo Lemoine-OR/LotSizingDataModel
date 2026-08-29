@@ -61,6 +61,29 @@ public sealed class UniversalTemporalQualifierTests
     }
 
     [Fact]
+    public void MinimumLotSize_IsGenericTemporalParameter()
+    {
+        string text =
+            "1,SL,Net:UNK | MinLot,TP:MinLot=C | Obj:Econ";
+
+        UniversalLotSizingNotation parsed =
+            new UniversalNotationParser()
+                .Parse(text);
+
+        Assert.Equal(
+            text,
+            parsed.Render());
+
+        Assert.Contains(
+            parsed.Beta.TemporalQualifiers,
+            qualifier =>
+                qualifier.Parameter ==
+                    UniversalTemporalParameter.MinimumLotSize &&
+                qualifier.Pattern ==
+                    TemporalPatternType.Constant);
+    }
+
+    [Fact]
     public void Parser_RejectsUnknownTemporalParameter()
     {
         Assert.Throws<FormatException>(

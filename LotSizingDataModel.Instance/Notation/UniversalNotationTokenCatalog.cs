@@ -18,6 +18,7 @@ internal static class UniversalNotationTokenCatalog
                 [UniversalNotationFeature.DeterministicDemand] = "Det",
                 [UniversalNotationFeature.TimeVaryingDemand] = "DVar",
                 [UniversalNotationFeature.Production] = "Prod",
+                [UniversalNotationFeature.UncapacitatedProduction] = "Uncap:P",
 
                 [UniversalNotationFeature.ProductionCapacity] = "Cap:P",
                 [UniversalNotationFeature.SharedProductionCapacity] = "Cap:Shared",
@@ -164,6 +165,7 @@ internal static class UniversalNotationTokenCatalog
             UniversalTemporalParameter.HoldingCost => "HC",
             UniversalTemporalParameter.ProductionCost => "PC",
             UniversalTemporalParameter.ProductionCapacity => "CapP",
+            UniversalTemporalParameter.MinimumLotSize => "MinLot",
             _ => throw new ArgumentOutOfRangeException(
                 nameof(parameter),
                 parameter,
@@ -181,6 +183,7 @@ internal static class UniversalNotationTokenCatalog
             "HC" => UniversalTemporalParameter.HoldingCost,
             "PC" => UniversalTemporalParameter.ProductionCost,
             "CAPP" => UniversalTemporalParameter.ProductionCapacity,
+            "MINLOT" => UniversalTemporalParameter.MinimumLotSize,
             _ => throw new FormatException(
                 $"Unknown temporal-parameter token '{code}'.")
         };

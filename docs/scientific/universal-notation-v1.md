@@ -29,7 +29,9 @@ reverse-flow semantics.
 Scheme v1 defines stable canonical tokens for characteristics already
 represented by typed descriptors. Examples include:
 
-`Dem,Det,DVar,Prod,Cap:P,Cap:Var,SC,ST,MinLot,BL,Buy,Tr,Dist,Fin`
+`Dem,Det,DVar,Prod,Uncap:P,Cap:P,Cap:Var,SC,ST,MinLot,BL,Buy,Tr,Dist,Fin`
+
+`Uncap:P` explicitly requires production without a production-capacity constraint. Token omission remains unconstrained under partial-specification matching.
 
 The renderer orders tokens canonically. The parser accepts arbitrary beta-token
 order and normalizes it.

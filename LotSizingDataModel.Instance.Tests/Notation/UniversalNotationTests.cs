@@ -60,7 +60,7 @@ public sealed class UniversalNotationTests
                 .Render();
 
         Assert.Equal(
-            "1,SL,Net:IND:E1 | Dem,Det,Prod,SC | Obj:Econ",
+            "1,SL,Net:IND:E1 | Dem,Det,Prod,Uncap:P,SC | Obj:Econ",
             notation);
     }
 

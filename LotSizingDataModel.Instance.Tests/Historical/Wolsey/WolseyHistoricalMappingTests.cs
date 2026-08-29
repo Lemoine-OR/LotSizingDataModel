@@ -111,7 +111,7 @@ public sealed class WolseyHistoricalMappingTests
     }
 
     [Fact]
-    public void UncapacitatedRegime_IsNotInferredFromMissingCapacityToken()
+    public void UncapacitatedRegime_MapsExplicitlyAndExactly()
     {
         var classification =
             new WolseySingleItemClassification(
@@ -123,12 +123,15 @@ public sealed class WolseyHistoricalMappingTests
                 .Map(classification);
 
         Assert.Equal(
-            HistoricalMappingCoverage.Partial,
+            HistoricalMappingCoverage.Exact,
             mapping.Coverage);
 
-        Assert.Contains(
-            "CAP.U:ExplicitUncapacitatedProduction",
+        Assert.Empty(
             mapping.UnrepresentedHistoricalDimensions);
+
+        Assert.Equal(
+            "1,SL,Net:UNK | Dem,Det,Prod,Uncap:P,SC | Obj:Econ",
+            mapping.UniversalSpecification.CanonicalText);
     }
 
     [Fact]
@@ -253,7 +256,7 @@ public sealed class WolseyHistoricalMappingTests
     }
 
     [Fact]
-    public void ConstantLowerBound_IsNotClaimedExactWithoutGenericPatternSupport()
+    public void ConstantLowerBound_UsesGenericMinimumLotTemporalQualifier()
     {
         var classification =
             new WolseySingleItemClassification(
@@ -269,11 +272,21 @@ public sealed class WolseyHistoricalMappingTests
                 .Map(classification);
 
         Assert.Equal(
-            HistoricalMappingCoverage.Partial,
+            HistoricalMappingCoverage.Exact,
             mapping.Coverage);
 
-        Assert.Contains(
-            "VAR.LB(C):ConstantMinimumProductionLevel",
+        Assert.Empty(
             mapping.UnrepresentedHistoricalDimensions);
+
+        Assert.Contains(
+            mapping.UniversalSpecification.Notation
+                .Beta.TemporalQualifiers,
+            qualifier =>
+                qualifier.Parameter ==
+                    LotSizingDataModel.Instance.Notation
+                        .UniversalTemporalParameter.MinimumLotSize &&
+                qualifier.Pattern ==
+                    LotSizingDataModel.Instance.Descriptors.Temporal
+                        .TemporalPatternType.Constant);
     }
 }

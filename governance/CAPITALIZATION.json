@@ -262,6 +262,15 @@
       "correctiveAction": "Historical enums preserve source-token namespaces and mapping code uses source definitions, never string-name coincidence.",
       "permanentGuard": "Every historical token mapping must be backed by an explicit semantic case; ambiguous or unsupported tokens remain unrepresented rather than being matched to a similarly named universal feature.",
       "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-030",
+      "category": "explicit-negative-semantics",
+      "symptom": "Explicitly uncapacitated production is represented only by absence of a capacity token.",
+      "rootCause": "Positive-constraint matching interprets omission as unspecified, so absence cannot encode a required negative condition.",
+      "correctiveAction": "Derive ProductionCapacityRegime and encode explicit uncapacitated production with generic token Uncap:P.",
+      "permanentGuard": "Semantically meaningful absence/negative conditions require explicit representation whenever omission means unconstrained.",
+      "status": "active"
     }
   ]
 }

@@ -37,6 +37,9 @@ public enum UniversalNotationFeature
     TimeVaryingDemand = 2,
     Production = 3,
 
+    /// <summary>Production exists without a production-capacity constraint.</summary>
+    UncapacitatedProduction = 9,
+
     ProductionCapacity = 10,
     SharedProductionCapacity = 11,
     TimeVaryingProductionCapacity = 12,
