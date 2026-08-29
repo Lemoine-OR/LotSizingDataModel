@@ -11,7 +11,9 @@ namespace LotSizingDataModel.Solution.Metadata.Scientific;
 /// </remarks>
 public sealed class SolutionScientificProvenance
 {
-    public const string CurrentSchemaVersion = "1";
+    public const string LegacySchemaVersion = "1";
+
+    public const string CurrentSchemaVersion = "2";
 
     public string SchemaVersion { get; init; } =
         CurrentSchemaVersion;
@@ -40,8 +42,27 @@ public sealed class SolutionScientificProvenance
     public string FormulationScientificCompatibility { get; init; } =
         string.Empty;
 
+    public string SolutionMethodId { get; init; } =
+        string.Empty;
+
+    public string SolutionMethodCategory { get; init; } =
+        string.Empty;
+
+    public string SolverBackendKind { get; init; } =
+        string.Empty;
+
     public DateTime CapturedAtUtc { get; init; } =
         DateTime.UtcNow;
+
+    public bool IsLegacySchema =>
+        SchemaVersion.Equals(
+            LegacySchemaVersion,
+            StringComparison.Ordinal);
+
+    public bool HasResolutionMethodEvidence =>
+        !string.IsNullOrWhiteSpace(SolutionMethodId) &&
+        !string.IsNullOrWhiteSpace(SolutionMethodCategory) &&
+        !string.IsNullOrWhiteSpace(SolverBackendKind);
 
     public bool IsStructurallyComplete =>
         !string.IsNullOrWhiteSpace(SchemaVersion) &&
@@ -51,5 +72,14 @@ public sealed class SolutionScientificProvenance
         !string.IsNullOrWhiteSpace(CanonicalProblemClassCode) &&
         !string.IsNullOrWhiteSpace(FormulationId) &&
         !string.IsNullOrWhiteSpace(
-            FormulationScientificCompatibility);
+            FormulationScientificCompatibility) &&
+        (
+            IsLegacySchema ||
+            (
+                SchemaVersion.Equals(
+                    CurrentSchemaVersion,
+                    StringComparison.Ordinal) &&
+                HasResolutionMethodEvidence
+            )
+        );
 }

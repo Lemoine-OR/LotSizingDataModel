@@ -26,6 +26,12 @@ public sealed class SolutionScientificProvenanceCodecTests
                     "Standard solver-independent MILP",
                 FormulationScientificCompatibility =
                     "Compatible",
+                SolutionMethodId =
+                    "MILP-GENERAL",
+                SolutionMethodCategory =
+                    "MixedIntegerLinearProgramming",
+                SolverBackendKind =
+                    "Cplex",
                 CapturedAtUtc =
                     new DateTime(
                         2026,
@@ -105,7 +111,11 @@ public sealed class SolutionScientificProvenanceCodecTests
                 CanonicalProblemClassCode = "SI-ULS",
                 ProblemClassMatchKind = "ExactCore",
                 FormulationId = "standard",
-                FormulationScientificCompatibility = "Compatible"
+                FormulationScientificCompatibility = "Compatible",
+                SolutionMethodId = "MILP-GENERAL",
+                SolutionMethodCategory =
+                    "MixedIntegerLinearProgramming",
+                SolverBackendKind = "Cplex"
             };
 
         var second =
@@ -116,7 +126,11 @@ public sealed class SolutionScientificProvenanceCodecTests
                 CanonicalProblemClassCode = "SI-ULS",
                 ProblemClassMatchKind = "ExactCore",
                 FormulationId = "standard",
-                FormulationScientificCompatibility = "Compatible"
+                FormulationScientificCompatibility = "Compatible",
+                SolutionMethodId = "MILP-GENERAL",
+                SolutionMethodCategory =
+                    "MixedIntegerLinearProgramming",
+                SolverBackendKind = "Gurobi"
             };
 
         SolutionScientificProvenanceCodec.Write(metadata, first);
@@ -137,4 +151,43 @@ public sealed class SolutionScientificProvenanceCodecTests
                 .Provenance!
                 .DetectedNotation);
     }
+
+    [Fact]
+    public void LegacySchemaV1_RemainsReadable()
+    {
+        var metadata =
+            new SolutionGenerationMetadata();
+
+        var legacy =
+            new SolutionScientificProvenance
+            {
+                SchemaVersion =
+                    SolutionScientificProvenance.LegacySchemaVersion,
+                DetectedNotation =
+                    "1,SL,Net:UNK | Dem,Prod,Uncap:P,SC | Obj:Econ",
+                CanonicalProblemClassCode = "SI-ULS",
+                ProblemClassMatchKind = "ExactCore",
+                FormulationId = "standard",
+                FormulationScientificCompatibility = "Compatible"
+            };
+
+        SolutionScientificProvenanceCodec.Write(
+            metadata,
+            legacy);
+
+        SolutionScientificProvenanceReadResult read =
+            SolutionScientificProvenanceCodec.Read(
+                metadata);
+
+        Assert.Equal(
+            SolutionScientificProvenanceReadKind.Valid,
+            read.Kind);
+
+        Assert.True(
+            read.Provenance!.IsLegacySchema);
+
+        Assert.False(
+            read.Provenance.HasResolutionMethodEvidence);
+    }
+
 }

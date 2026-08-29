@@ -74,6 +74,13 @@ public sealed class ScientificLotSizingSolvePipelineTests
         Assert.Equal(
             StandardLotSizingFormulation.StandardFormulationId,
             result.FormulationSelection.Formulation!.FormulationId);
+
+        Assert.True(
+            result.ResolutionPlan.IsReady);
+
+        Assert.Equal(
+            "MILP-GENERAL",
+            result.ResolutionPlan.SelectedMethodId);
     }
 
     [Fact]
@@ -228,11 +235,25 @@ public sealed class ScientificLotSizingSolvePipelineTests
         Assert.NotNull(
             result.CapturedProvenance);
 
+        SolutionScientificProvenanceReadResult provenanceRead =
+            SolutionScientificProvenanceCodec
+                .Read(data.Solution.GenerationMetadata);
+
         Assert.Equal(
             SolutionScientificProvenanceReadKind.Valid,
-            SolutionScientificProvenanceCodec
-                .Read(data.Solution.GenerationMetadata)
-                .Kind);
+            provenanceRead.Kind);
+
+        Assert.Equal(
+            SolutionScientificProvenance.CurrentSchemaVersion,
+            provenanceRead.Provenance!.SchemaVersion);
+
+        Assert.Equal(
+            "MILP-GENERAL",
+            provenanceRead.Provenance.SolutionMethodId);
+
+        Assert.Equal(
+            SolverKind.Cplex.ToString(),
+            provenanceRead.Provenance.SolverBackendKind);
 
         Assert.NotNull(
             result.NumericalVerification);
@@ -273,6 +294,52 @@ public sealed class ScientificLotSizingSolvePipelineTests
 
         Assert.True(
             fakeSolver.StopRequested);
+    }
+
+
+    [Fact]
+    public async Task ExplicitBackendDrift_IsBlocking()
+    {
+        ReferenceFixtureData data =
+            ReferenceFixture.Load();
+
+        var sourceRequest =
+            new SolverRequest(data.Instance)
+            {
+                PreferredSolver =
+                    SolverKind.Gurobi
+            };
+
+        var fakeSolver =
+            new ScientificSolvePipelineFakeSolverService(
+                request =>
+                    ScientificSolvePipelineFakeSolverService.Success(
+                        request,
+                        data.Solution));
+
+        var pipeline =
+            new ScientificLotSizingSolvePipeline(
+                fakeSolver,
+                CreateStandardRegistry());
+
+        ScientificSolvePipelineResult result =
+            await pipeline.SolveAsync(
+                new ScientificSolvePipelineRequest(
+                    sourceRequest,
+                    verifyNumerically: false,
+                    verifyProvenance: false));
+
+        Assert.Equal(
+            ScientificSolvePipelineStatus.BackendDrift,
+            result.Status);
+
+        Assert.Null(
+            result.CapturedProvenance);
+
+        Assert.Contains(
+            result.Diagnostics,
+            diagnostic =>
+                diagnostic.Code == "LSDM-PIPE-013");
     }
 
     private static MathematicalModelFormulationRegistry

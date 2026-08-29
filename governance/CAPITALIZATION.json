@@ -460,6 +460,51 @@
       "correctiveAction": "Compare SolverRunResult.FormulationName with scientific selection before provenance capture.",
       "permanentGuard": "Formulation drift is blocking for provenance capture and returns LSDM-PIPE-011.",
       "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-052",
+      "category": "solution-method-vs-backend",
+      "symptom": "CPLEX/Gurobi/Xpress/CBC are classified as solution methods instead of native solver backends.",
+      "rootCause": "Algorithmic method and implementation backend are collapsed into one resolution label.",
+      "correctiveAction": "Separate ScientificSolutionMethodDefinition from ScientificSolverBackendDefinition.",
+      "permanentGuard": "SolverKind values may never be used as scientific solution-method identifiers.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-053",
+      "category": "catalog-vs-executable-solution-method",
+      "symptom": "A literature method family is auto-selected although no executable adapter exists in LotSizingDataModel.",
+      "rootCause": "Scientific relevance is conflated with implementation availability.",
+      "correctiveAction": "Solution methods have Executable or CatalogOnly support levels; automatic planning selects only ExecutableCompatible candidates.",
+      "permanentGuard": "CatalogOnly methods are never auto-selected.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-054",
+      "category": "solution-provenance-method-backend",
+      "symptom": "Scientific solution provenance records problem/formulation but cannot state the algorithmic method family or actual backend.",
+      "rootCause": "Provenance schema v1 ended at formulation compatibility.",
+      "correctiveAction": "Schema v2 records solutionMethodId, solutionMethodCategory and solverBackendKind while retaining v1 read compatibility.",
+      "permanentGuard": "New end-to-end pipeline solutions use provenance schema v2.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-055",
+      "category": "backend-drift",
+      "symptom": "A requested or scientifically compatible backend family differs from the backend actually reported by SolverRunResult.",
+      "rootCause": "Only formulation identity is rechecked after solve.",
+      "correctiveAction": "Validate SolverRunResult.SolverKind against the scientific resolution plan before provenance capture.",
+      "permanentGuard": "Backend drift blocks schema-v2 provenance capture and emits LSDM-PIPE-012/013.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-056",
+      "category": "cross-cutting-helper-signature-propagation",
+      "symptom": "A transversal helper signature gains a required argument but one or more existing call sites are left with the previous arity/order, producing a compile-time CS7036 failure.",
+      "rootCause": "The change is propagated by broad textual replacement without a complete call-site parity audit after the helper contract changes.",
+      "correctiveAction": "After changing an internal helper signature, enumerate every call site and verify that every invocation carries the new argument in the intended semantic position.",
+      "permanentGuard": "Pack fabrication must statically audit all ScientificLotSizingSolvePipeline.Result(...) call sites against the helper contract before delivery; Build-Validated remains the final committed-candidate compiler gate.",
+      "status": "active"
     }
   ]
 }

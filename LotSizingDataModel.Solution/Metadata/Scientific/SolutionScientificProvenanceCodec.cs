@@ -40,6 +40,15 @@ public static class SolutionScientificProvenanceCodec
     public const string FormulationCompatibilityParameter =
         ParameterPrefix + "formulationCompatibility";
 
+    public const string SolutionMethodIdParameter =
+        ParameterPrefix + "solutionMethodId";
+
+    public const string SolutionMethodCategoryParameter =
+        ParameterPrefix + "solutionMethodCategory";
+
+    public const string SolverBackendKindParameter =
+        ParameterPrefix + "solverBackendKind";
+
     public const string CapturedAtUtcParameter =
         ParameterPrefix + "capturedAtUtc";
 
@@ -55,6 +64,9 @@ public static class SolutionScientificProvenanceCodec
             FormulationIdParameter,
             FormulationFamilyParameter,
             FormulationCompatibilityParameter,
+            SolutionMethodIdParameter,
+            SolutionMethodCategoryParameter,
+            SolverBackendKindParameter,
             CapturedAtUtcParameter
         };
 
@@ -88,6 +100,9 @@ public static class SolutionScientificProvenanceCodec
         if (
             !provenance.SchemaVersion.Equals(
                 SolutionScientificProvenance.CurrentSchemaVersion,
+                StringComparison.Ordinal) &&
+            !provenance.SchemaVersion.Equals(
+                SolutionScientificProvenance.LegacySchemaVersion,
                 StringComparison.Ordinal))
         {
             throw new NotSupportedException(
@@ -119,6 +134,34 @@ public static class SolutionScientificProvenanceCodec
             metadata,
             FormulationCompatibilityParameter,
             provenance.FormulationScientificCompatibility);
+
+        if (
+            provenance.SchemaVersion.Equals(
+                SolutionScientificProvenance.CurrentSchemaVersion,
+                StringComparison.Ordinal))
+        {
+            Set(
+                metadata,
+                SolutionMethodIdParameter,
+                provenance.SolutionMethodId);
+
+            Set(
+                metadata,
+                SolutionMethodCategoryParameter,
+                provenance.SolutionMethodCategory);
+
+            Set(
+                metadata,
+                SolverBackendKindParameter,
+                provenance.SolverBackendKind);
+        }
+        else
+        {
+            metadata.RemoveParameter(SolutionMethodIdParameter);
+            metadata.RemoveParameter(SolutionMethodCategoryParameter);
+            metadata.RemoveParameter(SolverBackendKindParameter);
+        }
+
         Set(
             metadata,
             CapturedAtUtcParameter,
@@ -162,6 +205,9 @@ public static class SolutionScientificProvenanceCodec
         if (
             !schema.Equals(
                 SolutionScientificProvenance.CurrentSchemaVersion,
+                StringComparison.Ordinal) &&
+            !schema.Equals(
+                SolutionScientificProvenance.LegacySchemaVersion,
                 StringComparison.Ordinal))
         {
             return Invalid(
@@ -210,6 +256,15 @@ public static class SolutionScientificProvenanceCodec
                     string.Empty,
                 FormulationScientificCompatibility =
                     Get(metadata, FormulationCompatibilityParameter) ??
+                    string.Empty,
+                SolutionMethodId =
+                    Get(metadata, SolutionMethodIdParameter) ??
+                    string.Empty,
+                SolutionMethodCategory =
+                    Get(metadata, SolutionMethodCategoryParameter) ??
+                    string.Empty,
+                SolverBackendKind =
+                    Get(metadata, SolverBackendKindParameter) ??
                     string.Empty,
                 CapturedAtUtc =
                     capturedAtUtc.ToUniversalTime()

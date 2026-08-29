@@ -123,6 +123,11 @@
       "prefix": "LSDM-PIPE",
       "owner": "Checker.Pipeline.Scientific",
       "status": "active"
+    },
+    {
+      "prefix": "LSDM-METHOD",
+      "owner": "Solver.Resolution.Scientific",
+      "status": "reserved"
     }
   ]
 }

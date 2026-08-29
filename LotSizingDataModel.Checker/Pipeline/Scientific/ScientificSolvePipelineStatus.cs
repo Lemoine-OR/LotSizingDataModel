@@ -8,6 +8,7 @@ public enum ScientificSolvePipelineStatus
     PreflightRejected,
     CompletedWithoutSolution,
     FormulationDrift,
+    BackendDrift,
     ProvenanceCaptureFailed,
     Completed
 }

@@ -4,6 +4,7 @@ using LotSizingDataModel.Instance.Scientific;
 using LotSizingDataModel.Solution.Metadata.Scientific;
 using LotSizingDataModel.Solver.Execution;
 using LotSizingDataModel.Solver.Formulation.Scientific;
+using LotSizingDataModel.Solver.Resolution.Scientific;
 
 namespace LotSizingDataModel.Checker.Pipeline.Scientific;
 
@@ -16,6 +17,7 @@ public sealed class ScientificSolvePipelineResult
         ScientificSolvePipelineStatus status,
         ScientificClassificationResult classification,
         ScientificFormulationSelectionResult formulationSelection,
+        ScientificResolutionPlan resolutionPlan,
         SolverRunResult? solverRun,
         SolutionScientificProvenance? capturedProvenance,
         LotSizingSolutionVerificationResult? numericalVerification,
@@ -32,6 +34,10 @@ public sealed class ScientificSolvePipelineResult
             formulationSelection ??
             throw new ArgumentNullException(nameof(formulationSelection));
 
+        ResolutionPlan =
+            resolutionPlan ??
+            throw new ArgumentNullException(nameof(resolutionPlan));
+
         SolverRun = solverRun;
         CapturedProvenance = capturedProvenance;
         NumericalVerification = numericalVerification;
@@ -47,6 +53,8 @@ public sealed class ScientificSolvePipelineResult
 
     public ScientificFormulationSelectionResult
         FormulationSelection { get; }
+
+    public ScientificResolutionPlan ResolutionPlan { get; }
 
     public SolverRunResult? SolverRun { get; }
 

@@ -7,6 +7,7 @@ using LotSizingDataModel.Solver.Execution;
 using LotSizingDataModel.Solver.Formulation;
 using LotSizingDataModel.Solver.Formulation.Scientific;
 using LotSizingDataModel.Solver.Mapping.Scientific;
+using LotSizingDataModel.Solver.Resolution.Scientific;
 
 namespace LotSizingDataModel.Checker.Pipeline.Scientific;
 
@@ -36,6 +37,9 @@ public sealed class ScientificLotSizingSolvePipeline :
     private readonly ScientificFormulationSelectionService
         _formulationSelectionService;
 
+    private readonly ScientificResolutionPlanner
+        _resolutionPlanner;
+
     private readonly LotSizingSolutionVerificationService
         _solutionVerificationService;
 
@@ -50,6 +54,7 @@ public sealed class ScientificLotSizingSolvePipeline :
             formulationRegistry,
             new ScientificClassificationEngine(),
             new ScientificFormulationSelectionService(),
+            new ScientificResolutionPlanner(),
             new LotSizingSolutionVerificationService(),
             new SolutionScientificProvenanceChecker())
     {
@@ -60,6 +65,7 @@ public sealed class ScientificLotSizingSolvePipeline :
         MathematicalModelFormulationRegistry formulationRegistry,
         ScientificClassificationEngine classificationEngine,
         ScientificFormulationSelectionService formulationSelectionService,
+        ScientificResolutionPlanner resolutionPlanner,
         LotSizingSolutionVerificationService solutionVerificationService,
         SolutionScientificProvenanceChecker provenanceChecker)
     {
@@ -79,6 +85,10 @@ public sealed class ScientificLotSizingSolvePipeline :
             formulationSelectionService ??
             throw new ArgumentNullException(
                 nameof(formulationSelectionService));
+
+        _resolutionPlanner =
+            resolutionPlanner ??
+            throw new ArgumentNullException(nameof(resolutionPlanner));
 
         _solutionVerificationService =
             solutionVerificationService ??
@@ -119,13 +129,21 @@ public sealed class ScientificLotSizingSolvePipeline :
                 allowFallback:
                     !callerRequestedSpecificFormulation);
 
+        ScientificResolutionPlan resolutionPlan =
+            _resolutionPlanner.Create(
+                classification,
+                selection,
+                sourceRequest.PreferredSolver);
+
         var diagnostics =
             new List<ScientificSolvePipelineDiagnostic>();
 
         if (
             classification.IsBlocked ||
             !selection.IsSuccessful ||
-            selection.Formulation is null)
+            selection.Formulation is null ||
+            !resolutionPlan.IsReady ||
+            resolutionPlan.SelectedMethod is null)
         {
             diagnostics.Add(
                 Diagnostic(
@@ -134,13 +152,17 @@ public sealed class ScientificLotSizingSolvePipeline :
                     "scientificPreflight",
                     classification.IsBlocked
                         ? "Scientific classification is blocked."
-                        : "No scientifically selectable mathematical " +
-                          "formulation is available."));
+                        : !selection.IsSuccessful
+                            ? "No scientifically selectable mathematical " +
+                              "formulation is available."
+                            : "No executable scientific resolution plan is " +
+                              "available."));
 
             return Result(
                 ScientificSolvePipelineStatus.PreflightRejected,
                 classification,
                 selection,
+                resolutionPlan,
                 solverRun: null,
                 provenance: null,
                 numericalVerification: null,
@@ -165,6 +187,7 @@ public sealed class ScientificLotSizingSolvePipeline :
                 ScientificSolvePipelineStatus.PreflightRejected,
                 classification,
                 selection,
+                resolutionPlan,
                 solverRun: null,
                 provenance: null,
                 numericalVerification: null,
@@ -215,6 +238,7 @@ public sealed class ScientificLotSizingSolvePipeline :
                 ScientificSolvePipelineStatus.CompletedWithoutSolution,
                 classification,
                 selection,
+                resolutionPlan,
                 solverRun,
                 provenance: null,
                 numericalVerification: null,
@@ -240,6 +264,65 @@ public sealed class ScientificLotSizingSolvePipeline :
                 ScientificSolvePipelineStatus.FormulationDrift,
                 classification,
                 selection,
+                resolutionPlan,
+                solverRun,
+                provenance: null,
+                numericalVerification: null,
+                provenanceVerification: null,
+                diagnostics);
+        }
+
+        if (
+            resolutionPlan.SelectedMethod!.Method.RequiresMilpBackend &&
+            (
+                ScientificSolverBackendCatalog.Find(
+                    solverRun.SolverKind) is not
+                    ScientificSolverBackendDefinition actualBackend ||
+                !actualBackend.Supports(
+                    resolutionPlan.SelectedMethod.Method)
+            ))
+        {
+            diagnostics.Add(
+                Diagnostic(
+                    "LSDM-PIPE-012",
+                    ScientificSolvePipelineDiagnosticSeverity.Error,
+                    "solverRun.solverKind",
+                    $"Solver backend '{solverRun.SolverKind}' is not " +
+                    $"compatible with scientific solution method " +
+                    $"'{resolutionPlan.SelectedMethod.Method.MethodId}'."));
+
+            return Result(
+                ScientificSolvePipelineStatus.BackendDrift,
+                classification,
+                selection,
+                resolutionPlan,
+                solverRun,
+                provenance: null,
+                numericalVerification: null,
+                provenanceVerification: null,
+                diagnostics);
+        }
+
+        if (
+            sourceRequest.PreferredSolver !=
+                LotSizingDataModel.Solver.Common.SolverKind.Automatic &&
+            solverRun.SolverKind !=
+                sourceRequest.PreferredSolver)
+        {
+            diagnostics.Add(
+                Diagnostic(
+                    "LSDM-PIPE-013",
+                    ScientificSolvePipelineDiagnosticSeverity.Error,
+                    "solverRun.solverKind",
+                    $"Caller requested solver backend " +
+                    $"'{sourceRequest.PreferredSolver}', but the solver run " +
+                    $"reports '{solverRun.SolverKind}'."));
+
+            return Result(
+                ScientificSolvePipelineStatus.BackendDrift,
+                classification,
+                selection,
+                resolutionPlan,
                 solverRun,
                 provenance: null,
                 numericalVerification: null,
@@ -257,7 +340,9 @@ public sealed class ScientificLotSizingSolvePipeline :
             provenance =
                 ScientificSolutionProvenanceMapper.Apply(
                     solution,
-                    selection);
+                    selection,
+                    resolutionPlan.SelectedMethod!.Method,
+                    solverRun.SolverKind);
         }
         catch (Exception exception)
         {
@@ -273,6 +358,7 @@ public sealed class ScientificLotSizingSolvePipeline :
                 ScientificSolvePipelineStatus.ProvenanceCaptureFailed,
                 classification,
                 selection,
+                resolutionPlan,
                 solverRun,
                 provenance: null,
                 numericalVerification: null,
@@ -347,6 +433,7 @@ public sealed class ScientificLotSizingSolvePipeline :
             ScientificSolvePipelineStatus.Completed,
             classification,
             selection,
+            resolutionPlan,
             solverRun,
             provenance,
             numericalVerification,
@@ -374,6 +461,7 @@ public sealed class ScientificLotSizingSolvePipeline :
         ScientificSolvePipelineStatus status,
         ScientificClassificationResult classification,
         ScientificFormulationSelectionResult selection,
+        ScientificResolutionPlan resolutionPlan,
         SolverRunResult? solverRun,
         SolutionScientificProvenance? provenance,
         LotSizingSolutionVerificationResult? numericalVerification,
@@ -383,6 +471,7 @@ public sealed class ScientificLotSizingSolvePipeline :
                 status,
                 classification,
                 selection,
+                resolutionPlan,
                 solverRun,
                 provenance,
                 numericalVerification,

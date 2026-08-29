@@ -4,6 +4,8 @@ using LotSizingDataModel.Instance.Scientific;
 using LotSizingDataModel.Solution;
 using LotSizingDataModel.Solution.Metadata.Scientific;
 using LotSizingDataModel.Solver.Formulation.Scientific;
+using LotSizingDataModel.Solver.Resolution.Scientific;
+using LotSizingDataModel.Solver.Common;
 
 namespace LotSizingDataModel.Checker.Scientific;
 
@@ -316,6 +318,111 @@ public sealed class SolutionScientificProvenanceChecker
                     "solution.provenance.formulationFamily",
                     "The formulation identifier is unchanged but its current " +
                     "scientific family label differs from the recorded one."));
+        }
+
+        if (provenance.IsLegacySchema)
+        {
+            aggregate =
+                Merge(
+                    aggregate,
+                    SolutionScientificProvenanceCheckKind.Stale);
+
+            diagnostics.Add(
+                Diagnostic(
+                    "LSDM-PROV-040",
+                    SolutionScientificProvenanceDiagnosticSeverity.Warning,
+                    "solution.provenance.schemaVersion",
+                    "Legacy scientific provenance schema v1 has no explicit " +
+                    "solution-method/backend evidence."));
+        }
+        else
+        {
+            ScientificSolutionMethodDefinition? method =
+                ScientificSolutionMethodCatalog.Find(
+                    provenance.SolutionMethodId);
+
+            if (method is null)
+            {
+                aggregate =
+                    Merge(
+                        aggregate,
+                        SolutionScientificProvenanceCheckKind.Incomplete);
+
+                diagnostics.Add(
+                    Diagnostic(
+                        "LSDM-PROV-041",
+                        SolutionScientificProvenanceDiagnosticSeverity.Warning,
+                        "solution.provenance.solutionMethodId",
+                        $"Recorded solution method " +
+                        $"'{provenance.SolutionMethodId}' is not present in " +
+                        "the current scientific method catalog."));
+            }
+            else if (
+                classification.PrimaryProblemClass is not null &&
+                !method.IsApplicableTo(
+                    classification.PrimaryProblemClass.Definition.Id))
+            {
+                aggregate =
+                    Merge(
+                        aggregate,
+                        SolutionScientificProvenanceCheckKind.Contradiction);
+
+                diagnostics.Add(
+                    Diagnostic(
+                        "LSDM-PROV-042",
+                        SolutionScientificProvenanceDiagnosticSeverity.Error,
+                        "solution.provenance.solutionMethodId",
+                        $"Recorded solution method '{method.MethodId}' is not " +
+                        "applicable to the current canonical problem class."));
+            }
+
+            if (
+                !Enum.TryParse(
+                    provenance.SolverBackendKind,
+                    ignoreCase: true,
+                    out SolverKind backendKind))
+            {
+                aggregate =
+                    Merge(
+                        aggregate,
+                        SolutionScientificProvenanceCheckKind.Invalid);
+
+                diagnostics.Add(
+                    Diagnostic(
+                        "LSDM-PROV-043",
+                        SolutionScientificProvenanceDiagnosticSeverity.Error,
+                        "solution.provenance.solverBackendKind",
+                        $"Recorded solver backend " +
+                        $"'{provenance.SolverBackendKind}' is unknown."));
+            }
+            else if (method is not null)
+            {
+                ScientificSolverBackendDefinition? backend =
+                    ScientificSolverBackendCatalog.Find(
+                        backendKind);
+
+                if (
+                    method.RequiresMilpBackend &&
+                    (
+                        backend is null ||
+                        !backend.Supports(method)
+                    ))
+                {
+                    aggregate =
+                        Merge(
+                            aggregate,
+                            SolutionScientificProvenanceCheckKind.Contradiction);
+
+                    diagnostics.Add(
+                        Diagnostic(
+                            "LSDM-PROV-044",
+                            SolutionScientificProvenanceDiagnosticSeverity.Error,
+                            "solution.provenance.solverBackendKind",
+                            $"Recorded backend '{backendKind}' is not " +
+                            $"compatible with recorded solution method " +
+                            $"'{method.MethodId}'."));
+                }
+            }
         }
 
         if (diagnostics.Count == 0)

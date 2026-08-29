@@ -603,11 +603,11 @@
       "scientificStatus": "implemented",
       "implementationStatus": "implemented",
       "core": "not applicable",
-      "instance": "Consumes detected notation and unique canonical problem class",
-      "mathematics": "Records scientifically selected mathematical formulation identity",
-      "notation": "Canonical detected notation scheme/id/version is captured",
-      "checker": "Independent provenance checker revalidates notation, problem class and formulation compatibility",
-      "notes": "Persisted through existing optional generation parameters; no XML schema break."
+      "instance": "Records canonical problem class",
+      "mathematics": "Records formulation plus scientific solution-method family",
+      "notation": "Records detected universal notation",
+      "checker": "Schema v2 revalidates method/backend compatibility; v1 remains readable as stale",
+      "notes": "Schema v2 adds solutionMethodId/category and solverBackendKind."
     },
     {
       "id": "scientific-solution-provenance-checker",
@@ -644,6 +644,30 @@
       "notation": "not applicable",
       "checker": "LSDM-PIPE-011 blocks provenance capture on formulation drift",
       "notes": "Caller SolverRequest remains unchanged; a delegated request is pinned."
+    },
+    {
+      "id": "scientific-solution-method-catalog",
+      "domain": "solution-method",
+      "scientificStatus": "implemented",
+      "implementationStatus": "implemented",
+      "core": "not applicable",
+      "instance": "Consumes canonical problem-class classification",
+      "mathematics": "Separates MILP, dynamic programming, network, relaxation/decomposition, heuristic, metaheuristic and matheuristic families",
+      "notation": "not applicable",
+      "checker": "Only ExecutableCompatible solution methods may be automatically selected",
+      "notes": "MILP-GENERAL is currently the sole executable method family."
+    },
+    {
+      "id": "scientific-resolution-plan",
+      "domain": "solver-orchestration",
+      "scientificStatus": "implemented",
+      "implementationStatus": "implemented",
+      "core": "not applicable",
+      "instance": "Starts from ScientificClassificationResult",
+      "mathematics": "Carries existing scientific formulation selection",
+      "notation": "not applicable",
+      "checker": "Resolution plan explicitly selects solution method and compatible backend family",
+      "notes": "Automatic backend remains delegated to technical availability."
     }
   ]
 }

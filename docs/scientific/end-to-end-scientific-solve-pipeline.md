@@ -54,3 +54,19 @@ not mutate them; progress observers are copied to the delegated request.
 - independently recomputes the mathematical objective.
 
 alpha.19 constrains that pipeline scientifically rather than replacing it.
+
+
+## alpha.20 resolution-method layer
+
+Before delegating the technical solve, the pipeline now constructs a
+`ScientificResolutionPlan`.
+
+The plan explicitly selects the executable scientific solution method and
+lists compatible native backend families.
+
+Current automatic path:
+
+`canonical problem -> compatible formulation -> MILP-GENERAL -> MILP backend`
+
+The actual backend reported by `SolverRunResult.SolverKind` is checked before
+schema-v2 provenance is captured.
