@@ -42,7 +42,7 @@ public sealed class UniversalNotationMatcher
         return Match(
             descriptor,
             specificationText,
-            Array.Empty<UniversalTemporalQualifier>(),
+            UniversalDerivedSemantics.Empty,
             schemeVersion);
     }
 
@@ -53,8 +53,25 @@ public sealed class UniversalNotationMatcher
             actualTemporalQualifiers,
         string? schemeVersion = null)
     {
-        ArgumentNullException.ThrowIfNull(descriptor);
         ArgumentNullException.ThrowIfNull(actualTemporalQualifiers);
+
+        return Match(
+            descriptor,
+            specificationText,
+            new UniversalDerivedSemantics(
+                temporalQualifiers:
+                    actualTemporalQualifiers),
+            schemeVersion);
+    }
+
+    public UniversalNotationMatchResult Match(
+        LotSizingProblemDescriptor descriptor,
+        string specificationText,
+        UniversalDerivedSemantics actualDerivedSemantics,
+        string? schemeVersion = null)
+    {
+        ArgumentNullException.ThrowIfNull(descriptor);
+        ArgumentNullException.ThrowIfNull(actualDerivedSemantics);
 
         UniversalProblemSpecification specification =
             UniversalProblemSpecification.Parse(
@@ -64,7 +81,7 @@ public sealed class UniversalNotationMatcher
         return Match(
             descriptor,
             specification,
-            actualTemporalQualifiers);
+            actualDerivedSemantics);
     }
 
     public UniversalNotationMatchResult Match(
@@ -74,7 +91,7 @@ public sealed class UniversalNotationMatcher
         return Match(
             descriptor,
             specification,
-            Array.Empty<UniversalTemporalQualifier>());
+            UniversalDerivedSemantics.Empty);
     }
 
     public UniversalNotationMatchResult Match(
@@ -83,14 +100,29 @@ public sealed class UniversalNotationMatcher
         IEnumerable<UniversalTemporalQualifier>
             actualTemporalQualifiers)
     {
+        ArgumentNullException.ThrowIfNull(actualTemporalQualifiers);
+
+        return Match(
+            descriptor,
+            specification,
+            new UniversalDerivedSemantics(
+                temporalQualifiers:
+                    actualTemporalQualifiers));
+    }
+
+    public UniversalNotationMatchResult Match(
+        LotSizingProblemDescriptor descriptor,
+        UniversalProblemSpecification specification,
+        UniversalDerivedSemantics actualDerivedSemantics)
+    {
         ArgumentNullException.ThrowIfNull(descriptor);
         ArgumentNullException.ThrowIfNull(specification);
-        ArgumentNullException.ThrowIfNull(actualTemporalQualifiers);
+        ArgumentNullException.ThrowIfNull(actualDerivedSemantics);
 
         UniversalLotSizingNotation generated =
             _generator.Generate(
                 descriptor,
-                actualTemporalQualifiers);
+                actualDerivedSemantics);
 
         string generatedText =
             generated.Render();
@@ -106,6 +138,7 @@ public sealed class UniversalNotationMatcher
         MatchBeta(
             generated.Beta,
             specification.Notation.Beta,
+            actualDerivedSemantics,
             issues);
 
         MatchGamma(
@@ -358,6 +391,7 @@ public sealed class UniversalNotationMatcher
     private static void MatchBeta(
         UniversalNotationBeta actual,
         UniversalNotationBeta expected,
+        UniversalDerivedSemantics actualDerivedSemantics,
         ICollection<UniversalNotationMatchIssue> issues)
     {
         foreach (
@@ -409,6 +443,43 @@ public sealed class UniversalNotationMatcher
                     requiredQualifier.Pattern.ToString(),
                     actualQualifier.Pattern.ToString(),
                     "The known temporal pattern contradicts the specification.");
+            }
+        }
+
+        foreach (
+            UniversalSemanticCondition requiredCondition
+            in expected.SemanticConditions)
+        {
+            actualDerivedSemantics.TryGetConditionState(
+                requiredCondition,
+                out UniversalConditionState state);
+
+            if (state == UniversalConditionState.Unknown)
+            {
+                AddIncomplete(
+                    issues,
+                    "LSDM-MATCH-033",
+                    "beta.semanticConditions." +
+                    requiredCondition,
+                    "Satisfied",
+                    "Unknown",
+                    "The requested derived semantic condition has not been " +
+                    "analyzed for this instance/projection.");
+
+                continue;
+            }
+
+            if (state == UniversalConditionState.NotSatisfied)
+            {
+                AddContradiction(
+                    issues,
+                    "LSDM-MATCH-034",
+                    "beta.semanticConditions." +
+                    requiredCondition,
+                    "Satisfied",
+                    "NotSatisfied",
+                    "The analyzed semantic condition contradicts the " +
+                    "specification.");
             }
         }
     }

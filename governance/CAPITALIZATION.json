@@ -271,6 +271,33 @@
       "correctiveAction": "Derive ProductionCapacityRegime and encode explicit uncapacitated production with generic token Uncap:P.",
       "permanentGuard": "Semantically meaningful absence/negative conditions require explicit representation whenever omission means unconstrained.",
       "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-031",
+      "category": "derived-semantic-conditions",
+      "symptom": "A scientific property derived from detailed parameter series is either guessed from coarse booleans or encoded as a historical acronym in universal notation.",
+      "rootCause": "The notation had temporal derived analyses but no generic tri-state carrier for other derived mathematical conditions.",
+      "correctiveAction": "Represent reusable positive requirements as UniversalSemanticCondition and actual analyses as Unknown/Satisfied/NotSatisfied through UniversalDerivedSemantics.",
+      "permanentGuard": "Historical acronyms may map to generic conditions, but universal semantic conditions must have an explicit scientific analyzer or already-modeled derivation.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-032",
+      "category": "historical-partial-closure",
+      "symptom": "A historical problem class remains wholly unrepresented even after one of its defining dimensions becomes generically expressible.",
+      "rootCause": "Historical mapping gaps are treated monolithically instead of dimension by dimension.",
+      "correctiveAction": "Close each representable source dimension independently while retaining every still-unrepresented dimension explicitly.",
+      "permanentGuard": "Historical coverage is Exact only when the gap list is empty; partial closure must remove only the source dimensions actually represented.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-033",
+      "category": "matcher-exactness-test-contract",
+      "symptom": "A matcher test expects Exact while its specification intentionally omits a known canonical descriptor characteristic.",
+      "rootCause": "The test confuses 'all explicit requirements are satisfied' with canonical equality of the complete generated notation.",
+      "correctiveAction": "Tests for Exact must include every characteristic emitted by Generate(descriptor, derivedSemantics); tests with omitted satisfied characteristics must assert Compatible.",
+      "permanentGuard": "Matcher tests must separately prove Exact for canonical equality and Compatible for positive partial specifications, even when all explicit semantic-condition requirements are satisfied.",
+      "status": "active"
     }
   ]
 }

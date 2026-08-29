@@ -436,10 +436,10 @@
       "implementationStatus": "partial",
       "core": "not applicable",
       "instance": "WolseyHistoricalMapper projects representable dimensions and enumerates every unsupported dimension",
-      "mathematics": "C/CC/U capacity regimes and B/SC/LB/LB(C)/SS variants are projectable; WW, DLSI/DLS and several real model extensions remain future work",
-      "notation": "Uses Uncap:P and TP:MinLot=C in addition to existing generic tokens",
+      "mathematics": "WW now maps to the generic non-speculative cost condition; DLSI/DLS map their zero-or-full-capacity property, while initial-stock decision semantics remain unresolved",
+      "notation": "Adds Cost:NS for WW and ProdMode:0F for DLSI/DLS",
       "checker": "Coverage Exact only when no source dimension remains unrepresented",
-      "notes": "Remaining gaps: WW condition, DLSI/DLS zero-or-full-capacity and initial-stock semantics, start-up times, sales, exact machine/bucket/count dimensions, and sequence-dependent changeovers."
+      "notes": "Remaining gaps: DLSI/DLS initial-stock decision distinction, start-up times, sales, exact machine/bucket/count dimensions and sequence-dependent changeovers."
     },
     {
       "id": "production-capacity-regime",
@@ -452,6 +452,42 @@
       "notation": "Uncap:P explicitly represents uncapacitated production",
       "checker": "Generator and matcher no longer confuse explicit uncapacitated production with omitted/unconstrained capacity information",
       "notes": "Derived semantic only; no nominal serialized flag."
+    },
+    {
+      "id": "generic-derived-semantic-conditions",
+      "domain": "classification-notation",
+      "scientificStatus": "implemented",
+      "implementationStatus": "implemented",
+      "core": "No Core source flag; conditions are derived from explicit existing parameter semantics",
+      "instance": "UniversalDerivedSemantics carries tri-state actual analyses",
+      "mathematics": "Initial conditions: non-speculative adjacent production/holding costs and zero-or-full-capacity production",
+      "notation": "Positive requirements use Cost:NS and ProdMode:0F",
+      "checker": "Matcher distinguishes Unknown -> Incomplete from NotSatisfied -> Contradiction",
+      "notes": "Universal tokens are generic semantic conditions, not Wolsey labels."
+    },
+    {
+      "id": "non-speculative-production-holding-costs",
+      "domain": "cost-structure",
+      "scientificStatus": "implemented",
+      "implementationStatus": "implemented",
+      "core": "Consumes explicit unit-cost and holding-cost series; no Core mutation",
+      "instance": "NonSpeculativeCostConditionAnalyzer checks h_t + p_t - p_(t+1) >= 0 with tolerance",
+      "mathematics": "Represents the adjacent no-speculation cost relation used by Wolsey WW",
+      "notation": "Cost:NS",
+      "checker": "Tri-state semantic matcher support",
+      "notes": "Historical WW maps to this generic condition."
+    },
+    {
+      "id": "zero-or-full-capacity-production",
+      "domain": "production-structure",
+      "scientificStatus": "implemented",
+      "implementationStatus": "implemented",
+      "core": "Derived from existing minimum-lot-size and production-capacity parameter series",
+      "instance": "ZeroOrFullCapacityProductionAnalyzer checks positive period capacity and MinLot=Capacity within tolerance",
+      "mathematics": "The existing lower and upper bounds then force x_t to be zero or full capacity",
+      "notation": "ProdMode:0F",
+      "checker": "Tri-state semantic matcher support",
+      "notes": "Closes the zero/full-capacity dimension of Wolsey DLSI/DLS, but initial-stock decision semantics remain separate gaps."
     }
   ]
 }

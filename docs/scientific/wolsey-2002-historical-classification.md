@@ -115,3 +115,19 @@ Current explicitly unrepresented examples include:
 `HistoricalMappingCoverage.Exact` is returned only when the classification
 contains no such remaining source dimension. Otherwise coverage is `Partial`
 and every gap is named.
+
+
+## alpha.14 mapping improvement
+
+Two additional Wolsey dimensions now have generic semantic representations:
+
+- `PROB=WW` -> `Cost:NS`;
+- the zero-or-full-capacity restriction of `DLSI` and `DLS`
+  -> `ProdMode:0F`.
+
+This does not make DLSI/DLS fully representable: the historical distinction
+between a variable initial-stock decision (`DLSI`) and its absence (`DLS`)
+remains explicitly unrepresented.
+
+The mapping stays dimension-by-dimension: representable source semantics are
+projected, while remaining source semantics stay named as gaps.

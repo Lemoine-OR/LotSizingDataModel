@@ -16,13 +16,12 @@ public sealed class UniversalNotationGenerator
     {
         return Generate(
             descriptor,
-            Array.Empty<UniversalTemporalQualifier>(),
+            UniversalDerivedSemantics.Empty,
             objective);
     }
 
     /// <summary>
-    /// Generates notation and enriches beta with generic temporal qualifiers
-    /// supplied by an explicit analysis/projection layer.
+    /// Backward-compatible temporal-only enrichment overload.
     /// </summary>
     public UniversalLotSizingNotation Generate(
         LotSizingProblemDescriptor descriptor,
@@ -30,8 +29,27 @@ public sealed class UniversalNotationGenerator
         UniversalObjectiveKind objective =
             UniversalObjectiveKind.Economic)
     {
-        ArgumentNullException.ThrowIfNull(descriptor);
         ArgumentNullException.ThrowIfNull(temporalQualifiers);
+
+        return Generate(
+            descriptor,
+            new UniversalDerivedSemantics(
+                temporalQualifiers:
+                    temporalQualifiers),
+            objective);
+    }
+
+    /// <summary>
+    /// Generates notation enriched with explicit derived analyses.
+    /// </summary>
+    public UniversalLotSizingNotation Generate(
+        LotSizingProblemDescriptor descriptor,
+        UniversalDerivedSemantics derivedSemantics,
+        UniversalObjectiveKind objective =
+            UniversalObjectiveKind.Economic)
+    {
+        ArgumentNullException.ThrowIfNull(descriptor);
+        ArgumentNullException.ThrowIfNull(derivedSemantics);
 
         UniversalItemCardinality itemCardinality =
             descriptor.Structure.ItemCount switch
@@ -80,7 +98,8 @@ public sealed class UniversalNotationGenerator
             beta:
                 new UniversalNotationBeta(
                     ExtractFeatures(descriptor),
-                    temporalQualifiers),
+                    derivedSemantics.TemporalQualifiers,
+                    derivedSemantics.SatisfiedConditions),
             gamma:
                 new UniversalNotationGamma
                 {

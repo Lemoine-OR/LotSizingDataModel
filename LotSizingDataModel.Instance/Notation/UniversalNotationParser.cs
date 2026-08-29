@@ -381,6 +381,9 @@ public sealed class UniversalNotationParser
         var temporalQualifiers =
             new List<UniversalTemporalQualifier>();
 
+        var semanticConditions =
+            new List<UniversalSemanticCondition>();
+
         foreach (string token in tokens)
         {
             if (
@@ -391,6 +394,18 @@ public sealed class UniversalNotationParser
             {
                 temporalQualifiers.Add(
                     qualifier!);
+
+                continue;
+            }
+
+            if (
+                UniversalNotationTokenCatalog
+                    .TryParseSemanticCondition(
+                        token,
+                        out UniversalSemanticCondition semanticCondition))
+            {
+                semanticConditions.Add(
+                    semanticCondition);
 
                 continue;
             }
@@ -408,7 +423,8 @@ public sealed class UniversalNotationParser
 
         return new UniversalNotationBeta(
             features,
-            temporalQualifiers);
+            temporalQualifiers,
+            semanticConditions);
     }
 
     private static UniversalNotationGamma ParseGamma(

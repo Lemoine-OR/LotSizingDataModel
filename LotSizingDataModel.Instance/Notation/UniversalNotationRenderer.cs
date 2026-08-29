@@ -128,6 +128,13 @@ public static class UniversalNotationRenderer
                     UniversalNotationTokenCatalog.GetFeatureToken));
 
         tokens.AddRange(
+            beta.SemanticConditions
+                .OrderBy(condition => (int)condition)
+                .Select(
+                    UniversalNotationTokenCatalog
+                        .GetSemanticConditionToken));
+
+        tokens.AddRange(
             beta.TemporalQualifiers
                 .OrderBy(
                     qualifier =>

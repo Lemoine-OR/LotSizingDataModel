@@ -27,12 +27,17 @@ public sealed class UniversalNotationAlpha
 public sealed class UniversalNotationBeta
 {
     private readonly IReadOnlyCollection<UniversalNotationFeature> _features;
+
     private readonly IReadOnlyCollection<UniversalTemporalQualifier>
         _temporalQualifiers;
 
+    private readonly IReadOnlyCollection<UniversalSemanticCondition>
+        _semanticConditions;
+
     public UniversalNotationBeta(
         IEnumerable<UniversalNotationFeature>? features = null,
-        IEnumerable<UniversalTemporalQualifier>? temporalQualifiers = null)
+        IEnumerable<UniversalTemporalQualifier>? temporalQualifiers = null,
+        IEnumerable<UniversalSemanticCondition>? semanticConditions = null)
     {
         _features =
             (features ?? Array.Empty<UniversalNotationFeature>())
@@ -81,6 +86,13 @@ public sealed class UniversalNotationBeta
                     qualifier =>
                         (int)qualifier.Parameter)
                 .ToArray();
+
+        _semanticConditions =
+            (semanticConditions ??
+             Array.Empty<UniversalSemanticCondition>())
+                .Distinct()
+                .OrderBy(condition => (int)condition)
+                .ToArray();
     }
 
     public IReadOnlyCollection<UniversalNotationFeature> Features =>
@@ -90,8 +102,16 @@ public sealed class UniversalNotationBeta
         TemporalQualifiers =>
             _temporalQualifiers;
 
+    public IReadOnlyCollection<UniversalSemanticCondition>
+        SemanticConditions =>
+            _semanticConditions;
+
     public bool Contains(UniversalNotationFeature feature) =>
         _features.Contains(feature);
+
+    public bool ContainsSemanticCondition(
+        UniversalSemanticCondition condition) =>
+            _semanticConditions.Contains(condition);
 
     public bool TryGetTemporalQualifier(
         UniversalTemporalParameter parameter,
@@ -105,6 +125,7 @@ public sealed class UniversalNotationBeta
         return qualifier is not null;
     }
 }
+
 
 /// <summary>
 /// Gamma field: objective family.

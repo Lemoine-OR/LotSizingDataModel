@@ -1,5 +1,6 @@
 using LotSizingDataModel.Instance.Historical.BitranYanasse;
 using LotSizingDataModel.Instance.Historical.Wolsey;
+using LotSizingDataModel.Instance.Notation;
 
 namespace LotSizingDataModel.Instance.Tests.Historical.Wolsey;
 
@@ -90,7 +91,7 @@ public sealed class WolseyHistoricalMappingTests
     }
 
     [Fact]
-    public void WagnerWhitinCondition_IsPreservedAsUnrepresentedNotGuessed()
+    public void WagnerWhitinCondition_MapsToGenericNonSpeculativeCondition()
     {
         var classification =
             new WolseySingleItemClassification(
@@ -102,12 +103,17 @@ public sealed class WolseyHistoricalMappingTests
                 .Map(classification);
 
         Assert.Equal(
-            HistoricalMappingCoverage.Partial,
+            HistoricalMappingCoverage.Exact,
             mapping.Coverage);
 
-        Assert.Contains(
-            "PROB.WW:WagnerWhitinCostCondition",
+        Assert.Empty(
             mapping.UnrepresentedHistoricalDimensions);
+
+        Assert.Contains(
+            UniversalSemanticCondition
+                .NonSpeculativeProductionHoldingCosts,
+            mapping.UniversalSpecification.Notation
+                .Beta.SemanticConditions);
     }
 
     [Fact]
@@ -192,6 +198,40 @@ public sealed class WolseyHistoricalMappingTests
                 .UniversalNotationFeature.LostSales,
             mapping.UniversalSpecification.Notation
                 .Beta.Features);
+    }
+
+    [Fact]
+    public void Dls_MapsZeroOrFullCapacityButKeepsInitialStockGap()
+    {
+        var classification =
+            new WolseySingleItemClassification(
+                WolseyProblemVersion.DLS,
+                WolseyCapacityRegime.CC);
+
+        WolseyHistoricalMapping mapping =
+            new WolseyHistoricalMapper()
+                .Map(classification);
+
+        Assert.Equal(
+            HistoricalMappingCoverage.Partial,
+            mapping.Coverage);
+
+        Assert.Contains(
+            UniversalSemanticCondition
+                .ZeroOrFullCapacityProduction,
+            mapping.UniversalSpecification.Notation
+                .Beta.SemanticConditions);
+
+        Assert.DoesNotContain(
+            mapping.UnrepresentedHistoricalDimensions,
+            dimension =>
+                dimension.Contains(
+                    "ZeroOrFullCapacityProduction",
+                    StringComparison.Ordinal));
+
+        Assert.Contains(
+            "PROB.DLS:NoVariableInitialStockDecision",
+            mapping.UnrepresentedHistoricalDimensions);
     }
 
     [Fact]

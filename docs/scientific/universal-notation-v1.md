@@ -60,3 +60,15 @@ The core invariant is:
 Bitran-Yanasse `alpha/beta/gamma/delta` slash notation is not merged into this
 grammar. Historical classifications are projections/aliases over the universal
 descriptor/notation system and retain their own exact semantics.
+
+
+## Generic derived conditions
+
+The beta field may also contain positive semantic conditions backed by an
+explicit analysis:
+
+- `Cost:NS`: non-speculative adjacent production/holding costs;
+- `ProdMode:0F`: positive production is forced to full capacity.
+
+When used as a specification these tokens are not inferred from omission.
+Their actual state is supplied through `UniversalDerivedSemantics`.

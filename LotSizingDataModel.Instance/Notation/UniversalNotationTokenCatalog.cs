@@ -275,4 +275,49 @@ internal static class UniversalNotationTokenCatalog
         return true;
     }
 
+
+    public static string GetSemanticConditionToken(
+        UniversalSemanticCondition condition)
+    {
+        return condition switch
+        {
+            UniversalSemanticCondition
+                .NonSpeculativeProductionHoldingCosts =>
+                    "Cost:NS",
+
+            UniversalSemanticCondition
+                .ZeroOrFullCapacityProduction =>
+                    "ProdMode:0F",
+
+            _ => throw new ArgumentOutOfRangeException(
+                nameof(condition),
+                condition,
+                "Unknown universal semantic condition.")
+        };
+    }
+
+    public static bool TryParseSemanticCondition(
+        string token,
+        out UniversalSemanticCondition condition)
+    {
+        switch (token.ToUpperInvariant())
+        {
+            case "COST:NS":
+                condition =
+                    UniversalSemanticCondition
+                        .NonSpeculativeProductionHoldingCosts;
+                return true;
+
+            case "PRODMODE:0F":
+                condition =
+                    UniversalSemanticCondition
+                        .ZeroOrFullCapacityProduction;
+                return true;
+
+            default:
+                condition = default;
+                return false;
+        }
+    }
+
 }

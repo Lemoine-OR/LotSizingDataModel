@@ -38,11 +38,15 @@ public sealed class WolseyHistoricalMapper
         var temporalQualifiers =
             new List<UniversalTemporalQualifier>();
 
+        var semanticConditions =
+            new List<UniversalSemanticCondition>();
+
         var missing =
             new List<string>();
 
         MapProblemVersion(
             classification.SingleItem.Problem,
+            semanticConditions,
             missing);
 
         MapCapacity(
@@ -113,7 +117,8 @@ public sealed class WolseyHistoricalMapper
                 beta:
                     new UniversalNotationBeta(
                         features,
-                        temporalQualifiers),
+                        temporalQualifiers,
+                        semanticConditions),
                 gamma:
                     new UniversalNotationGamma
                     {
@@ -136,6 +141,7 @@ public sealed class WolseyHistoricalMapper
 
     private static void MapProblemVersion(
         WolseyProblemVersion problem,
+        ICollection<UniversalSemanticCondition> semanticConditions,
         ICollection<string> missing)
     {
         switch (problem)
@@ -145,20 +151,25 @@ public sealed class WolseyHistoricalMapper
                 break;
 
             case WolseyProblemVersion.WW:
-                missing.Add(
-                    "PROB.WW:WagnerWhitinCostCondition");
+                semanticConditions.Add(
+                    UniversalSemanticCondition
+                        .NonSpeculativeProductionHoldingCosts);
                 break;
 
             case WolseyProblemVersion.DLSI:
-                missing.Add(
-                    "PROB.DLSI:ZeroOrFullCapacityProduction");
+                semanticConditions.Add(
+                    UniversalSemanticCondition
+                        .ZeroOrFullCapacityProduction);
+
                 missing.Add(
                     "PROB.DLSI:VariableInitialStockDecision");
                 break;
 
             case WolseyProblemVersion.DLS:
-                missing.Add(
-                    "PROB.DLS:ZeroOrFullCapacityProduction");
+                semanticConditions.Add(
+                    UniversalSemanticCondition
+                        .ZeroOrFullCapacityProduction);
+
                 missing.Add(
                     "PROB.DLS:NoVariableInitialStockDecision");
                 break;
