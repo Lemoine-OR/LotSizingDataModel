@@ -296,6 +296,18 @@
       "notation": "will validate declared/detected consistency",
       "checker": "Composes Core SupplyChainValidator and adds stable LSDM-SEM instance-level semantic rules",
       "notes": "Distinct from exact feasibility analysis and SolutionChecker. Warnings are non-blocking; Error/Fatal diagnostics block classification, notation generation, solving and validated export."
+    },
+    {
+      "id": "typed-problem-descriptors",
+      "domain": "classification-architecture",
+      "scientificStatus": "implemented",
+      "implementationStatus": "partial",
+      "core": "No source-data change in alpha.4",
+      "instance": "Typed descriptors for existing structure, time, demand, production/lot, capacity, setup, inventory/service, procurement, transport/distribution and objective/finance semantics",
+      "mathematics": "No formulation change; existing phenomena only",
+      "notation": "planned consumer",
+      "checker": "Compatible with InstanceModelChecker",
+      "notes": "Lossless bridge to LotSizingProblemFeatures proven by tests; source extraction migrates incrementally later."
     }
   ]
 }

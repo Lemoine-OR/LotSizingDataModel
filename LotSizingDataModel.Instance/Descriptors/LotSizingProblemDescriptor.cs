@@ -1,0 +1,169 @@
+using LotSizingDataModel.Instance.Classification;
+
+namespace LotSizingDataModel.Instance.Descriptors;
+
+/// <summary>
+/// Typed structured description of the factual lot-sizing problem
+/// characteristics currently represented by an instance.
+/// </summary>
+/// <remarks>
+/// Alpha.4 is a lossless non-serialized bridge over the historical
+/// LotSizingProblemFeatures vector. The target extraction direction is
+/// Core source data -> typed Descriptor -> legacy Features.
+/// </remarks>
+public sealed class LotSizingProblemDescriptor
+{
+    public StructureDescriptor Structure { get; init; } = new();
+    public TimeDescriptor Time { get; init; } = new();
+    public DemandDescriptor Demand { get; init; } = new();
+    public ProductionDescriptor Production { get; init; } = new();
+    public CapacityDescriptor Capacity { get; init; } = new();
+    public SetupDescriptor Setup { get; init; } = new();
+    public InventoryServiceDescriptor InventoryService { get; init; } = new();
+    public ProcurementDescriptor Procurement { get; init; } = new();
+    public TransportationDistributionDescriptor TransportationDistribution { get; init; } = new();
+    public ObjectiveFinanceDescriptor ObjectiveFinance { get; init; } = new();
+
+    public static LotSizingProblemDescriptor FromLegacyFeatures(
+        LotSizingProblemFeatures features)
+    {
+        ArgumentNullException.ThrowIfNull(features);
+
+        return new LotSizingProblemDescriptor
+        {
+            Structure = new StructureDescriptor
+            {
+                ItemCount = features.ItemCount,
+                PlantCount = features.PlantCount,
+                WorkCenterCount = features.WorkCenterCount,
+                WarehouseCount = features.WarehouseCount,
+                SupplierCount = features.SupplierCount,
+                DistributionCenterCount = features.DistributionCenterCount,
+                TransportResourceCount = features.TransportResourceCount,
+                ProductStructureRelationshipCount = features.ProductStructureRelationshipCount,
+                MaximumProductStructureDepth = features.MaximumProductStructureDepth,
+                ProductStructureType = features.ProductStructureType,
+                IsMultiSite = features.IsMultiSite
+            },
+            Time = new TimeDescriptor
+            {
+                PlanningHorizon = features.PlanningHorizon
+            },
+            Demand = new DemandDescriptor
+            {
+                HasDemand = features.HasDemand,
+                IsDeterministic = features.HasDeterministicDemand,
+                IsTimeVarying = features.HasTimeVaryingDemand
+            },
+            Production = new ProductionDescriptor
+            {
+                HasProduction = features.HasProduction,
+                HasLeadTimes = features.HasProductionLeadTimes,
+                HasMinimumLotSizes = features.HasMinimumLotSizes,
+                HasMaximumLotSizes = features.HasMaximumLotSizes,
+                HasLotSizeMultiples = features.HasLotSizeMultiples
+            },
+            Capacity = new CapacityDescriptor
+            {
+                HasProductionCapacity = features.HasProductionCapacityConstraints,
+                HasSharedProductionCapacity = features.HasSharedProductionCapacity,
+                HasTimeVaryingProductionCapacity = features.HasTimeVaryingProductionCapacity,
+                HasSupplierCapacity = features.HasSupplierCapacityConstraints,
+                HasTransportCapacity = features.HasTransportCapacityConstraints,
+                HasWarehouseCapacity = features.HasWarehouseCapacityConstraints,
+                HasAdditionalProductionCapacity = features.HasAdditionalProductionCapacity,
+                HasAdditionalWarehouseCapacity = features.HasAdditionalWarehouseCapacity,
+                HasAdditionalTransportCapacity = features.HasAdditionalTransportCapacity
+            },
+            Setup = new SetupDescriptor
+            {
+                HasSetupCosts = features.HasSetupCosts,
+                HasSetupTimes = features.HasSetupTimes,
+                HasStartUpCosts = features.HasStartUpCosts
+            },
+            InventoryService = new InventoryServiceDescriptor
+            {
+                HasInitialInventory = features.HasInitialInventory,
+                HasSafetyStockRequirements = features.HasSafetyStockRequirements,
+                HasBacklogging = features.HasBacklogging,
+                HasLostSales = features.HasLostSales
+            },
+            Procurement = new ProcurementDescriptor
+            {
+                HasPurchasing = features.HasPurchasing,
+                HasSupplierLeadTimes = features.HasSupplierLeadTimes
+            },
+            TransportationDistribution = new TransportationDistributionDescriptor
+            {
+                HasTransportation = features.HasTransportation,
+                HasTransportLeadTimes = features.HasTransportLeadTimes,
+                HasDistribution = features.HasDistribution
+            },
+            ObjectiveFinance = new ObjectiveFinanceDescriptor
+            {
+                HasFinancialConstraints = features.HasFinancialConstraints,
+                HasMultipleObjectives = features.HasMultipleObjectives
+            }
+        };
+    }
+
+    public LotSizingProblemFeatures ToLegacyFeatures()
+    {
+        return new LotSizingProblemFeatures
+        {
+            ItemCount = Structure.ItemCount,
+            PlanningHorizon = Time.PlanningHorizon,
+            PlantCount = Structure.PlantCount,
+            WorkCenterCount = Structure.WorkCenterCount,
+            WarehouseCount = Structure.WarehouseCount,
+            SupplierCount = Structure.SupplierCount,
+            DistributionCenterCount = Structure.DistributionCenterCount,
+            TransportResourceCount = Structure.TransportResourceCount,
+            ProductStructureRelationshipCount = Structure.ProductStructureRelationshipCount,
+            MaximumProductStructureDepth = Structure.MaximumProductStructureDepth,
+            ProductStructureType = Structure.ProductStructureType,
+
+            HasDemand = Demand.HasDemand,
+            HasDeterministicDemand = Demand.IsDeterministic,
+            HasTimeVaryingDemand = Demand.IsTimeVarying,
+
+            HasInitialInventory = InventoryService.HasInitialInventory,
+            HasSafetyStockRequirements = InventoryService.HasSafetyStockRequirements,
+            HasBacklogging = InventoryService.HasBacklogging,
+            HasLostSales = InventoryService.HasLostSales,
+
+            HasProduction = Production.HasProduction,
+            HasProductionCapacityConstraints = Capacity.HasProductionCapacity,
+            HasSharedProductionCapacity = Capacity.HasSharedProductionCapacity,
+            HasTimeVaryingProductionCapacity = Capacity.HasTimeVaryingProductionCapacity,
+
+            HasSetupCosts = Setup.HasSetupCosts,
+            HasSetupTimes = Setup.HasSetupTimes,
+            HasStartUpCosts = Setup.HasStartUpCosts,
+
+            HasProductionLeadTimes = Production.HasLeadTimes,
+            HasMinimumLotSizes = Production.HasMinimumLotSizes,
+            HasMaximumLotSizes = Production.HasMaximumLotSizes,
+            HasLotSizeMultiples = Production.HasLotSizeMultiples,
+
+            HasAdditionalProductionCapacity = Capacity.HasAdditionalProductionCapacity,
+            HasAdditionalWarehouseCapacity = Capacity.HasAdditionalWarehouseCapacity,
+            HasAdditionalTransportCapacity = Capacity.HasAdditionalTransportCapacity,
+
+            HasPurchasing = Procurement.HasPurchasing,
+            HasSupplierCapacityConstraints = Capacity.HasSupplierCapacity,
+            HasSupplierLeadTimes = Procurement.HasSupplierLeadTimes,
+
+            HasTransportation = TransportationDistribution.HasTransportation,
+            HasTransportCapacityConstraints = Capacity.HasTransportCapacity,
+            HasTransportLeadTimes = TransportationDistribution.HasTransportLeadTimes,
+
+            HasDistribution = TransportationDistribution.HasDistribution,
+            HasWarehouseCapacityConstraints = Capacity.HasWarehouseCapacity,
+
+            IsMultiSite = Structure.IsMultiSite,
+            HasFinancialConstraints = ObjectiveFinance.HasFinancialConstraints,
+            HasMultipleObjectives = ObjectiveFinance.HasMultipleObjectives
+        };
+    }
+}

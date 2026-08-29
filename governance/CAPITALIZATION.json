@@ -154,6 +154,24 @@
       "correctiveAction": "InstanceModelChecker composes SupplyChainValidator diagnostics and adds only instance-level semantic rules.",
       "permanentGuard": "Structural/referential truth remains owned by Core.SupplyChainValidator; InstanceModelChecker must not independently reimplement those rules.",
       "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-018",
+      "category": "descriptor-migration",
+      "symptom": "Replacing the flat historical feature vector in one step risks XML/API breakage and loss of classification semantics.",
+      "rootCause": "LotSizingProblemFeatures mixes many scientific domains in one historical vector.",
+      "correctiveAction": "Introduce typed descriptors first as a lossless non-serialized bridge, prove full round-trip equivalence, then migrate extraction toward Core -> Descriptor -> Features.",
+      "permanentGuard": "Every represented primary feature must remain losslessly mappable until formally deprecated under an explicit compatibility policy.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-019",
+      "category": "powershell-transaction-engine-binding",
+      "symptom": "A compact transactional launcher fails before shadow creation with PositionalParameterNotFound for System.Object[].",
+      "rootCause": "Condensed PowerShell helper functions and positional calls passed array-valued native arguments through ambiguous positional binding under Windows PowerShell 5.1.",
+      "correctiveAction": "Use explicit helper functions with named parameters for executable, repository path and string-array arguments.",
+      "permanentGuard": "Transactional pack engines must not use compact positional wrappers for array-valued arguments; validated explicit wrappers are the canonical implementation.",
+      "status": "active"
     }
   ]
 }
