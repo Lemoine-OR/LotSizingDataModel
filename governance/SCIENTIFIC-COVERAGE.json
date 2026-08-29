@@ -392,6 +392,18 @@
       "notation": "universal notation describes factual structure/features/objective; planning paradigms remain separate metadata/mappings",
       "checker": "taxonomy unit tests prevent DRP/MRP from being treated as problem classes",
       "notes": "Dimensions: StructuralProperty, PlanningParadigm, LotSizingProblemClass, MathematicalFormulation, SolutionMethod, HistoricalClassification."
+    },
+    {
+      "id": "bitran-yanasse-historical-mapping",
+      "domain": "historical-classification",
+      "scientificStatus": "implemented",
+      "implementationStatus": "partial",
+      "core": "No Core change; the historical profile consumes explicit temporal series",
+      "instance": "BitranYanasseHistoricalMapper, applicability assessment and lossless historical mapping object",
+      "mathematics": "Classical domain projection requires single-item deterministic capacitated production; extensions are reported separately",
+      "notation": "Universal v1 projects the representable domain as 1,SL,Net:UNK | Dem,Det,Prod,Cap:P | Obj:Econ",
+      "checker": "UniversalNotationMatcher can test the projected universal domain; historical temporal dimensions remain external until generic qualifiers exist",
+      "notes": "Coverage is explicitly Partial because setup/holding/production-cost/capacity temporal patterns are not yet encoded by universal notation v1."
     }
   ]
 }

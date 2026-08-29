@@ -226,6 +226,15 @@
       "correctiveAction": "Compute expectedPaths from files that are provably changed relative to the exact baseline; omit byte-identical baseline files even if they were consulted or copied during pack fabrication.",
       "permanentGuard": "Before sealing a pack, every expectedPaths entry must differ from the exact baseline or be a genuinely new path; every actual changed path must be listed, and baseline-identical files must be excluded.",
       "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-026",
+      "category": "historical-mapping-coverage",
+      "symptom": "A historical classification is claimed to be fully represented by universal notation even though one or more historical dimensions have no equivalent token/attribute in the current grammar.",
+      "rootCause": "Historical mapping coverage is implicit rather than represented as data.",
+      "correctiveAction": "Historical mapping objects must report Exact or Partial coverage and preserve every unmapped historical dimension explicitly instead of silently dropping it.",
+      "permanentGuard": "A historical mapping may be marked Exact only when every source classification dimension is represented losslessly in the target universal specification.",
+      "status": "active"
     }
   ]
 }
