@@ -1,0 +1,153 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Lemoine-OR/LotSizingDataModel/governance/EXTENSION-CONTRACT.schema.json",
+  "title": "LotSizingDataModel scientific extension contract",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "id",
+    "title",
+    "scientificDefinition",
+    "provenance",
+    "dataModel",
+    "instance",
+    "classification",
+    "notation",
+    "mathematics",
+    "solver",
+    "solution",
+    "modelChecker",
+    "feasibilityAnalyzer",
+    "solutionChecker",
+    "serialization",
+    "tests",
+    "documentation",
+    "status"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "type": "integer",
+      "const": 1
+    },
+    "id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
+    "scientificDefinition": {
+      "type": "string",
+      "minLength": 1
+    },
+    "provenance": {
+      "type": "object",
+      "required": [
+        "kind",
+        "sourcesVerified"
+      ],
+      "properties": {
+        "kind": {
+          "enum": [
+            "canonical-published",
+            "platform-adaptation",
+            "project-specific",
+            "experimental"
+          ]
+        },
+        "sourcesVerified": {
+          "type": "boolean"
+        },
+        "references": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "dataModel": {
+      "$ref": "#/$defs/layer"
+    },
+    "instance": {
+      "$ref": "#/$defs/layer"
+    },
+    "classification": {
+      "$ref": "#/$defs/layer"
+    },
+    "notation": {
+      "$ref": "#/$defs/layer"
+    },
+    "mathematics": {
+      "$ref": "#/$defs/layer"
+    },
+    "solver": {
+      "$ref": "#/$defs/layer"
+    },
+    "solution": {
+      "$ref": "#/$defs/layer"
+    },
+    "modelChecker": {
+      "$ref": "#/$defs/layer"
+    },
+    "feasibilityAnalyzer": {
+      "$ref": "#/$defs/layer"
+    },
+    "solutionChecker": {
+      "$ref": "#/$defs/layer"
+    },
+    "serialization": {
+      "$ref": "#/$defs/layer"
+    },
+    "tests": {
+      "$ref": "#/$defs/layer"
+    },
+    "documentation": {
+      "$ref": "#/$defs/layer"
+    },
+    "status": {
+      "enum": [
+        "planned",
+        "in-progress",
+        "implemented",
+        "reviewed",
+        "deferred",
+        "experimental"
+      ]
+    }
+  },
+  "$defs": {
+    "layer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "applicability",
+        "status",
+        "contract"
+      ],
+      "properties": {
+        "applicability": {
+          "enum": [
+            "required",
+            "optional",
+            "not-applicable"
+          ]
+        },
+        "status": {
+          "enum": [
+            "missing",
+            "planned",
+            "partial",
+            "implemented",
+            "not-applicable"
+          ]
+        },
+        "contract": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

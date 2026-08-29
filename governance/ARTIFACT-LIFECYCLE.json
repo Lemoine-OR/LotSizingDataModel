@@ -1,0 +1,47 @@
+{
+  "schemaVersion": 1,
+  "policyVersion": "1.0",
+  "statuses": [
+    "active",
+    "published",
+    "superseded",
+    "disposable",
+    "retained",
+    "unknown"
+  ],
+  "managedRoots": [
+    {
+      "path": "Documentation/artifacts",
+      "owner": "build automation",
+      "defaultStatus": "disposable",
+      "sourceControlled": false
+    },
+    {
+      "path": "Documentation/test-results",
+      "owner": "test automation",
+      "defaultStatus": "disposable",
+      "sourceControlled": false
+    },
+    {
+      "path": "Documentation/release",
+      "owner": "release automation",
+      "defaultStatus": "retained",
+      "sourceControlled": false
+    },
+    {
+      "path": "Documentation/governance-reports",
+      "owner": "governance automation",
+      "defaultStatus": "retained",
+      "sourceControlled": false
+    }
+  ],
+  "deletionConditions": [
+    "origin-known",
+    "path-under-managed-root",
+    "status-disposable-or-superseded",
+    "no-user-uncommitted-work-affected",
+    "no-unique-published-artifact",
+    "replacement-verified-when-required",
+    "scope-explicit"
+  ]
+}

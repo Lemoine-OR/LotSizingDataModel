@@ -1,4 +1,4 @@
-[CmdletBinding()]
+﻿[CmdletBinding()]
 param(
     [switch]$IncludeExternalSolverAdapters
 )
@@ -12,6 +12,10 @@ Set-Location $RepoRoot
 Write-Host "PowerShell automation syntax: OK" -ForegroundColor Green
 
 & (Join-Path $RepoRoot "tools\Test-VersioningPreflight.ps1")
+& (Join-Path $RepoRoot "tools\Test-VersionIdentity.ps1")
+
+# Scientific governance is a first-class build gate from v1.2.0-alpha.1 onward.
+& (Join-Path $RepoRoot "tools\Test-ScientificGovernance.ps1")
 
 $TestResults = Join-Path $RepoRoot "Documentation\test-results"
 $Artifacts = Join-Path $RepoRoot "Documentation\artifacts"
@@ -78,7 +82,7 @@ $version = & (Join-Path $RepoRoot "tools\Get-LotSizingVersion.ps1") -SkipRestore
 Write-Host ""
 Write-Host "============================================================"
 Write-Host "LotSizingDataModel validated build succeeded" -ForegroundColor Green
-Write-Host "Version : $($version.BuildVersionSimple)"
+Write-Host "Version : $($version.DisplayVersion)"
 Write-Host "File    : $($version.AssemblyFileVersion)"
 Write-Host "Commit  : $($version.GitCommitIdShort)"
 Write-Host "Package : $($package.ZipPath)"

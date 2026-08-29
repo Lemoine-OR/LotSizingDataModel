@@ -1,0 +1,150 @@
+{
+  "schemaVersion": 1,
+  "catalogVersion": "1.0",
+  "entries": [
+    {
+      "id": "LSDM-CAP-001",
+      "category": "baseline",
+      "symptom": "An automated change is applied to an unknown repository state.",
+      "rootCause": "Baseline identity was not treated as an invariant.",
+      "correctiveAction": "Require exact HEAD, expected branch, clean status and expected file identities before mutation.",
+      "permanentGuard": "Every transactional pack validates its immutable baseline before the first effect.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-002",
+      "category": "native-process",
+      "symptom": "Normal native stderr is interpreted as a PowerShell failure.",
+      "rootCause": "Windows PowerShell 5.1 can surface native stderr as NativeCommandError under ErrorActionPreference=Stop.",
+      "correctiveAction": "Use a native-command wrapper and judge native success from process exit code.",
+      "permanentGuard": "Native stderr alone is never proof of failure.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-003",
+      "category": "repository-discovery",
+      "symptom": "A generated NextGen clone is rediscovered as a competing source repository.",
+      "rootCause": "All clones sharing the same remote were treated as equally authoritative.",
+      "correctiveAction": "Prefer the canonical reference clone and exclude generated workspaces from fallback discovery.",
+      "permanentGuard": "Generated workspaces never silently become source baselines.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-004",
+      "category": "reconstruction",
+      "symptom": "Successive patch-on-patch revisions make provenance uncertain.",
+      "rootCause": "A failed infrastructure artifact was repaired incrementally instead of rebuilt from its contract.",
+      "correctiveAction": "Rebuild from the latest immutable validated baseline.",
+      "permanentGuard": "Published/released pack revisions are immutable; infrastructure defects trigger reconstruction.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-005",
+      "category": "non-interactive-automation",
+      "symptom": "An automated run waits for unexpected user input.",
+      "rootCause": "Interactive commands or authentication prompts were allowed inside automation.",
+      "correctiveAction": "Use non-interactive modes and fail explicitly when required data are unavailable.",
+      "permanentGuard": "Read-Host, Pause and interactive prompt flows are forbidden in automated paths.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-006",
+      "category": "scientific-parity",
+      "symptom": "A feature exists in one layer but is absent or only nominally represented in another.",
+      "rootCause": "Feature completion was assessed locally instead of across the scientific software chain.",
+      "correctiveAction": "Track every extension through the universal extension contract and scientific coverage registry.",
+      "permanentGuard": "No feature is declared fully supported until all applicable layers are explicitly in parity.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-007",
+      "category": "powershell-collection-semantics",
+      "symptom": "StrictMode raises PropertyNotFoundException when .Count is read from a scalar returned by a function that normally represents a collection.",
+      "rootCause": "Windows PowerShell unwraps zero/one-element pipeline results unless the caller explicitly materializes an array.",
+      "correctiveAction": "Materialize collection-valued function results with @(...), and use @($value).Count in guards.",
+      "permanentGuard": "Infrastructure code must never assume pipeline collection cardinality from the runtime type of an unmaterialized result.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-008",
+      "category": "git-scope-detection",
+      "symptom": "A directory containing several new files appears as one '?? directory/' entry and fails exact expected-path comparison.",
+      "rootCause": "git status --porcelain uses normal untracked-file collapsing unless --untracked-files=all is requested.",
+      "correctiveAction": "All exact-scope calculations use git status --porcelain --untracked-files=all.",
+      "permanentGuard": "Any packaging/preflight engine comparing expected paths to Git status must request untracked-files=all and validate individual files, never directory summaries.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-009",
+      "category": "versioning",
+      "symptom": "A prerelease declared in version.json is not fully reflected when the candidate is built from an uncommitted version change.",
+      "rootCause": "Nerdbank.GitVersioning derives some version semantics from committed Git history; its documentation explicitly warns that some version.json changes are not effective until committed.",
+      "correctiveAction": "Create the candidate commit inside the disposable shadow worktree before running Build-Validated.",
+      "permanentGuard": "Version-changing candidates are validated only from a clean committed shadow candidate.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-010",
+      "category": "version-identity",
+      "symptom": "BuildVersionSimple omits the prerelease suffix and can make prerelease artifacts appear stable.",
+      "rootCause": "BuildVersionSimple is a numeric simple version and is not the public human prerelease identity.",
+      "correctiveAction": "Expose PrereleaseVersion and compute a DisplayVersion equal to the declared version.json semantic version.",
+      "permanentGuard": "Artifact names, documentation display and validated-build summaries use DisplayVersion; a version-identity validator enforces declared/version-tool parity.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-011",
+      "category": "transactional-validation",
+      "symptom": "A shadow working-tree replay validates source bytes but not the exact Git commit identity later used by versioning.",
+      "rootCause": "The previous pipeline built an uncommitted shadow then replayed files into the real branch.",
+      "correctiveAction": "Commit the candidate in the shadow, validate that exact commit, then fast-forward the real branch to the same validated commit object.",
+      "permanentGuard": "For versioned candidates, shadow commit SHA and final local branch HEAD must be identical.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-012",
+      "category": "powershell-strictmode-transitive",
+      "symptom": "A legacy script succeeds normally but fails when invoked from a StrictMode-enabled caller because an unmaterialized pipeline result is treated as a scalar.",
+      "rootCause": "StrictMode exposes collection-cardinality assumptions in nested infrastructure scripts.",
+      "correctiveAction": "Make Test-VersioningPreflight strict-safe itself: enable StrictMode locally, materialize nested version search results, and wrap Count guards.",
+      "permanentGuard": "Critical preflight scripts must pass when StrictMode is enabled in their own scope, not merely when called from permissive callers.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-013",
+      "category": "preflight-self-audit",
+      "symptom": "A safety scanner flags the forbidden pattern inside its own transformation literal instead of active code.",
+      "rootCause": "The static guard did not distinguish executable source from quoted OldText fixtures.",
+      "correctiveAction": "Scope safety checks to active statements or AST nodes and explicitly exclude transformation literals/fixtures.",
+      "permanentGuard": "Preflight detectors must include positive and negative fixtures and must not self-match on their own test strings.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-014",
+      "category": "immutable-file-reconstruction",
+      "symptom": "A multi-line text anchor fails because line endings or formatting differ despite the baseline file being semantically the expected one.",
+      "rootCause": "Critical infrastructure reconstruction depended on exact multi-line textual formatting.",
+      "correctiveAction": "For critical files with an exact known baseline blob, verify the blob SHA and replace the complete file with a canonical payload.",
+      "permanentGuard": "Versioning/preflight critical files are reconstructed as complete canonical files after exact baseline blob verification; multi-line textual anchors are forbidden there.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-015",
+      "category": "temporary-branch-lifecycle",
+      "symptom": "A failed candidate can leave a temporary branch even when no candidate commit was created.",
+      "rootCause": "Cleanup was conditional only on a non-null candidate commit.",
+      "correctiveAction": "If no candidate commit was created, delete the temporary branch only when it is proven to still point to the immutable baseline. Retain committed candidates for recovery.",
+      "permanentGuard": "Temporary branch cleanup is state-aware: baseline-only branches are disposable; committed validated candidates are retained until successful finalization.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-016",
+      "category": "fresh-worktree-restore-order",
+      "symptom": "A versioning gate fails with MSB4057 because the NBGV GetBuildVersion target is unavailable in a fresh shadow worktree.",
+      "rootCause": "The gate called Get-LotSizingVersion.ps1 with -SkipRestore before any project restore had materialized NuGet/MSBuild imports in the new worktree.",
+      "correctiveAction": "Pre-build version identity validation performs its own restore. -SkipRestore is allowed only after an explicit successful restore in the same worktree.",
+      "permanentGuard": "Any version probe executed before the build restore must not use -SkipRestore; build ordering and restore assumptions are part of the validation contract.",
+      "status": "active"
+    }
+  ]
+}

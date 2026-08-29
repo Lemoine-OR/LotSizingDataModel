@@ -120,6 +120,7 @@ $buildInfo = [ordered]@{
     repository = "https://github.com/Lemoine-OR/LotSizingDataModel"
     buildVersion = $VersionInfo.BuildVersion
     buildVersionSimple = $VersionInfo.BuildVersionSimple
+    displayVersion = $VersionInfo.DisplayVersion
     assemblyVersion = $VersionInfo.AssemblyVersion
     assemblyFileVersion = $VersionInfo.AssemblyFileVersion
     informationalVersion = $VersionInfo.AssemblyInformationalVersion
@@ -134,7 +135,7 @@ $buildInfo | ConvertTo-Json -Depth 5 |
     Set-Content -LiteralPath (Join-Path $PackageRoot "build-info.json") -Encoding UTF8
 
 $readme = @"
-LotSizingDataModel $($VersionInfo.BuildVersionSimple)
+LotSizingDataModel $($VersionInfo.DisplayVersion)
 
 Author: David Lemoine
 Organization: Lemoine-OR
@@ -150,7 +151,7 @@ Set-Content -LiteralPath (Join-Path $PackageRoot "README.txt") -Value $readme -E
 # Validate every packaged first-party DLL before producing the ZIP.
 & (Join-Path $RepoRoot "tools\Verify-AssemblyMetadata.ps1") -DllPath $firstPartyDlls
 
-$zipName = "LotSizingDataModel-$($VersionInfo.BuildVersionSimple)-validated.zip"
+$zipName = "LotSizingDataModel-$($VersionInfo.DisplayVersion)-validated.zip"
 $zipPath = Join-Path $ArtifactRoot $zipName
 Remove-Item -LiteralPath $zipPath -Force -ErrorAction SilentlyContinue
 
@@ -169,5 +170,5 @@ Write-Host "SHA-256: $hash"
     PackageRoot = $PackageRoot
     ZipPath = $zipPath
     ChecksumPath = $checksumPath
-    Version = $VersionInfo.BuildVersionSimple
+    Version = $VersionInfo.DisplayVersion
 }

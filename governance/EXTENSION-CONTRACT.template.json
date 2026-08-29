@@ -1,0 +1,77 @@
+{
+  "schemaVersion": 1,
+  "id": "replace-with-stable-extension-id",
+  "title": "Replace with extension title",
+  "scientificDefinition": "Define the scientific semantics and exact scope.",
+  "provenance": {
+    "kind": "project-specific",
+    "sourcesVerified": false,
+    "references": []
+  },
+  "dataModel": {
+    "applicability": "required",
+    "status": "planned",
+    "contract": "Define the required contract before implementation."
+  },
+  "instance": {
+    "applicability": "required",
+    "status": "planned",
+    "contract": "Define the required contract before implementation."
+  },
+  "classification": {
+    "applicability": "required",
+    "status": "planned",
+    "contract": "Define the required contract before implementation."
+  },
+  "notation": {
+    "applicability": "required",
+    "status": "planned",
+    "contract": "Define the required contract before implementation."
+  },
+  "mathematics": {
+    "applicability": "required",
+    "status": "planned",
+    "contract": "Define the required contract before implementation."
+  },
+  "solver": {
+    "applicability": "required",
+    "status": "planned",
+    "contract": "Define the required contract before implementation."
+  },
+  "solution": {
+    "applicability": "required",
+    "status": "planned",
+    "contract": "Define the required contract before implementation."
+  },
+  "modelChecker": {
+    "applicability": "required",
+    "status": "planned",
+    "contract": "Define the required contract before implementation."
+  },
+  "feasibilityAnalyzer": {
+    "applicability": "optional",
+    "status": "planned",
+    "contract": "Define cheap/exact feasibility implications when applicable."
+  },
+  "solutionChecker": {
+    "applicability": "required",
+    "status": "planned",
+    "contract": "Define the required contract before implementation."
+  },
+  "serialization": {
+    "applicability": "required",
+    "status": "planned",
+    "contract": "Define the required contract before implementation."
+  },
+  "tests": {
+    "applicability": "required",
+    "status": "planned",
+    "contract": "Define the required contract before implementation."
+  },
+  "documentation": {
+    "applicability": "required",
+    "status": "planned",
+    "contract": "Define the required contract before implementation."
+  },
+  "status": "planned"
+}

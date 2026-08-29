@@ -51,7 +51,7 @@ $dotVersion = cmd /c "dot -V 2>&1"
 Write-Host $dotVersion
 
 $VersionInfo = & (Join-Path $RepoRoot "tools\Get-LotSizingVersion.ps1")
-$displayVersion = $VersionInfo.BuildVersionSimple
+$displayVersion = $VersionInfo.DisplayVersion
 $commitShort = $VersionInfo.GitCommitIdShort
 
 $overrideFile = Join-Path $RepoRoot "docs\project-overrides.json"

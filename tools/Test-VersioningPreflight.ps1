@@ -1,7 +1,9 @@
-[CmdletBinding()]
+﻿[CmdletBinding()]
 param()
 
 $ErrorActionPreference = "Stop"
+Set-StrictMode -Version 2.0
+
 $RepoRoot = Split-Path -Parent $PSScriptRoot
 Set-Location $RepoRoot
 
@@ -26,14 +28,22 @@ if (-not (Test-Path -LiteralPath $gitMetadata)) {
 }
 
 # Detect nested NBGV version files, which would create multiple version domains.
-$nestedVersions = Get-ChildItem -LiteralPath $RepoRoot -Recurse -File -Filter "version.json" |
-    Where-Object {
-        $_.FullName -ne $versionFile -and
-        $_.FullName -notmatch '[\\/](bin|obj|Documentation|\.git)[\\/]'
-    }
+$nestedVersions =
+    @(
+        Get-ChildItem -LiteralPath $RepoRoot -Recurse -File -Filter "version.json" |
+        Where-Object {
+            $_.FullName -ne $versionFile -and
+            $_.FullName -notmatch '[\\/](bin|obj|Documentation|\.git)[\\/]'
+        }
+    )
 
-if ($nestedVersions.Count -gt 0) {
-    $paths = ($nestedVersions | ForEach-Object { $_.FullName }) -join [Environment]::NewLine
+if (@($nestedVersions).Count -gt 0) {
+    $paths =
+        @(
+            $nestedVersions |
+            ForEach-Object { $_.FullName }
+        ) -join [Environment]::NewLine
+
     throw "Nested version.json file(s) detected. LotSizingDataModel uses one repository-wide version domain:`n$paths"
 }
 
@@ -46,14 +56,24 @@ Get-ChildItem -LiteralPath $RepoRoot -Recurse -File -Filter "*.cs" |
         $_.FullName -notmatch '[\\/](bin|obj|Documentation|\.git)[\\/]'
     } |
     ForEach-Object {
-        $match = Select-String -LiteralPath $_.FullName -Pattern $assemblyAttributePattern -AllMatches
+        $match =
+            Select-String `
+                -LiteralPath $_.FullName `
+                -Pattern $assemblyAttributePattern `
+                -AllMatches
+
         if ($null -ne $match) {
             $legacyHits += $_.FullName
         }
     }
 
-if ($legacyHits.Count -gt 0) {
-    $paths = ($legacyHits | Sort-Object -Unique) -join [Environment]::NewLine
+if (@($legacyHits).Count -gt 0) {
+    $paths =
+        @(
+            $legacyHits |
+            Sort-Object -Unique
+        ) -join [Environment]::NewLine
+
     throw "Legacy explicit assembly version attribute(s) detected. They would conflict with automatic Git versioning:`n$paths"
 }
 

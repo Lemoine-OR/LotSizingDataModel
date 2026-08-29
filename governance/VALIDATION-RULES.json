@@ -1,0 +1,108 @@
+{
+  "schemaVersion": 1,
+  "catalogVersion": "1.0",
+  "severities": [
+    "Information",
+    "Warning",
+    "Error",
+    "Fatal"
+  ],
+  "services": [
+    {
+      "id": "supply-chain-validator",
+      "layer": "Core",
+      "question": "Are domain data structurally, referentially and locally consistent?",
+      "solverAllowed": false
+    },
+    {
+      "id": "instance-model-checker",
+      "layer": "Instance",
+      "question": "Does the instance describe a scientifically meaningful lot-sizing problem?",
+      "solverAllowed": false
+    },
+    {
+      "id": "instance-feasibility-analyzer",
+      "layer": "Checker",
+      "question": "Does at least one feasible solution exist?",
+      "solverAllowed": true
+    },
+    {
+      "id": "solution-checker",
+      "layer": "Checker",
+      "question": "Does this candidate solution satisfy the instance and objective contract?",
+      "solverAllowed": true
+    }
+  ],
+  "codeNamespaces": [
+    {
+      "prefix": "SC",
+      "owner": "Core.SupplyChainValidator",
+      "status": "existing"
+    },
+    {
+      "prefix": "BOM",
+      "owner": "Core.SupplyChainValidator",
+      "status": "existing"
+    },
+    {
+      "prefix": "PHY",
+      "owner": "Core.SupplyChainValidator",
+      "status": "existing"
+    },
+    {
+      "prefix": "PRD",
+      "owner": "Core.SupplyChainValidator",
+      "status": "existing"
+    },
+    {
+      "prefix": "INV",
+      "owner": "Core.SupplyChainValidator",
+      "status": "existing"
+    },
+    {
+      "prefix": "TCH",
+      "owner": "Core.SupplyChainValidator",
+      "status": "existing"
+    },
+    {
+      "prefix": "DEM",
+      "owner": "Core.SupplyChainValidator",
+      "status": "existing"
+    },
+    {
+      "prefix": "SRC",
+      "owner": "Core.SupplyChainValidator",
+      "status": "existing"
+    },
+    {
+      "prefix": "SUP",
+      "owner": "Core.SupplyChainValidator",
+      "status": "existing"
+    },
+    {
+      "prefix": "LSDM-SEM",
+      "owner": "Instance.InstanceModelChecker",
+      "status": "reserved"
+    },
+    {
+      "prefix": "LSDM-NOT",
+      "owner": "Instance.Notation",
+      "status": "reserved"
+    },
+    {
+      "prefix": "LSDM-PAR",
+      "owner": "ScientificParityValidator",
+      "status": "reserved"
+    },
+    {
+      "prefix": "LSDM-GOV",
+      "owner": "ScientificGovernanceValidator",
+      "status": "active"
+    },
+    {
+      "prefix": "LSDM-FEA",
+      "owner": "Checker.InstanceFeasibilityAnalyzer",
+      "status": "reserved"
+    }
+  ]
+}

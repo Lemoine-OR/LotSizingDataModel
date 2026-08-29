@@ -30,14 +30,14 @@ if (-not $publicRelease) {
     )
 }
 
-$buildVersion = [string]$VersionInfo.BuildVersionSimple
+$buildVersion = [string]$VersionInfo.DisplayVersion
 $releaseVersion = [string]$VersionInfo.PackageVersion
 $commitId = [string]$VersionInfo.GitCommitId
 $commitShort = [string]$VersionInfo.GitCommitIdShort
 $fileVersion = [string]$VersionInfo.AssemblyFileVersion
 
 if ([string]::IsNullOrWhiteSpace($buildVersion)) {
-    throw "NBGV BuildVersionSimple is empty."
+    throw "NBGV DisplayVersion is empty."
 }
 
 if ([string]::IsNullOrWhiteSpace($releaseVersion)) {
@@ -79,10 +79,10 @@ $buildInfo =
     Get-Content -LiteralPath $sourceBuildInfo -Raw |
     ConvertFrom-Json
 
-if ([string]$buildInfo.buildVersionSimple -ne $buildVersion) {
+if ([string]$buildInfo.displayVersion -ne $buildVersion) {
     throw (
         "Validated package build version '{0}' does not match NBGV '{1}'." -f
-        [string]$buildInfo.buildVersionSimple,
+        [string]$buildInfo.displayVersion,
         $buildVersion
     )
 }

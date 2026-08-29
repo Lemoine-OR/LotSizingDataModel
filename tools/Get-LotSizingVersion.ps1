@@ -1,4 +1,4 @@
-[CmdletBinding()]
+﻿[CmdletBinding()]
 param(
     [switch]$SkipRestore
 )
@@ -61,7 +61,7 @@ Get-Content -LiteralPath $tempFile | ForEach-Object {
     }
 }
 
-$required = @(
+$requiredNonEmpty = @(
     "AssemblyVersion",
     "AssemblyFileVersion",
     "AssemblyInformationalVersion",
@@ -72,11 +72,30 @@ $required = @(
     "PackageVersion"
 )
 
-foreach ($key in $required) {
+foreach ($key in $requiredNonEmpty) {
     if (-not $values.ContainsKey($key) -or
         [string]::IsNullOrWhiteSpace([string]$values[$key])) {
-        throw "Missing NBGV property '$key' in generated version information file '$tempFile'."
+        throw "Missing or empty NBGV property '$key' in generated version information file '$tempFile'."
     }
 }
+
+# PrereleaseVersion is required as a property but may legitimately be empty
+# for stable releases.
+if (-not $values.ContainsKey("PrereleaseVersion")) {
+    throw "Missing NBGV property 'PrereleaseVersion' in generated version information file '$tempFile'."
+}
+
+$displayVersion = [string]$values["BuildVersionSimple"]
+$prereleaseVersion = [string]$values["PrereleaseVersion"]
+
+if (-not [string]::IsNullOrWhiteSpace($prereleaseVersion)) {
+    if (-not $prereleaseVersion.StartsWith("-", [System.StringComparison]::Ordinal)) {
+        throw "NBGV PrereleaseVersion must include its leading hyphen. Received '$prereleaseVersion'."
+    }
+
+    $displayVersion += $prereleaseVersion
+}
+
+$values["DisplayVersion"] = $displayVersion
 
 [pscustomobject]$values

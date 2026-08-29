@@ -22,6 +22,7 @@
       <_LotSizingVersionLine Include="AssemblyInformationalVersion=$(AssemblyInformationalVersion)" />
       <_LotSizingVersionLine Include="BuildVersion=$(BuildVersion)" />
       <_LotSizingVersionLine Include="BuildVersionSimple=$(BuildVersionSimple)" />
+      <_LotSizingVersionLine Include="PrereleaseVersion=$(PrereleaseVersion)" />
       <_LotSizingVersionLine Include="BuildVersion3Components=$(BuildVersion3Components)" />
       <_LotSizingVersionLine Include="GitCommitId=$(GitCommitId)" />
       <_LotSizingVersionLine Include="GitCommitIdShort=$(GitCommitIdShort)" />
