@@ -368,6 +368,18 @@
       "notation": "strict three-field parser with stable token catalog",
       "checker": "malformed/unknown tokens rejected with FormatException",
       "notes": "Reserved closed-loop network syntax Net:CL(F:...;R:...) is parseable even though Core reverse-flow generation is not yet active."
+    },
+    {
+      "id": "universal-notation-matcher",
+      "domain": "classification-notation",
+      "scientificStatus": "implemented",
+      "implementationStatus": "implemented",
+      "core": "not applicable",
+      "instance": "UniversalProblemSpecification + UniversalNotationMatcher + structured LSDM-MATCH issues",
+      "mathematics": "No formulation change; matcher compares semantic descriptors/specifications",
+      "notation": "Exact / Compatible / Incomplete / Contradiction semantics implemented",
+      "checker": "Structured mismatch issues distinguish proven contradiction from insufficient descriptor information",
+      "notes": "Partial specifications are positive constraints. Exact requires canonical equality with generated notation."
     }
   ]
 }

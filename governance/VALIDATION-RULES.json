@@ -103,6 +103,12 @@
       "prefix": "LSDM-FEA",
       "owner": "Checker.InstanceFeasibilityAnalyzer",
       "status": "reserved"
+    },
+    {
+      "prefix": "LSDM-MATCH",
+      "owner": "LotSizingDataModel.Instance.Notation.Matching",
+      "purpose": "Stable universal-notation specification matching diagnostics",
+      "status": "active"
     }
   ]
 }

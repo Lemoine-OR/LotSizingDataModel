@@ -199,6 +199,15 @@
       "correctiveAction": "Use a versioned LSDM scheme, typed alpha/beta/gamma AST, stable token catalog, strict parser and deterministic canonical renderer.",
       "permanentGuard": "Generated notation must satisfy Render(Parse(Render(Generate(descriptor)))) == Render(Generate(descriptor)); historical alias notations remain separate projections.",
       "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-023",
+      "category": "notation-matching-semantics",
+      "symptom": "A partial notation is treated as a closed-world description, so omitted optional characteristics become false contradictions.",
+      "rootCause": "Generation notation and problem-specification semantics are conflated.",
+      "correctiveAction": "Exact matching uses full canonical generated equality; compatibility matching interprets explicitly present tokens as positive requirements and omitted optional beta/network modifiers as unconstrained.",
+      "permanentGuard": "Matcher precedence is Contradiction > Incomplete > Exact > Compatible, and Exact always requires canonical equality with generated notation.",
+      "status": "active"
     }
   ]
 }
