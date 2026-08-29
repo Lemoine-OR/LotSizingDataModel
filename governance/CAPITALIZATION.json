@@ -361,6 +361,33 @@
       "correctiveAction": "HistoricalClassificationCapability reports mapping and complete-code detection independently.",
       "permanentGuard": "CanMapDeclaredClassification never implies CanDetectCompleteHistoricalCode.",
       "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-041",
+      "category": "scientific-vs-technical-formulation-support",
+      "symptom": "A formulation is considered scientifically supported solely because CanBuild(instance) returns true.",
+      "rootCause": "Technical build preconditions are conflated with semantic/modeling coverage.",
+      "correctiveAction": "Add explicit mathematical-formulation scientific profiles and require verified canonical-class/extension coverage separately from CanBuild.",
+      "permanentGuard": "Automatic scientific selection requires ScientificCompatible; concrete instance selection additionally requires CanBuild(instance).",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-042",
+      "category": "unknown-formulation-capability",
+      "symptom": "An unprofiled or unverified formulation capability is silently treated as supported.",
+      "rootCause": "Capability absence is interpreted optimistically.",
+      "correctiveAction": "Use Undetermined for unprofiled formulations and unverified extensions.",
+      "permanentGuard": "Undetermined formulations/extensions are never auto-selected.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-043",
+      "category": "formulation-profile-parity",
+      "symptom": "A scientific formulation profile claims support that has no corresponding registered variable/objective/constraint implementation evidence.",
+      "rootCause": "Capability metadata drifts from the actual formulation factory.",
+      "correctiveAction": "Ground profile support in concrete builder families and keep evidence with the profile.",
+      "permanentGuard": "Changes to standard formulation builder families require scientific capability-profile review and tests.",
+      "status": "active"
     }
   ]
 }

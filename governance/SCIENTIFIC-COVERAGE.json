@@ -560,6 +560,42 @@
       "notation": "Historical mappings remain separate from universal detected notation",
       "checker": "Capability distinguishes mapping from complete historical detection",
       "notes": "Bitran-Yanasse requires explicit temporal profile; Wolsey inverse detection remains future work."
+    },
+    {
+      "id": "scientific-formulation-compatibility",
+      "domain": "mathematical-formulation",
+      "scientificStatus": "implemented",
+      "implementationStatus": "implemented",
+      "core": "not applicable",
+      "instance": "Consumes ScientificClassificationResult and canonical problem-class extensions",
+      "mathematics": "Formulation scientific profiles declare supported canonical classes and extension coverage",
+      "notation": "No new notation token; formulation coverage is an orthogonal taxonomy axis",
+      "checker": "Compatibility reports Compatible/Incompatible/Undetermined/Blocked",
+      "notes": "Scientific compatibility is independent from technical CanBuild."
+    },
+    {
+      "id": "standard-formulation-scientific-profile",
+      "domain": "mathematical-formulation",
+      "scientificStatus": "implemented",
+      "implementationStatus": "implemented",
+      "core": "No Core mutation",
+      "instance": "Supports all six executable canonical problem-class cores",
+      "mathematics": "Verified extension support is grounded in standard formulation builder families",
+      "notation": "not applicable",
+      "checker": "Checker.Tests enforce supported, unsupported and undetermined extension sets",
+      "notes": "Known unsupported: start-up costs, maximum lot size, supplier capacity, financial constraints, multiple objectives."
+    },
+    {
+      "id": "scientific-formulation-selection",
+      "domain": "mathematical-formulation",
+      "scientificStatus": "implemented",
+      "implementationStatus": "implemented",
+      "core": "not applicable",
+      "instance": "Can run from precomputed scientific classification or LotSizingInstance",
+      "mathematics": "Automatic selection requires verified scientific compatibility",
+      "notation": "not applicable",
+      "checker": "Concrete instance overload additionally checks CanBuild(instance)",
+      "notes": "Undetermined candidates are never auto-selected."
     }
   ]
 }

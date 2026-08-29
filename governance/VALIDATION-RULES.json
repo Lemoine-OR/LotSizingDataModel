@@ -108,6 +108,11 @@
       "prefix": "LSDM-SCI",
       "owner": "Instance.ScientificClassificationEngine",
       "status": "active"
+    },
+    {
+      "prefix": "LSDM-FORM",
+      "owner": "Solver.Formulation.Scientific",
+      "status": "active"
     }
   ]
 }
