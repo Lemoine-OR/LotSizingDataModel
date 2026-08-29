@@ -332,6 +332,30 @@
       "notation": "future historical alias mapping",
       "checker": "structural candidate only",
       "notes": "Conservatively named candidate to avoid overclaiming a full DRP problem class."
+    },
+    {
+      "id": "temporal-pattern-analysis",
+      "domain": "classification",
+      "scientificStatus": "implemented",
+      "implementationStatus": "implemented",
+      "core": "No source-data change; analyzes existing finite period series",
+      "instance": "TemporalPatternAnalyzer, tolerance policy, canonical analysis result",
+      "mathematics": "No formulation change",
+      "notation": "Stable historical Z/C/NI/ND/G tokens exposed",
+      "checker": "Empty and non-finite series are rejected by analyzer",
+      "notes": "Canonical specificity and numerical tolerance are explicit and tested."
+    },
+    {
+      "id": "bitran-yanasse-classification",
+      "domain": "historical-classification",
+      "scientificStatus": "implemented",
+      "implementationStatus": "partial",
+      "core": "Existing setup, holding, production-cost and capacity time-series classes can supply values when a classical single-item CLSP projection is selected",
+      "instance": "BitranYanasseProfileAnalyzer produces exact alpha/beta/gamma/delta temporal profile from four explicit series",
+      "mathematics": "No automatic projection to a classical CLSP formulation yet",
+      "notation": "Historical slash-separated codes Z/C/NI/ND/G implemented",
+      "checker": "Series validity enforced by TemporalPatternAnalyzer",
+      "notes": "Automatic selection of the relevant four Core series for arbitrary multi-item/multi-site instances is deliberately deferred to the historical mapping layer."
     }
   ]
 }

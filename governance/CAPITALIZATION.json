@@ -181,6 +181,15 @@
       "correctiveAction": "Maintain separate ProductStructureDescriptor and SupplyNetworkDescriptor analyses; BOM cycles remain invalid while physical supply cycles are represented by HasCycles.",
       "permanentGuard": "No physical-network classifier or notation token may derive topology from ComponentRequirements, and no BOM validator may reject a transport-flow cycle solely because it is cyclic.",
       "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-021",
+      "category": "temporal-pattern-classification",
+      "symptom": "Temporal pattern classification becomes non-deterministic near numerical tolerance boundaries or silently mixes historical and universal notations.",
+      "rootCause": "Zero, constant and monotone classes overlap mathematically, and floating-point tolerance can make both monotone directions appear true.",
+      "correctiveAction": "Use an explicit global-scale tolerance and canonical specificity Zero > Constant > one-direction monotonicity > General; tolerance-induced bidirectional ambiguity falls back to General.",
+      "permanentGuard": "Historical Bitran-Yanasse alpha/beta/gamma/delta codes remain slash-separated and isolated from the universal alpha|beta|gamma notation.",
+      "status": "active"
     }
   ]
 }
