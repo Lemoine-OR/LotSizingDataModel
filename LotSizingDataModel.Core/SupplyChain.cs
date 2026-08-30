@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Serialization;
 using LotSizingDataModel.Core.Common;
+using LotSizingDataModel.Core.DecisionModel.Finance;
+using LotSizingDataModel.Core.DecisionModel.Objectives;
 using LotSizingDataModel.Core.LogicalModel;
 using LotSizingDataModel.Core.PhysicalModel;
 using LotSizingDataModel.Core.Relationships;
@@ -27,6 +29,10 @@ public sealed class SupplyChain :
     IPlanningHorizonAware
 {
     private int _planningHorizon;
+    private PeriodicOperatingExpenditureBudget?
+        _periodicOperatingExpenditureBudget;
+    private OptimizationObjectivePolicy?
+        _objectivePolicy;
 
     /// <summary>
     /// Initializes an empty supply chain.
@@ -62,6 +68,71 @@ public sealed class SupplyChain :
     {
         get => _planningHorizon;
         set => ResizeTimeSeries(value);
+    }
+
+    /// <summary>
+    /// Gets or sets the period operating-expenditure budget.
+    /// </summary>
+    [XmlElement("periodicOperatingExpenditureBudget")]
+    public PeriodicOperatingExpenditureBudget?
+        PeriodicOperatingExpenditureBudget
+    {
+        get => _periodicOperatingExpenditureBudget;
+        set
+        {
+            if (ReferenceEquals(
+                    _periodicOperatingExpenditureBudget,
+                    value))
+            {
+                return;
+            }
+
+            if (_periodicOperatingExpenditureBudget is not null)
+            {
+                _periodicOperatingExpenditureBudget.PropertyChanged -=
+                    OnFinancialParameterPropertyChanged;
+            }
+
+            _periodicOperatingExpenditureBudget = value;
+
+            if (_periodicOperatingExpenditureBudget is not null)
+            {
+                if (PlanningHorizon > 0)
+                {
+                    _periodicOperatingExpenditureBudget
+                        .ResizeTimeSeries(PlanningHorizon);
+                }
+
+                _periodicOperatingExpenditureBudget.PropertyChanged +=
+                    OnFinancialParameterPropertyChanged;
+            }
+
+            OnPropertyChanged(
+                nameof(PeriodicOperatingExpenditureBudget));
+            OnPropertyChanged(
+                nameof(HasConsistentPlanningHorizon));
+        }
+    }
+
+    /// <summary>
+    /// Gets or sets the explicit business objective policy.
+    /// Null preserves the historical single economic objective.
+    /// </summary>
+    [XmlElement("objectivePolicy")]
+    public OptimizationObjectivePolicy? ObjectivePolicy
+    {
+        get => _objectivePolicy;
+        set
+        {
+            if (ReferenceEquals(_objectivePolicy, value))
+            {
+                return;
+            }
+
+            value?.EnsureValid();
+            _objectivePolicy = value;
+            OnPropertyChanged(nameof(ObjectivePolicy));
+        }
     }
 
     #region Logical subsystem
@@ -562,6 +633,11 @@ public sealed class SupplyChain :
     private IEnumerable<IPlanningHorizonAware>
         GetPlanningHorizonAwareObjects()
     {
+        if (PeriodicOperatingExpenditureBudget is not null)
+        {
+            yield return PeriodicOperatingExpenditureBudget;
+        }
+
         foreach (Plant plant in Plants)
         {
             yield return plant.Warehouse;
@@ -629,6 +705,18 @@ public sealed class SupplyChain :
     #endregion
 
     #region Private helpers
+
+    private void OnFinancialParameterPropertyChanged(
+        object? sender,
+        System.ComponentModel.PropertyChangedEventArgs e)
+    {
+        OnPropertyChanged(
+            nameof(PeriodicOperatingExpenditureBudget));
+        OnPropertyChanged(
+            nameof(HasConsistentPlanningHorizon));
+    }
+
+
 
     /// <summary>
     /// Adds an object to a collection after checking uniqueness

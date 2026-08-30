@@ -1,3 +1,4 @@
+using LotSizingDataModel.Core.DecisionModel.Objectives;
 using LotSizingDataModel.Instance.ProblemClasses;
 
 namespace LotSizingDataModel.Solver.Formulation.Scientific;
@@ -20,6 +21,9 @@ public sealed class MathematicalFormulationScientificProfile
     private readonly IReadOnlyCollection<LotSizingProblemClassExtensionKind>
         _knownUnsupportedExtensions;
 
+    private readonly IReadOnlyCollection<OptimizationObjectiveKind>
+        _supportedObjectiveKinds;
+
     public MathematicalFormulationScientificProfile(
         string formulationId,
         string formulationFamily,
@@ -29,6 +33,8 @@ public sealed class MathematicalFormulationScientificProfile
             supportedExtensions = null,
         IEnumerable<LotSizingProblemClassExtensionKind>?
             knownUnsupportedExtensions = null,
+        IEnumerable<OptimizationObjectiveKind>?
+            supportedObjectiveKinds = null,
         IEnumerable<string>? evidence = null)
     {
         if (string.IsNullOrWhiteSpace(formulationId))
@@ -70,6 +76,19 @@ public sealed class MathematicalFormulationScientificProfile
                 .OrderBy(value => (int)value)
                 .ToArray();
 
+        _supportedObjectiveKinds =
+            (supportedObjectiveKinds ??
+             new[]
+             {
+                 OptimizationObjectiveKind.Economic
+             })
+                .Where(
+                    value =>
+                        value != OptimizationObjectiveKind.Unknown)
+                .Distinct()
+                .OrderBy(value => (int)value)
+                .ToArray();
+
         LotSizingProblemClassExtensionKind[] overlap =
             _supportedExtensions
                 .Intersect(_knownUnsupportedExtensions)
@@ -106,6 +125,10 @@ public sealed class MathematicalFormulationScientificProfile
         KnownUnsupportedExtensions =>
             _knownUnsupportedExtensions;
 
+    public IReadOnlyCollection<OptimizationObjectiveKind>
+        SupportedObjectiveKinds =>
+            _supportedObjectiveKinds;
+
     public IReadOnlyList<string> Evidence { get; }
 
     public bool SupportsProblemClass(
@@ -119,4 +142,8 @@ public sealed class MathematicalFormulationScientificProfile
     public bool IsExtensionKnownUnsupported(
         LotSizingProblemClassExtensionKind extension) =>
             _knownUnsupportedExtensions.Contains(extension);
+
+    public bool SupportsObjectiveKind(
+        OptimizationObjectiveKind objectiveKind) =>
+            _supportedObjectiveKinds.Contains(objectiveKind);
 }

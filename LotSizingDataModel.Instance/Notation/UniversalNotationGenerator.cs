@@ -1,3 +1,4 @@
+using LotSizingDataModel.Core.DecisionModel.Objectives;
 using LotSizingDataModel.Instance.Common;
 using LotSizingDataModel.Instance.Descriptors;
 using LotSizingDataModel.Instance.Descriptors.Network;
@@ -104,10 +105,33 @@ public sealed class UniversalNotationGenerator
                 new UniversalNotationGamma
                 {
                     Objective =
-                        descriptor.ObjectiveFinance.HasMultipleObjectives
-                            ? UniversalObjectiveKind.MultipleObjectives
-                            : objective
+                        ResolveObjective(
+                            descriptor.ObjectiveFinance,
+                            objective)
                 });
+    }
+
+    private static UniversalObjectiveKind ResolveObjective(
+        ObjectiveFinanceDescriptor descriptor,
+        UniversalObjectiveKind fallback)
+    {
+        if (descriptor.HasMultipleObjectives)
+        {
+            return UniversalObjectiveKind.MultipleObjectives;
+        }
+
+        return descriptor.PrimaryObjectiveKind switch
+        {
+            OptimizationObjectiveKind.Economic =>
+                UniversalObjectiveKind.Economic,
+            OptimizationObjectiveKind.Financial =>
+                UniversalObjectiveKind.Financial,
+            OptimizationObjectiveKind.Sustainability =>
+                UniversalObjectiveKind.Sustainability,
+            OptimizationObjectiveKind.ServiceLevel =>
+                UniversalObjectiveKind.ServiceLevel,
+            _ => fallback
+        };
     }
 
     private static IEnumerable<UniversalNotationFeature>

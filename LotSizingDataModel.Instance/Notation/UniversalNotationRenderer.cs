@@ -155,6 +155,9 @@ public static class UniversalNotationRenderer
         {
             UniversalObjectiveKind.Economic => "Obj:Econ",
             UniversalObjectiveKind.MultipleObjectives => "Obj:Multi",
+            UniversalObjectiveKind.Financial => "Obj:Fin",
+            UniversalObjectiveKind.Sustainability => "Obj:Sust",
+            UniversalObjectiveKind.ServiceLevel => "Obj:Service",
             _ => "Obj:?"
         };
     }

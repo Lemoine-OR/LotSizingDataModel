@@ -53,7 +53,6 @@ public sealed class ScientificFormulationCatalogTests
     [Theory]
     [InlineData(LotSizingProblemClassExtensionKind.StartUpCosts)]
     [InlineData(LotSizingProblemClassExtensionKind.StartUpTimes)]
-    [InlineData(LotSizingProblemClassExtensionKind.FinancialConstraints)]
     [InlineData(LotSizingProblemClassExtensionKind.MultipleObjectives)]
     public void KnownUnsupportedExtensions_AreExplicit(
         LotSizingProblemClassExtensionKind extension)

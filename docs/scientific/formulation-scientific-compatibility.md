@@ -108,3 +108,23 @@ Both extensions move from `KnownUnsupported` to `supportedExtensions`.
 
 Supplier capacity at this stage is supplier-item-destination capacity, not
 aggregate shared supplier capacity.
+
+
+## alpha.23 finance and objective semantics
+
+`FinancialConstraints` moves to verified support for the currently represented
+financial semantic: `PeriodicOperatingExpenditureBudget`.
+
+The standard formulation additionally declares supported objective kinds.
+Current verified objective support is:
+
+- `Economic`.
+
+A single `Financial`, `Sustainability`, or `ServiceLevel` objective is
+scientifically incompatible with the standard formulation.
+
+`MultipleObjectives` remains `KnownUnsupported` until a real weighted-sum or
+lexicographic execution layer exists.
+
+This prevents "one objective with many cost terms" from being mislabeled as
+multiobjective optimization.

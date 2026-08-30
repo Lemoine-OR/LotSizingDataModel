@@ -160,6 +160,7 @@ public static class StandardLotSizingFormulationFactory
 
             new InventoryBalanceConstraintFamilyBuilder(),
             new DemandSatisfactionConstraintFamilyBuilder(),
+            new PeriodicOperatingExpenditureBudgetConstraintFamilyBuilder(),
 
             new InventoryCapacityConstraintFamilyBuilder(),
             new WorkCenterCapacityConstraintFamilyBuilder(),

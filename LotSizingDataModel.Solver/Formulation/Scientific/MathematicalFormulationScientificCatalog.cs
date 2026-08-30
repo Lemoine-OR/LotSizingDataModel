@@ -1,3 +1,4 @@
+using LotSizingDataModel.Core.DecisionModel.Objectives;
 using LotSizingDataModel.Instance.ProblemClasses;
 
 namespace LotSizingDataModel.Solver.Formulation.Scientific;
@@ -54,15 +55,20 @@ public static class MathematicalFormulationScientificCatalog
                     LotSizingProblemClassExtensionKind.TransportLeadTime,
                     LotSizingProblemClassExtensionKind.Distribution,
                     LotSizingProblemClassExtensionKind.WarehouseCapacity,
-                    LotSizingProblemClassExtensionKind.MultiSite
+                    LotSizingProblemClassExtensionKind.MultiSite,
+                    LotSizingProblemClassExtensionKind.FinancialConstraints
                 },
             knownUnsupportedExtensions:
                 new[]
                 {
                     LotSizingProblemClassExtensionKind.StartUpCosts,
                     LotSizingProblemClassExtensionKind.StartUpTimes,
-                    LotSizingProblemClassExtensionKind.FinancialConstraints,
                     LotSizingProblemClassExtensionKind.MultipleObjectives
+                },
+            supportedObjectiveKinds:
+                new[]
+                {
+                    OptimizationObjectiveKind.Economic
                 },
             evidence:
                 new[]
@@ -81,7 +87,8 @@ public static class MathematicalFormulationScientificCatalog
                     "ProcurementVariableFamilyBuilder",
                     "SupplierCapacityConstraintFamilyBuilder",
                     "TransportVariableFamilyBuilder",
-                    "WarehouseCapacityConstraintFamilyBuilder"
+                    "WarehouseCapacityConstraintFamilyBuilder",
+                    "PeriodicOperatingExpenditureBudgetConstraintFamilyBuilder"
                 });
 
     public static IReadOnlyList<MathematicalFormulationScientificProfile>

@@ -716,6 +716,30 @@
       "notation": "Cap:S and TP:CapS=<pattern>",
       "checker": "Existing procurement projection plus generic mathematical feasibility checker",
       "notes": "Shared aggregate supplier capacity remains future work."
+    },
+    {
+      "id": "periodic-operating-expenditure-budget",
+      "domain": "financial-constraint",
+      "scientificStatus": "implemented",
+      "implementationStatus": "implemented",
+      "core": "PeriodicOperatingExpenditureBudget on SupplyChain",
+      "instance": "HasFinancialConstraints is extracted from real budget data",
+      "mathematics": "Positive period-indexed economic objective terms <= period budget",
+      "notation": "Fin beta feature; objective gamma remains independent",
+      "checker": "Generic MathematicalFeasibilityChecker evaluates generated budget constraints",
+      "notes": "Not a treasury/cash-flow model; revenues and non-period objective terms are excluded."
+    },
+    {
+      "id": "objective-policy",
+      "domain": "objective-semantics",
+      "scientificStatus": "implemented",
+      "implementationStatus": "partial",
+      "core": "OptimizationObjectivePolicy with criteria, weights, priorities and aggregation mode",
+      "instance": "Primary objective, criterion count and aggregation mode are detected and round-trip in descriptors/features",
+      "mathematics": "Standard formulation executes only single Economic objective",
+      "notation": "Obj:Econ/Fin/Sust/Service/Multi",
+      "checker": "Scientific formulation compatibility rejects unsupported objective kinds and true multiobjective policies",
+      "notes": "WeightedSum/Lexicographic data model exists; execution engine remains future work."
     }
   ]
 }

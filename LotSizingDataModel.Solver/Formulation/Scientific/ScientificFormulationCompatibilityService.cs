@@ -1,3 +1,4 @@
+using LotSizingDataModel.Core.DecisionModel.Objectives;
 using LotSizingDataModel.Instance.ProblemClasses;
 using LotSizingDataModel.Instance.Scientific;
 
@@ -113,6 +114,31 @@ public sealed class ScientificFormulationCompatibilityService
                     "classification.problemClass",
                     $"Formulation '{profile.FormulationId}' has no " +
                     $"verified support for canonical class '{problemClass}'."));
+
+            return Create(
+                profile,
+                ScientificFormulationCompatibilityKind.Incompatible,
+                problemClass,
+                Array.Empty<LotSizingProblemClassExtensionKind>(),
+                Array.Empty<LotSizingProblemClassExtensionKind>(),
+                Array.Empty<LotSizingProblemClassExtensionKind>(),
+                diagnostics);
+        }
+
+        OptimizationObjectiveKind objectiveKind =
+            classification.Descriptor?.ObjectiveFinance
+                .PrimaryObjectiveKind ??
+            OptimizationObjectiveKind.Economic;
+
+        if (!profile.SupportsObjectiveKind(objectiveKind))
+        {
+            diagnostics.Add(
+                new ScientificFormulationDiagnostic(
+                    "LSDM-FORM-013",
+                    ScientificFormulationDiagnosticSeverity.Error,
+                    "classification.objective",
+                    $"Formulation '{profile.FormulationId}' has no verified " +
+                    $"support for objective kind '{objectiveKind}'."));
 
             return Create(
                 profile,

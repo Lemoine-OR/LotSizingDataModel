@@ -21,9 +21,12 @@ public enum UniversalProblemLevel
 /// </summary>
 public enum UniversalObjectiveKind
 {
-    Unknown,
-    Economic,
-    MultipleObjectives
+    Unknown = 0,
+    Economic = 1,
+    MultipleObjectives = 2,
+    Financial = 3,
+    Sustainability = 4,
+    ServiceLevel = 5
 }
 
 /// <summary>

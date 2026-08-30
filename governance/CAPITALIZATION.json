@@ -577,6 +577,78 @@
       "correctiveAction": "Move each promoted extension in both the scientific profile and the support-state theory data in the same pack.",
       "permanentGuard": "Pack fabrication audits that promoted extensions occur exactly once in the profile and in VerifiedSupported test data, and not in KnownUnsupported test data.",
       "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-065",
+      "category": "financial-constraint-vs-financial-objective",
+      "symptom": "The presence of a budget constraint changes gamma to Obj:Fin.",
+      "rootCause": "Financial feasibility constraints and the optimization criterion are conflated.",
+      "correctiveAction": "Keep financial constraints in beta (Fin) and determine gamma only from ObjectivePolicy.",
+      "permanentGuard": "HasFinancialConstraints never implies a Financial objective kind.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-066",
+      "category": "multiobjective-vs-cost-components",
+      "symptom": "A single total-cost objective with production, holding, transport and penalty terms is labeled multiobjective.",
+      "rootCause": "Objective components are confused with independent optimization criteria.",
+      "correctiveAction": "MultipleObjectives is detected only from an explicit ObjectivePolicy with multiple enabled criteria.",
+      "permanentGuard": "Several objective terms do not imply HasMultipleObjectives.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-067",
+      "category": "operating-budget-vs-cash-flow",
+      "symptom": "A period expenditure cap is described as a full treasury/cash-flow model.",
+      "rootCause": "Payment timing, financing and cash balance mechanics are assumed without data.",
+      "correctiveAction": "Name and document the executable semantic PeriodicOperatingExpenditureBudget and exclude revenues/non-period terms by definition.",
+      "permanentGuard": "Do not claim cash-flow/trésorerie support until financing flows and payment timing exist explicitly.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-068",
+      "category": "objective-kind-formulation-compatibility",
+      "symptom": "A formulation is considered compatible because all extensions are supported even though the requested objective family is unsupported.",
+      "rootCause": "Scientific formulation profiles check problem class/extensions but not objective kind.",
+      "correctiveAction": "Add SupportedObjectiveKinds and reject unsupported objective kinds with LSDM-FORM-013.",
+      "permanentGuard": "Scientific formulation compatibility requires both semantic extension coverage and objective-kind coverage.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-069",
+      "category": "financial-budget-cost-single-source",
+      "symptom": "Financial budget constraints manually repeat all cost coefficients from objective builders.",
+      "rootCause": "Budget formulation duplicates economic objective construction.",
+      "correctiveAction": "Build period expenditure constraints from positive coefficients of the already assembled objective expression and canonical period domain keys.",
+      "permanentGuard": "PeriodicOperatingExpenditureBudgetConstraintFamilyBuilder reuses context.Model.Objective rather than maintaining a second cost catalog.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-070",
+      "category": "structural-transform-anchor-scope",
+      "symptom": "A transaction aborts because a generic textual transform anchor is present more than once in the target file.",
+      "rootCause": "The transform identifies a local syntactic target with a globally generic statement instead of including the enclosing method/member identity in the anchor.",
+      "correctiveAction": "Scope transforms to the smallest uniquely identifiable structural region, such as the complete method signature/header plus the local insertion point.",
+      "permanentGuard": "A transform aimed at a known method/member must not use a generic body statement as its sole global anchor; fabrication audit must verify the structural target identity is embedded in the transform.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-071",
+      "category": "scientific-governance-enum-preflight",
+      "symptom": "Build-Validated rejects SCIENTIFIC-COVERAGE.json because a fabricated scientificStatus or implementationStatus value is outside the governance contract.",
+      "rootCause": "Pack fabrication treats governance status values as free text instead of validating them against the repository's accepted status vocabulary before candidate reconstruction.",
+      "correctiveAction": "Validate every scientific coverage status in the pack payload before creating a shadow worktree.",
+      "permanentGuard": "Accepted implementationStatus values are implemented, partial, unsupported. Accepted scientificStatus values are documented, implemented, planned, project-specific. Any other value aborts before worktree creation.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-072",
+      "category": "modeling-api-symbol-verification",
+      "symptom": "New formulation code references a plausible but nonexistent modeling API symbol such as MathematicalObjectiveSense.",
+      "rootCause": "A new symbol name is inferred instead of verified against the existing modeling contract.",
+      "correctiveAction": "Before packaging, audit all newly referenced modeling enum/type names against existing source contracts; use ObjectiveSense for MathematicalObjective.Sense.",
+      "permanentGuard": "New formulation builders must pass a source-contract symbol audit for objective sense, constraint sense, domain keys and model context APIs before delivery.",
+      "status": "active"
     }
   ]
 }

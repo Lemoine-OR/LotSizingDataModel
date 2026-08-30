@@ -437,6 +437,12 @@ public sealed class UniversalNotationParser
                     UniversalObjectiveKind.Economic,
                 "OBJ:MULTI" =>
                     UniversalObjectiveKind.MultipleObjectives,
+                "OBJ:FIN" =>
+                    UniversalObjectiveKind.Financial,
+                "OBJ:SUST" =>
+                    UniversalObjectiveKind.Sustainability,
+                "OBJ:SERVICE" =>
+                    UniversalObjectiveKind.ServiceLevel,
                 "OBJ:?" =>
                     UniversalObjectiveKind.Unknown,
                 _ => throw new FormatException(

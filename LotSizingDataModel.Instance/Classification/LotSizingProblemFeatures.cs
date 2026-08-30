@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Xml.Serialization;
 using LotSizingDataModel.Core.Common;
+using LotSizingDataModel.Core.DecisionModel.Objectives;
 using LotSizingDataModel.Instance.Common;
 
 namespace LotSizingDataModel.Instance.Classification;
@@ -76,6 +77,11 @@ public sealed class LotSizingProblemFeatures : ModelObject
     private bool _isMultiSite;
     private bool _hasFinancialConstraints;
     private bool _hasMultipleObjectives;
+    private int _objectiveCriterionCount = 1;
+    private OptimizationObjectiveKind _primaryObjectiveKind =
+        OptimizationObjectiveKind.Economic;
+    private ObjectiveAggregationMode _objectiveAggregationMode =
+        ObjectiveAggregationMode.Single;
 
     /// <summary>
     /// Initializes an empty lot-sizing problem-feature profile.
@@ -909,6 +915,35 @@ public sealed class LotSizingProblemFeatures : ModelObject
         {
             NotifyDerivedProperties();
         }
+    }
+
+    /// <summary>Gets or sets the number of enabled objective criteria.</summary>
+    [XmlAttribute("objectiveCriterionCount")]
+    public int ObjectiveCriterionCount
+    {
+        get => _objectiveCriterionCount;
+        set => SetNonNegativeCount(
+            ref _objectiveCriterionCount,
+            value,
+            nameof(ObjectiveCriterionCount));
+    }
+
+    [XmlAttribute("primaryObjectiveKind")]
+    public OptimizationObjectiveKind PrimaryObjectiveKind
+    {
+        get => _primaryObjectiveKind;
+        set => SetProperty(
+            ref _primaryObjectiveKind,
+            value);
+    }
+
+    [XmlAttribute("objectiveAggregationMode")]
+    public ObjectiveAggregationMode ObjectiveAggregationMode
+    {
+        get => _objectiveAggregationMode;
+        set => SetProperty(
+            ref _objectiveAggregationMode,
+            value);
     }
 
     private void NotifyDerivedProperties()

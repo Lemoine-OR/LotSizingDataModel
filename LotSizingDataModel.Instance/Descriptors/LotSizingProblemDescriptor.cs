@@ -1,4 +1,5 @@
 using LotSizingDataModel.Core;
+using LotSizingDataModel.Core.DecisionModel.Objectives;
 using LotSizingDataModel.Instance.Classification;
 using LotSizingDataModel.Instance.Descriptors.Network;
 
@@ -121,7 +122,10 @@ public sealed class LotSizingProblemDescriptor
             ObjectiveFinance = new ObjectiveFinanceDescriptor
             {
                 HasFinancialConstraints = features.HasFinancialConstraints,
-                HasMultipleObjectives = features.HasMultipleObjectives
+                HasMultipleObjectives = features.HasMultipleObjectives,
+                ObjectiveCriterionCount = features.ObjectiveCriterionCount,
+                PrimaryObjectiveKind = features.PrimaryObjectiveKind,
+                AggregationMode = features.ObjectiveAggregationMode
             }
         };
     }
@@ -202,7 +206,10 @@ public sealed class LotSizingProblemDescriptor
 
             IsMultiSite = Structure.IsMultiSite,
             HasFinancialConstraints = ObjectiveFinance.HasFinancialConstraints,
-            HasMultipleObjectives = ObjectiveFinance.HasMultipleObjectives
+            HasMultipleObjectives = ObjectiveFinance.HasMultipleObjectives,
+            ObjectiveCriterionCount = ObjectiveFinance.ObjectiveCriterionCount,
+            PrimaryObjectiveKind = ObjectiveFinance.PrimaryObjectiveKind,
+            ObjectiveAggregationMode = ObjectiveFinance.AggregationMode
         };
     }
 }

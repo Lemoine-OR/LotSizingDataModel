@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using LotSizingDataModel.Core;
 using LotSizingDataModel.Core.PhysicalModel;
+using LotSizingDataModel.Core.DecisionModel.Objectives;
 using LotSizingDataModel.Instance.Analysis;
 
 namespace LotSizingDataModel.Instance.Classification;
@@ -373,15 +374,29 @@ public static class LotSizingProblemFeatureExtractor
                         .Count >
                     1,
 
-                /*
-                 * These concepts are not represented by
-                 * dedicated objects in the current Core model.
-                 */
                 HasFinancialConstraints =
-                    false,
+                    supplyChain.PeriodicOperatingExpenditureBudget
+                        is not null,
 
                 HasMultipleObjectives =
-                    false
+                    supplyChain.ObjectivePolicy?
+                        .HasMultipleEnabledCriteria ??
+                    false,
+
+                ObjectiveCriterionCount =
+                    supplyChain.ObjectivePolicy?
+                        .EnabledCriterionCount ??
+                    1,
+
+                PrimaryObjectiveKind =
+                    supplyChain.ObjectivePolicy?
+                        .PrimaryObjectiveKind ??
+                    OptimizationObjectiveKind.Economic,
+
+                ObjectiveAggregationMode =
+                    supplyChain.ObjectivePolicy?
+                        .AggregationMode ??
+                    ObjectiveAggregationMode.Single
             };
 
         return features;
