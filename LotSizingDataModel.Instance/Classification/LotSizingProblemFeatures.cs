@@ -90,6 +90,11 @@ public sealed class LotSizingProblemFeatures : ModelObject
     private bool _hasSequenceDependentChangeoverTimes;
     private bool _hasSequenceDependentChangeoverCosts;
     private bool _hasMaximumSetupCountConstraints;
+    private SmallBucketProductionMode _smallBucketProductionMode;
+    private int _schedulingResourceCount;
+    private bool _hasMaximumProducedItemCountConstraint;
+    private int _maximumProducedItemCountPerBucket;
+    private int _maximumSetupTransitionsPerBucket;
 
     /// <summary>
     /// Initializes an empty lot-sizing problem-feature profile.
@@ -1007,6 +1012,52 @@ public sealed class LotSizingProblemFeatures : ModelObject
         set => SetProperty(
             ref _hasMaximumSetupCountConstraints,
             value);
+    }
+
+    [XmlAttribute("smallBucketProductionMode")]
+    public SmallBucketProductionMode SmallBucketProductionMode
+    {
+        get => _smallBucketProductionMode;
+        set => SetProperty(ref _smallBucketProductionMode, value);
+    }
+
+    [XmlAttribute("schedulingResourceCount")]
+    public int SchedulingResourceCount
+    {
+        get => _schedulingResourceCount;
+        set => SetNonNegativeCount(
+            ref _schedulingResourceCount,
+            value,
+            nameof(SchedulingResourceCount));
+    }
+
+    [XmlAttribute("hasMaximumProducedItemCountConstraint")]
+    public bool HasMaximumProducedItemCountConstraint
+    {
+        get => _hasMaximumProducedItemCountConstraint;
+        set => SetProperty(
+            ref _hasMaximumProducedItemCountConstraint,
+            value);
+    }
+
+    [XmlAttribute("maximumProducedItemCountPerBucket")]
+    public int MaximumProducedItemCountPerBucket
+    {
+        get => _maximumProducedItemCountPerBucket;
+        set => SetNonNegativeCount(
+            ref _maximumProducedItemCountPerBucket,
+            value,
+            nameof(MaximumProducedItemCountPerBucket));
+    }
+
+    [XmlAttribute("maximumSetupTransitionsPerBucket")]
+    public int MaximumSetupTransitionsPerBucket
+    {
+        get => _maximumSetupTransitionsPerBucket;
+        set => SetNonNegativeCount(
+            ref _maximumSetupTransitionsPerBucket,
+            value,
+            nameof(MaximumSetupTransitionsPerBucket));
     }
 
     private void NotifyDerivedProperties()

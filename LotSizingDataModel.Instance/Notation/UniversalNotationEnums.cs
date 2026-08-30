@@ -85,5 +85,12 @@ public enum UniversalNotationFeature
     SetupCarryOver = 85,
     SequenceDependentChangeoverTime = 86,
     SequenceDependentChangeoverCost = 87,
-    MaximumSetupCount = 88
+    MaximumSetupCount = 88,
+
+    SingleSchedulingResource = 89,
+    SmallBucketAllOrNothingProduction = 90,
+    SmallBucketContinuousProduction = 91,
+    AtMostOneProducedItemPerBucket = 92,
+    AtMostTwoProducedItemsPerBucket = 93,
+    AtMostOneSetupTransitionPerBucket = 94
 }

@@ -16,6 +16,7 @@ public sealed class ProductionSchedulingProfile :
     IPlanningHorizonAware
 {
     private SchedulingBucketMode _bucketMode;
+    private SmallBucketProductionMode _smallBucketProductionMode;
     private SetupCarryOverPolicy _setupCarryOverPolicy;
     private int _initialSetupItemId;
 
@@ -24,6 +25,15 @@ public sealed class ProductionSchedulingProfile :
     {
         get => _bucketMode;
         set => SetProperty(ref _bucketMode, value);
+    }
+
+    [XmlAttribute("smallBucketProductionMode")]
+    public SmallBucketProductionMode SmallBucketProductionMode
+    {
+        get => _smallBucketProductionMode;
+        set => SetProperty(
+            ref _smallBucketProductionMode,
+            value);
     }
 
     [XmlAttribute("setupCarryOverPolicy")]
@@ -69,6 +79,13 @@ public sealed class ProductionSchedulingProfile :
         set;
     }
 
+    [XmlElement("maximumProducedItemCount")]
+    public MaximumProducedItemCount? MaximumProducedItemCount
+    {
+        get;
+        set;
+    }
+
     [XmlArray("changeovers")]
     [XmlArrayItem("changeover")]
     public List<ProductionChangeover> Changeovers
@@ -98,6 +115,24 @@ public sealed class ProductionSchedulingProfile :
                 changeover.ChangeoverCost is not null);
 
     [XmlIgnore]
+    public bool HasMaximumProducedItemCountConstraint =>
+        MaximumProducedItemCount is not null;
+
+    [XmlIgnore]
+    public int MaximumProducedItemCountPerBucket =>
+        GetMaximumValue(
+            MaximumProducedItemCount,
+            parameter =>
+                parameter.GetCount);
+
+    [XmlIgnore]
+    public int MaximumSetupTransitionsPerBucket =>
+        GetMaximumValue(
+            MaximumSetupCount,
+            parameter =>
+                parameter.GetCount);
+
+    [XmlIgnore]
     public int PlanningHorizon
     {
         get
@@ -110,6 +145,11 @@ public sealed class ProductionSchedulingProfile :
             if (MaximumSetupCount is not null)
             {
                 return MaximumSetupCount.PlanningHorizon;
+            }
+
+            if (MaximumProducedItemCount is not null)
+            {
+                return MaximumProducedItemCount.PlanningHorizon;
             }
 
             ProductionChangeover? first =
@@ -152,6 +192,7 @@ public sealed class ProductionSchedulingProfile :
 
         MicroPeriodCount?.ResizeTimeSeries(periodCount);
         MaximumSetupCount?.ResizeTimeSeries(periodCount);
+        MaximumProducedItemCount?.ResizeTimeSeries(periodCount);
 
         foreach (
             ProductionChangeover changeover
@@ -164,6 +205,28 @@ public sealed class ProductionSchedulingProfile :
         OnPropertyChanged(nameof(HasConsistentPlanningHorizon));
     }
 
+    private static int GetMaximumValue<T>(
+        T? parameter,
+        Func<T, Func<int, int>> accessorFactory)
+        where T : class, IPlanningHorizonAware
+    {
+        if (
+            parameter is null ||
+            parameter.PlanningHorizon <= 0)
+        {
+            return 0;
+        }
+
+        Func<int, int> accessor =
+            accessorFactory(parameter);
+
+        return Enumerable
+            .Range(
+                1,
+                parameter.PlanningHorizon)
+            .Max(accessor);
+    }
+
     private IEnumerable<int> EnumeratePlanningHorizons()
     {
         if (MicroPeriodCount is not null)
@@ -174,6 +237,11 @@ public sealed class ProductionSchedulingProfile :
         if (MaximumSetupCount is not null)
         {
             yield return MaximumSetupCount.PlanningHorizon;
+        }
+
+        if (MaximumProducedItemCount is not null)
+        {
+            yield return MaximumProducedItemCount.PlanningHorizon;
         }
 
         foreach (

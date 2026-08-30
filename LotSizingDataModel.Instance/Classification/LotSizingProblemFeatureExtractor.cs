@@ -443,7 +443,52 @@ public static class LotSizingProblemFeatureExtractor
                     supplyChain.WorkCenters.Any(
                         workCenter =>
                             workCenter.SchedulingProfile?
-                                .MaximumSetupCount is not null)
+                                .MaximumSetupCount is not null),
+
+                SmallBucketProductionMode =
+                    supplyChain.WorkCenters
+                        .Where(
+                            workCenter =>
+                                workCenter.SchedulingProfile is not null)
+                        .Select(
+                            workCenter =>
+                                workCenter.SchedulingProfile!
+                                    .SmallBucketProductionMode)
+                        .Distinct()
+                        .Take(2)
+                        .ToArray() is var schedulingModes &&
+                    schedulingModes.Length == 1
+                        ? schedulingModes[0]
+                        : SmallBucketProductionMode.Unspecified,
+
+                SchedulingResourceCount =
+                    supplyChain.WorkCenters.Count(
+                        workCenter =>
+                            workCenter.SchedulingProfile is not null),
+
+                HasMaximumProducedItemCountConstraint =
+                    supplyChain.WorkCenters.Any(
+                        workCenter =>
+                            workCenter.SchedulingProfile?
+                                .MaximumProducedItemCount is not null),
+
+                MaximumProducedItemCountPerBucket =
+                    supplyChain.WorkCenters
+                        .Select(
+                            workCenter =>
+                                workCenter.SchedulingProfile?
+                                    .MaximumProducedItemCountPerBucket ?? 0)
+                        .DefaultIfEmpty(0)
+                        .Max(),
+
+                MaximumSetupTransitionsPerBucket =
+                    supplyChain.WorkCenters
+                        .Select(
+                            workCenter =>
+                                workCenter.SchedulingProfile?
+                                    .MaximumSetupTransitionsPerBucket ?? 0)
+                        .DefaultIfEmpty(0)
+                        .Max()
             };
 
         return features;

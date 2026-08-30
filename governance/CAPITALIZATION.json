@@ -712,6 +712,87 @@
       "correctiveAction": "When a historical dimension becomes representable, search the whole test suite for the old gap identifier and migrate stale negative assertions into positive mapping assertions while retaining unrelated gaps.",
       "permanentGuard": "Pack fabrication must prove that each newly closed historical gap identifier is absent from inherited Assert.Contains gap assertions and that at least one positive semantic-feature assertion exists.",
       "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-080",
+      "category": "classifiable-vs-executable-problem-class",
+      "symptom": "A problem class becomes labeled Executable as soon as membership can be detected, even though no runnable formulation exists.",
+      "rootCause": "The problem-class support enum conflates scientific membership assessment with solver/formulation availability.",
+      "correctiveAction": "Introduce Classifiable support level and use it for DLSP/CSLP/PLSP until executable scheduling formulations exist.",
+      "permanentGuard": "Classifiable problem classes may be detected but cannot be treated as executable by formulation/method selection solely because membership is known.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-081",
+      "category": "scheduling-specificity-no-generic-fallback",
+      "symptom": "An integrated scheduling instance is simultaneously or primarily classified as generic MI-CLSP because its lot-sizing projection matches the generic core.",
+      "rootCause": "Problem-class detection ignores that scheduling semantics are strictly more specific than generic lot-sizing semantics.",
+      "correctiveAction": "When HasIntegratedScheduling is true, detect against classifiable scheduling classes only; do not silently fall back to generic six-core detection.",
+      "permanentGuard": "Integrated scheduling descriptors with insufficient scheduling semantics return no canonical member rather than degrade to generic CLSP.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-082",
+      "category": "dlsp-vs-cslp-production-mode",
+      "symptom": "DLSP and CSLP are distinguished only by the SmallBucket flag.",
+      "rootCause": "The all-or-nothing versus continuous production-quantity rule is not represented.",
+      "correctiveAction": "Add SmallBucketProductionMode with AllOrNothing and Continuous semantics.",
+      "permanentGuard": "DLSP requires AllOrNothing; CSLP requires Continuous.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-083",
+      "category": "plsp-per-bucket-cardinality",
+      "symptom": "PLSP is inferred from continuous small-bucket production without enforcing its one-transition/two-product structure.",
+      "rootCause": "Produced-item count and setup-transition count are omitted from canonical membership.",
+      "correctiveAction": "Represent MaximumProducedItemCount separately from MaximumSetupCount and require max produced items=2 plus at most one setup transition for PLSP.",
+      "permanentGuard": "PLSP classification requires both per-bucket item cardinality and setup-transition semantics.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-084",
+      "category": "scheduling-resource-cardinality",
+      "symptom": "Single-machine canonical DLSP/CSLP/PLSP rules are applied to an instance with several scheduling resources without explicit multi-resource extension semantics.",
+      "rootCause": "Resource cardinality is ignored during canonical small-bucket membership assessment.",
+      "correctiveAction": "Small-bucket canonical alpha.25 classes require exactly one scheduling resource.",
+      "permanentGuard": "Multi-resource scheduling cannot match canonical DLSP/CSLP/PLSP core automatically.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-085",
+      "category": "exact-core-fixture-purity",
+      "symptom": "A test expects ExactCore but its fixture enables an optional problem-class extension, so the analyzer correctly returns CompatibleExtension.",
+      "rootCause": "Canonical-core fixtures are assembled with convenience defaults that activate unrelated extension semantics.",
+      "correctiveAction": "Tests asserting ExactCore must explicitly disable every optional extension not listed in the canonical class core.",
+      "permanentGuard": "DLSP/CSLP ExactCore fixtures must not activate MaximumSetupCount; PLSP retains MaximumSetupCount because the one-transition rule is part of its canonical alpha.25 core.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-086",
+      "category": "test-analyzer-warning-cleanliness",
+      "symptom": "A candidate compiles with an xUnit analyzer warning even though the test has an equivalent warning-free assertion API.",
+      "rootCause": "Test code is validated only for compilation/test success and not for avoidable analyzer warnings.",
+      "correctiveAction": "Use analyzer-preferred assertion overloads, e.g. Assert.Single(collection, predicate) instead of filtering with Where before Assert.Single.",
+      "permanentGuard": "New or modified test files must not introduce xUnit analyzer warnings when a canonical warning-free API exists.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-087",
+      "category": "formulation-compatibility-requires-unique-problem-class",
+      "symptom": "A test expects formulation incompatibility from scheduling extensions even though the scientific classifier has no unique canonical problem class.",
+      "rootCause": "Extension-level formulation support is evaluated conceptually before the prerequisite problem-class identity is established.",
+      "correctiveAction": "Preserve the ScientificFormulationCompatibilityService order: without a unique PrimaryProblemClass, return Undetermined (LSDM-FORM-003). Only a uniquely classified unsupported class returns Incompatible (LSDM-FORM-010).",
+      "permanentGuard": "Checker tests must distinguish classifiable scheduling instances from incomplete scheduling descriptions. Incomplete classification must not be forced to Incompatible by extension flags alone.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-088",
+      "category": "problem-class-support-precedes-extension-support",
+      "symptom": "A compatibility test expects KnownUnsupportedExtensions to be populated for a problem class that the formulation profile itself does not support.",
+      "rootCause": "The test assumes extension analysis continues after canonical problem-class rejection.",
+      "correctiveAction": "When SupportsProblemClass is false, assert LSDM-FORM-010 and an empty extension-evidence channel; test profile-level unsupported extensions separately.",
+      "permanentGuard": "Problem-class incompatibility is terminal for one formulation assessment; extension support evidence is only evaluated after the canonical class is supported.",
+      "status": "active"
     }
   ]
 }

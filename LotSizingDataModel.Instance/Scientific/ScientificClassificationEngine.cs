@@ -252,7 +252,7 @@ public sealed class ScientificClassificationEngine
                             .Warning,
                     path: "classification.problemClasses",
                     message:
-                        "No currently executable canonical lot-sizing " +
+                        "No currently detectable canonical lot-sizing " +
                         "problem class matches this descriptor."));
         }
         else if (problemClasses.Count > 1)

@@ -47,6 +47,20 @@ public sealed class SchedulingFeatureExtractionTests
         Assert.True(features.HasSequenceDependentChangeoverTimes);
         Assert.True(features.HasSequenceDependentChangeoverCosts);
         Assert.True(features.HasMaximumSetupCountConstraints);
+        Assert.Equal(
+            SmallBucketProductionMode.Continuous,
+            features.SmallBucketProductionMode);
+        Assert.Equal(
+            1,
+            features.SchedulingResourceCount);
+        Assert.True(
+            features.HasMaximumProducedItemCountConstraint);
+        Assert.Equal(
+            2,
+            features.MaximumProducedItemCountPerBucket);
+        Assert.Equal(
+            1,
+            features.MaximumSetupTransitionsPerBucket);
 
         LotSizingProblemFeatures roundTrip =
             LotSizingProblemDescriptor
@@ -69,13 +83,17 @@ public sealed class SchedulingFeatureExtractionTests
             {
                 BucketMode =
                     SchedulingBucketMode.MacroMicro,
+                SmallBucketProductionMode =
+                    SmallBucketProductionMode.Continuous,
                 SetupCarryOverPolicy =
                     SetupCarryOverPolicy.Allowed,
                 InitialSetupItemId = 1,
                 MicroPeriodCount =
                     new MicroPeriodCount(3, 2),
                 MaximumSetupCount =
-                    new MaximumSetupCount(3, 1)
+                    new MaximumSetupCount(3, 1),
+                MaximumProducedItemCount =
+                    new MaximumProducedItemCount(3, 2)
             };
 
         profile.Changeovers.Add(

@@ -11,6 +11,9 @@ public sealed class LotSizingProblemClassAnalyzer
     private readonly UniversalNotationMatcher _matcher;
     private readonly LotSizingProblemClassExtensionAnalyzer _extensionAnalyzer;
 
+    private readonly SmallBucketSchedulingProblemClassAnalyzer
+        _smallBucketSchedulingAnalyzer;
+
     public LotSizingProblemClassAnalyzer()
         : this(
             new UniversalNotationMatcher(),
@@ -29,6 +32,10 @@ public sealed class LotSizingProblemClassAnalyzer
         _extensionAnalyzer =
             extensionAnalyzer ??
             throw new ArgumentNullException(nameof(extensionAnalyzer));
+
+        _smallBucketSchedulingAnalyzer =
+            new SmallBucketSchedulingProblemClassAnalyzer(
+                _extensionAnalyzer);
     }
 
     public LotSizingProblemClassMatchResult Assess(
@@ -47,6 +54,15 @@ public sealed class LotSizingProblemClassAnalyzer
                 LotSizingProblemClassMatchKind.NotRepresentable,
                 failedRequirements:
                     definition.CapabilityGaps);
+        }
+
+        if (
+            definition.SupportLevel ==
+            LotSizingProblemClassSupportLevel.Classifiable)
+        {
+            return _smallBucketSchedulingAnalyzer.Assess(
+                descriptor,
+                definition);
         }
 
         UniversalNotationMatchResult universal =

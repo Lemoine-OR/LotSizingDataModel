@@ -6,13 +6,20 @@ namespace LotSizingDataModel.Instance.ProblemClasses;
 public enum LotSizingProblemClassSupportLevel
 {
     /// <summary>
-    /// The current descriptor/notation stack can assess membership.
+    /// Membership is assessable and the class belongs to the currently
+    /// executable scientific formulation/solver scope.
     /// </summary>
-    Executable,
+    Executable = 0,
 
     /// <summary>
     /// Scientifically catalogued, but current model semantics are
-    /// insufficient for executable membership assessment.
+    /// insufficient for membership assessment.
     /// </summary>
-    CatalogOnly
+    CatalogOnly = 1,
+
+    /// <summary>
+    /// Current Core/Instance semantics are sufficient to assess canonical
+    /// membership, but no executable formulation/solver support is claimed.
+    /// </summary>
+    Classifiable = 2
 }

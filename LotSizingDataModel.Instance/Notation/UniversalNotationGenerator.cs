@@ -344,6 +344,40 @@ public sealed class UniversalNotationGenerator
             yield return UniversalNotationFeature.MaximumSetupCount;
         }
 
+        if (descriptor.Scheduling.HasSingleSchedulingResource)
+        {
+            yield return UniversalNotationFeature.SingleSchedulingResource;
+        }
+
+        if (descriptor.Scheduling.HasAllOrNothingSmallBucketProduction)
+        {
+            yield return
+                UniversalNotationFeature.SmallBucketAllOrNothingProduction;
+        }
+
+        if (descriptor.Scheduling.HasContinuousSmallBucketProduction)
+        {
+            yield return
+                UniversalNotationFeature.SmallBucketContinuousProduction;
+        }
+
+        if (descriptor.Scheduling.HasAtMostOneProducedItemPerBucket)
+        {
+            yield return
+                UniversalNotationFeature.AtMostOneProducedItemPerBucket;
+        }
+        else if (descriptor.Scheduling.HasAtMostTwoProducedItemsPerBucket)
+        {
+            yield return
+                UniversalNotationFeature.AtMostTwoProducedItemsPerBucket;
+        }
+
+        if (descriptor.Scheduling.HasAtMostOneSetupTransitionPerBucket)
+        {
+            yield return
+                UniversalNotationFeature.AtMostOneSetupTransitionPerBucket;
+        }
+
         if (descriptor.ObjectiveFinance.HasFinancialConstraints)
         {
             yield return UniversalNotationFeature.FinancialConstraint;

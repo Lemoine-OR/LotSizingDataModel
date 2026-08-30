@@ -77,20 +77,25 @@ public sealed class LotSizingProblemClassDetectorTests
     }
 
     [Fact]
-    public void SchedulingClassAssessment_IsExplicitlyNotRepresentable()
+    public void SchedulingClassWithoutRequiredSemantics_IsIncomplete()
     {
         LotSizingProblemDescriptor descriptor =
             LotSizingProblemDescriptor.FromLegacyFeatures(
                 new LotSizingProblemFeatures
                 {
                     ItemCount = 2,
+                    WorkCenterCount = 1,
                     PlanningHorizon = 6,
                     HasDemand = true,
                     HasDeterministicDemand = true,
                     HasProduction = true,
                     HasProductionCapacityConstraints = true,
                     HasSharedProductionCapacity = true,
-                    HasSetupCosts = true
+                    HasIntegratedScheduling = true,
+                    SchedulingBucketMode =
+                        LotSizingDataModel.Core.DecisionModel.Scheduling
+                            .SchedulingBucketMode.SmallBucket,
+                    SchedulingResourceCount = 1
                 });
 
         LotSizingProblemClassMatchResult result =
@@ -100,11 +105,11 @@ public sealed class LotSizingProblemClassDetectorTests
                     LotSizingProblemClassCatalog.Dlsp);
 
         Assert.Equal(
-            LotSizingProblemClassMatchKind.NotRepresentable,
+            LotSizingProblemClassMatchKind.Incomplete,
             result.Kind);
 
         Assert.Contains(
-            "IntegratedScheduling",
+            "Scheduling:ProductionMode",
             result.FailedRequirements);
     }
 }

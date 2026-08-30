@@ -62,7 +62,14 @@ internal static class UniversalNotationTokenCatalog
                 [UniversalNotationFeature.SetupCarryOver] = "SCO",
                 [UniversalNotationFeature.SequenceDependentChangeoverTime] = "SDCT",
                 [UniversalNotationFeature.SequenceDependentChangeoverCost] = "SDCC",
-                [UniversalNotationFeature.MaximumSetupCount] = "MaxSetup"
+                [UniversalNotationFeature.MaximumSetupCount] = "MaxSetup",
+
+                [UniversalNotationFeature.SingleSchedulingResource] = "SchedRes:1",
+                [UniversalNotationFeature.SmallBucketAllOrNothingProduction] = "SBProd:0F",
+                [UniversalNotationFeature.SmallBucketContinuousProduction] = "SBProd:Cont",
+                [UniversalNotationFeature.AtMostOneProducedItemPerBucket] = "BucketItems:1",
+                [UniversalNotationFeature.AtMostTwoProducedItemsPerBucket] = "BucketItems:2",
+                [UniversalNotationFeature.AtMostOneSetupTransitionPerBucket] = "SetupTrans:1"
             };
 
     private static readonly IReadOnlyDictionary<

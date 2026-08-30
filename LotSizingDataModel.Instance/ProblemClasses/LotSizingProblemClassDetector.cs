@@ -28,7 +28,13 @@ public sealed class LotSizingProblemClassDetector
     {
         ArgumentNullException.ThrowIfNull(descriptor);
 
-        return LotSizingProblemClassCatalog.ExecutableClasses
+        IReadOnlyList<LotSizingProblemClassDefinition>
+            candidateDefinitions =
+                descriptor.Scheduling.HasIntegratedScheduling
+                    ? LotSizingProblemClassCatalog.ClassifiableClasses
+                    : LotSizingProblemClassCatalog.ExecutableClasses;
+
+        return candidateDefinitions
             .Select(
                 definition =>
                     _analyzer.Assess(

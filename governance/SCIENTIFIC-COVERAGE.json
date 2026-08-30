@@ -764,6 +764,30 @@
       "notation": "SQT->SDCT; SQC->SDCC",
       "checker": "Historical mapping tests ensure SQT/SQC gaps close while bucket gap remains",
       "notes": "Machine bucket semantics remain explicitly unresolved."
+    },
+    {
+      "id": "small-bucket-production-semantics",
+      "domain": "scheduling",
+      "scientificStatus": "implemented",
+      "implementationStatus": "implemented",
+      "core": "SmallBucketProductionMode plus MaximumProducedItemCount on ProductionSchedulingProfile",
+      "instance": "SchedulingDescriptor carries production mode, scheduling resource count, maximum produced-item count and maximum setup transitions",
+      "mathematics": "Classification semantics only; executable scheduling formulation remains next stage",
+      "notation": "SchedRes:1, SBProd:0F/Cont, BucketItems:1/2, SetupTrans:1",
+      "checker": "Problem-class tests distinguish DLSP/CSLP/PLSP and reject insufficient semantics",
+      "notes": "Generic scheduling facts, not historical model-name flags."
+    },
+    {
+      "id": "small-bucket-problem-class-classification",
+      "domain": "problem-class",
+      "scientificStatus": "implemented",
+      "implementationStatus": "partial",
+      "core": "DLSP/CSLP/PLSP canonical membership rules implemented",
+      "instance": "SmallBucketSchedulingProblemClassAnalyzer consumes typed SchedulingDescriptor",
+      "mathematics": "No executable DLSP/CSLP/PLSP formulation claimed yet",
+      "notation": "Class identity supported by explicit generic scheduling tokens",
+      "checker": "Detector returns scheduling class only and prevents generic MI-CLSP fallback",
+      "notes": "SupportLevel=Classifiable; GLSP remains CatalogOnly."
     }
   ]
 }

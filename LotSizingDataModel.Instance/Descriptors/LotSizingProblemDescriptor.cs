@@ -133,6 +133,16 @@ public sealed class LotSizingProblemDescriptor
             {
                 HasIntegratedScheduling = features.HasIntegratedScheduling,
                 BucketMode = features.SchedulingBucketMode,
+                SmallBucketProductionMode =
+                    features.SmallBucketProductionMode,
+                SchedulingResourceCount =
+                    features.SchedulingResourceCount,
+                HasMaximumProducedItemCountConstraint =
+                    features.HasMaximumProducedItemCountConstraint,
+                MaximumProducedItemCountPerBucket =
+                    features.MaximumProducedItemCountPerBucket,
+                MaximumSetupTransitionsPerBucket =
+                    features.MaximumSetupTransitionsPerBucket,
                 HasInitialSetupState = features.HasInitialSetupState,
                 HasSetupCarryOver = features.HasSetupCarryOver,
                 HasSequenceDependentChangeoverTimes =
@@ -228,6 +238,16 @@ public sealed class LotSizingProblemDescriptor
 
             HasIntegratedScheduling = Scheduling.HasIntegratedScheduling,
             SchedulingBucketMode = Scheduling.BucketMode,
+            SmallBucketProductionMode =
+                Scheduling.SmallBucketProductionMode,
+            SchedulingResourceCount =
+                Scheduling.SchedulingResourceCount,
+            HasMaximumProducedItemCountConstraint =
+                Scheduling.HasMaximumProducedItemCountConstraint,
+            MaximumProducedItemCountPerBucket =
+                Scheduling.MaximumProducedItemCountPerBucket,
+            MaximumSetupTransitionsPerBucket =
+                Scheduling.MaximumSetupTransitionsPerBucket,
             HasInitialSetupState = Scheduling.HasInitialSetupState,
             HasSetupCarryOver = Scheduling.HasSetupCarryOver,
             HasSequenceDependentChangeoverTimes =

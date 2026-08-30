@@ -52,3 +52,11 @@ They remain `CatalogOnly`.
 
 Similarly, a macro/micro profile is necessary for GLSP-style semantics but is
 not sufficient by itself to classify or solve a GLSP instance.
+
+
+## alpha.25 continuation
+
+alpha.25 adds the production-quantity and per-bucket item-count semantics that
+alpha.24 intentionally did not invent. These new facts are sufficient to
+classify DLSP, CSLP and PLSP while preserving a separate non-executable support
+state.

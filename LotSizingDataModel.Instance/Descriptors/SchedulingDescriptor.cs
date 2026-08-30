@@ -11,6 +11,20 @@ public sealed class SchedulingDescriptor
 
     public SchedulingBucketMode BucketMode { get; init; }
 
+    public SmallBucketProductionMode SmallBucketProductionMode
+    {
+        get;
+        init;
+    }
+
+    public int SchedulingResourceCount { get; init; }
+
+    public bool HasMaximumProducedItemCountConstraint { get; init; }
+
+    public int MaximumProducedItemCountPerBucket { get; init; }
+
+    public int MaximumSetupTransitionsPerBucket { get; init; }
+
     public bool HasInitialSetupState { get; init; }
 
     public bool HasSetupCarryOver { get; init; }
@@ -32,4 +46,27 @@ public sealed class SchedulingDescriptor
     public bool HasBigBucketStructure =>
         BucketMode ==
         SchedulingBucketMode.BigBucket;
+
+    public bool HasSingleSchedulingResource =>
+        SchedulingResourceCount == 1;
+
+    public bool HasAllOrNothingSmallBucketProduction =>
+        SmallBucketProductionMode ==
+        SmallBucketProductionMode.AllOrNothing;
+
+    public bool HasContinuousSmallBucketProduction =>
+        SmallBucketProductionMode ==
+        SmallBucketProductionMode.Continuous;
+
+    public bool HasAtMostOneProducedItemPerBucket =>
+        HasMaximumProducedItemCountConstraint &&
+        MaximumProducedItemCountPerBucket <= 1;
+
+    public bool HasAtMostTwoProducedItemsPerBucket =>
+        HasMaximumProducedItemCountConstraint &&
+        MaximumProducedItemCountPerBucket <= 2;
+
+    public bool HasAtMostOneSetupTransitionPerBucket =>
+        HasMaximumSetupCountConstraints &&
+        MaximumSetupTransitionsPerBucket <= 1;
 }
