@@ -31,7 +31,7 @@ public sealed class LotSizingProblemClassDetector
         IReadOnlyList<LotSizingProblemClassDefinition>
             candidateDefinitions =
                 descriptor.Scheduling.HasIntegratedScheduling
-                    ? LotSizingProblemClassCatalog.ClassifiableClasses
+                    ? LotSizingProblemClassCatalog.SchedulingDetectableClasses
                     : LotSizingProblemClassCatalog.ExecutableClasses;
 
         return candidateDefinitions

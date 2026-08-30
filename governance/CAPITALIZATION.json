@@ -793,6 +793,78 @@
       "correctiveAction": "When SupportsProblemClass is false, assert LSDM-FORM-010 and an empty extension-evidence channel; test profile-level unsupported extensions separately.",
       "permanentGuard": "Problem-class incompatibility is terminal for one formulation assessment; extension support evidence is only evaluated after the canonical class is supported.",
       "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-089",
+      "category": "scheduling-setup-state-vs-period-activation",
+      "symptom": "The standard period-local setup variable is reused unchanged for persistent small-bucket setup-state semantics and its cost is charged every active bucket.",
+      "rootCause": "Generic lot-sizing setup activation and scheduling setup state are treated as the same mathematical event.",
+      "correctiveAction": "Dedicated small-bucket formulations build a persistent setup-state variable and a separate setup-start auxiliary; fixed setup cost is attached to setup start.",
+      "permanentGuard": "Small-bucket objective must never charge FixedSetupCost directly on persistent setup-state y.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-090",
+      "category": "dlsp-idle-setup-state",
+      "symptom": "DLSP equation x=capacity*y forces production whenever the machine remains set up, preventing idle buckets while preserving setup state.",
+      "rootCause": "Production activation and setup state are collapsed.",
+      "correctiveAction": "Introduce mathematical-only DLSP production activation p with a*x=U*p and p<=y.",
+      "permanentGuard": "DLSP persistent setup state and full-bucket production activation remain distinct variables.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-091",
+      "category": "auxiliary-solution-nonduplication",
+      "symptom": "Mathematical setup-start/production-activation auxiliaries are added as redundant serialized business decisions.",
+      "rootCause": "Solver variables are assumed to require one-to-one persistence in LotSizingSolution.",
+      "correctiveAction": "Keep exactly derivable auxiliaries mathematical-only; register no-op result mappers and derive values in the independent checker projector.",
+      "permanentGuard": "No new Solution family for an auxiliary that is exactly derivable from normalized production quantity/setup state.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-092",
+      "category": "grouping-constraint-persistent-state",
+      "symptom": "GroupingConstraint is applied directly to persistent setup-state variables in a scheduling formulation.",
+      "rootCause": "Setup occurrence and setup state are conflated.",
+      "correctiveAction": "Exclude GroupingConstraint from alpha.26 specialized formulations and reject such instances technically until occurrence-level integration is explicit.",
+      "permanentGuard": "GroupingConstraint keeps its minimum-spacing-on-setup-occurrence semantics.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-093",
+      "category": "executable-class-requires-formulation-and-method",
+      "symptom": "A class is promoted from Classifiable to Executable before formulation registry, scientific profile and executable method applicability are aligned.",
+      "rootCause": "Problem-class support state is updated in isolation.",
+      "correctiveAction": "Promote DLSP/CSLP only together with dedicated formulations, formulation profiles, registry wiring, MILP-GENERAL applicability and tests.",
+      "permanentGuard": "Executable class promotion requires end-to-end class/formulation/method parity.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-094",
+      "category": "support-promotion-test-parity",
+      "symptom": "A canonical problem class is promoted from Classifiable to Executable, while inherited tests still assert the previous support level or old executable/classifiable catalog counts.",
+      "rootCause": "Support-state promotion is propagated to catalog/formulation/method code but not audited across historical test expectations.",
+      "correctiveAction": "Whenever a class changes support level, audit all test suites for the class name, support-level enum, executable/classifiable counts and wording tied to the previous state.",
+      "permanentGuard": "Problem-class promotion requires test parity across Instance, Formulation, Resolution and Checker catalogs before candidate delivery.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-095",
+      "category": "static-initialization-dependency-order",
+      "symptom": "A static profile initializer references a static readonly field declared later in the same type; the referenced value is still its default during textual static initialization.",
+      "rootCause": "C# static field/property initializer execution order is textual, but pack fabrication validated only symbol presence.",
+      "correctiveAction": "Declare shared static initializer dependencies before every profile/property initializer that consumes them.",
+      "permanentGuard": "Scientific catalog fabrication must audit textual initialization order for shared static arrays/objects referenced by static property initializers.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-096",
+      "category": "test-symbol-namespace-contract",
+      "symptom": "A new test references an existing modeling helper by its simple type name but omits the namespace import required by the actual source contract, causing Checker.Tests compilation to fail.",
+      "rootCause": "Static fabrication validates symbol spelling and production-code imports but does not audit namespace resolution in newly created test files.",
+      "correctiveAction": "Resolve every non-local modeling helper used by new tests against its source namespace. MathematicalDomainKeyBuilder requires LotSizingDataModel.Solver.Building.",
+      "permanentGuard": "Before delivery, every new/modified test file using MathematicalDomainKeyBuilder must import LotSizingDataModel.Solver.Building or use the fully qualified type; apply the same source-namespace contract rule to future helper types.",
+      "status": "active"
     }
   ]
 }

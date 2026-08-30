@@ -119,6 +119,30 @@ public sealed class MathematicalSolutionValueProjector :
                         production.GetLotMultipleCount(
                             GetPeriod(key))),
 
+            MathematicalDecisionCategory
+                .AuxiliarySmallBucketProductionActivation =>
+                    ResolveProduction(
+                        solution,
+                        key,
+                        production =>
+                            Math.Abs(
+                                production.GetQuantity(
+                                    GetPeriod(key))) > 1e-9
+                                ? 1.0
+                                : 0.0),
+
+            MathematicalDecisionCategory
+                .AuxiliarySchedulingSetupStart =>
+                    ResolveProduction(
+                        solution,
+                        key,
+                        production =>
+                            IsSchedulingSetupStart(
+                                production,
+                                GetPeriod(key))
+                                ? 1.0
+                                : 0.0),
+
             MathematicalDecisionCategory.Inventory =>
                 ResolveInventory(
                     solution,
@@ -273,6 +297,20 @@ public sealed class MathematicalSolutionValueProjector :
                     $"'{key.Category}' is not supported by the " +
                     "solution value projector.")
         };
+    }
+
+    private static bool IsSchedulingSetupStart(
+        ProductionDecision production,
+        int period)
+    {
+        if (!production.IsSetupActivated(period))
+        {
+            return false;
+        }
+
+        return
+            period == 1 ||
+            !production.IsSetupActivated(period - 1);
     }
 
     private static double ResolveProduction(

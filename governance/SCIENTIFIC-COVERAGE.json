@@ -788,6 +788,30 @@
       "notation": "Class identity supported by explicit generic scheduling tokens",
       "checker": "Detector returns scheduling class only and prevents generic MI-CLSP fallback",
       "notes": "SupportLevel=Classifiable; GLSP remains CatalogOnly."
+    },
+    {
+      "id": "dlsp-executable-formulation",
+      "domain": "scheduling",
+      "scientificStatus": "implemented",
+      "implementationStatus": "implemented",
+      "core": "Small-bucket persistent setup state plus all-or-nothing production activation",
+      "instance": "Canonical DLSP classification from alpha.25",
+      "mathematics": "Dedicated solver-independent small-bucket-dlsp MILP",
+      "notation": "DLSP generic semantics retained from alpha.25",
+      "checker": "Auxiliary production activation and setup start independently projected from normalized solution",
+      "notes": "First executable scope is conservative; unsupported scheduling extensions remain rejected."
+    },
+    {
+      "id": "cslp-executable-formulation",
+      "domain": "scheduling",
+      "scientificStatus": "implemented",
+      "implementationStatus": "implemented",
+      "core": "Small-bucket persistent setup state plus continuous production",
+      "instance": "Canonical CSLP classification from alpha.25",
+      "mathematics": "Dedicated solver-independent small-bucket-cslp MILP",
+      "notation": "CSLP generic semantics retained from alpha.25",
+      "checker": "Setup-start auxiliary independently projected from normalized solution",
+      "notes": "PLSP remains Classifiable."
     }
   ]
 }

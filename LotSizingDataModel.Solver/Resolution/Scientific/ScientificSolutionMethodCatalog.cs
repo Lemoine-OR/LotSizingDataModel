@@ -31,6 +31,19 @@ public static class ScientificSolutionMethodCatalog
                     .MultiLevelCapacitatedLotSizing
             };
 
+    private static readonly CanonicalLotSizingProblemClassId[]
+        GeneralMilpProblemClasses =
+            AllExecutableCoreClasses
+                .Concat(
+                    new[]
+                    {
+                        CanonicalLotSizingProblemClassId
+                            .DiscreteLotSizingAndScheduling,
+                        CanonicalLotSizingProblemClassId
+                            .ContinuousSetupLotSizing
+                    })
+                .ToArray();
+
     public static ScientificSolutionMethodDefinition GeneralMilp { get; } =
         new(
             methodId: "MILP-GENERAL",
@@ -41,7 +54,7 @@ public static class ScientificSolutionMethodCatalog
             supportLevel:
                 ScientificSolutionMethodSupportLevel.Executable,
             applicableProblemClasses:
-                AllExecutableCoreClasses,
+                GeneralMilpProblemClasses,
             requiresMathematicalFormulation:
                 true,
             requiresMilpBackend:

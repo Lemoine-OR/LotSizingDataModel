@@ -15,7 +15,7 @@ public sealed class ScientificFormulationCatalogTests
     }
 
     [Fact]
-    public void StandardProfile_SupportsAllSixExecutableCoreClasses()
+    public void StandardProfile_SupportsSixGenericLotSizingCoreClassesOnly()
     {
         Assert.Equal(
             6,
@@ -23,11 +23,51 @@ public sealed class ScientificFormulationCatalogTests
                 .SupportedProblemClasses.Count);
 
         Assert.All(
-            LotSizingProblemClassCatalog.ExecutableClasses,
+            new[]
+            {
+                LotSizingProblemClassCatalog.SingleItemUncapacitated,
+                LotSizingProblemClassCatalog.SingleItemCapacitated,
+                LotSizingProblemClassCatalog.MultiItemUncapacitated,
+                LotSizingProblemClassCatalog.MultiItemCapacitated,
+                LotSizingProblemClassCatalog.UncapacitatedMultiLevel,
+                LotSizingProblemClassCatalog.MultiLevelCapacitated
+            },
             definition =>
                 Assert.True(
                     MathematicalFormulationScientificCatalog.Standard
                         .SupportsProblemClass(definition.Id)));
+
+        Assert.False(
+            MathematicalFormulationScientificCatalog.Standard
+                .SupportsProblemClass(
+                    CanonicalLotSizingProblemClassId
+                        .DiscreteLotSizingAndScheduling));
+
+        Assert.False(
+            MathematicalFormulationScientificCatalog.Standard
+                .SupportsProblemClass(
+                    CanonicalLotSizingProblemClassId
+                        .ContinuousSetupLotSizing));
+    }
+
+    [Fact]
+    public void DedicatedSmallBucketProfiles_CoverDlspAndCslp()
+    {
+        Assert.Equal(
+            3,
+            MathematicalFormulationScientificCatalog.All.Count);
+
+        Assert.True(
+            MathematicalFormulationScientificCatalog.DlspSmallBucket
+                .SupportsProblemClass(
+                    CanonicalLotSizingProblemClassId
+                        .DiscreteLotSizingAndScheduling));
+
+        Assert.True(
+            MathematicalFormulationScientificCatalog.CslpSmallBucket
+                .SupportsProblemClass(
+                    CanonicalLotSizingProblemClassId
+                        .ContinuousSetupLotSizing));
     }
 
     [Theory]

@@ -8,6 +8,32 @@ namespace LotSizingDataModel.Solver.Formulation.Scientific;
 /// </summary>
 public static class MathematicalFormulationScientificCatalog
 {
+    private static readonly LotSizingProblemClassExtensionKind[]
+        SmallBucketKnownUnsupportedExtensions =
+            new[]
+            {
+                LotSizingProblemClassExtensionKind.SetupTimes,
+                LotSizingProblemClassExtensionKind.StartUpCosts,
+                LotSizingProblemClassExtensionKind.StartUpTimes,
+                LotSizingProblemClassExtensionKind.ProductionLeadTimes,
+                LotSizingProblemClassExtensionKind.MinimumLotSize,
+                LotSizingProblemClassExtensionKind.MaximumLotSize,
+                LotSizingProblemClassExtensionKind.LotSizeMultiple,
+                LotSizingProblemClassExtensionKind
+                    .AdditionalProductionCapacity,
+                LotSizingProblemClassExtensionKind.MultiSite,
+                LotSizingProblemClassExtensionKind.MultipleObjectives,
+                LotSizingProblemClassExtensionKind.BigBucketScheduling,
+                LotSizingProblemClassExtensionKind.MacroMicroScheduling,
+                LotSizingProblemClassExtensionKind.InitialSetupState,
+                LotSizingProblemClassExtensionKind
+                    .SequenceDependentChangeoverTimes,
+                LotSizingProblemClassExtensionKind
+                    .SequenceDependentChangeoverCosts,
+                LotSizingProblemClassExtensionKind.MaximumSetupCount
+            };
+
+
     public static MathematicalFormulationScientificProfile Standard { get; } =
         new(
             formulationId:
@@ -102,11 +128,118 @@ public static class MathematicalFormulationScientificCatalog
                     "PeriodicOperatingExpenditureBudgetConstraintFamilyBuilder"
                 });
 
+    public static MathematicalFormulationScientificProfile
+        DlspSmallBucket { get; } =
+            new(
+                formulationId:
+                    SmallBucketSchedulingFormulation.DlspFormulationId,
+                formulationFamily:
+                    "Executable single-resource DLSP small-bucket MILP",
+                supportedProblemClasses:
+                    new[]
+                    {
+                        CanonicalLotSizingProblemClassId
+                            .DiscreteLotSizingAndScheduling
+                    },
+                supportedExtensions:
+                    new[]
+                    {
+                        LotSizingProblemClassExtensionKind.InitialInventory,
+                        LotSizingProblemClassExtensionKind.SafetyStock,
+                        LotSizingProblemClassExtensionKind.Backlogging,
+                        LotSizingProblemClassExtensionKind
+                            .AdditionalWarehouseCapacity,
+                        LotSizingProblemClassExtensionKind
+                            .AdditionalTransportCapacity,
+                        LotSizingProblemClassExtensionKind.Purchasing,
+                        LotSizingProblemClassExtensionKind.SupplierCapacity,
+                        LotSizingProblemClassExtensionKind.SupplierLeadTime,
+                        LotSizingProblemClassExtensionKind.Transportation,
+                        LotSizingProblemClassExtensionKind.TransportCapacity,
+                        LotSizingProblemClassExtensionKind.TransportLeadTime,
+                        LotSizingProblemClassExtensionKind.Distribution,
+                        LotSizingProblemClassExtensionKind.WarehouseCapacity,
+                        LotSizingProblemClassExtensionKind.FinancialConstraints,
+                        LotSizingProblemClassExtensionKind.SetupCarryOver
+                    },
+                knownUnsupportedExtensions:
+                    SmallBucketKnownUnsupportedExtensions,
+                supportedObjectiveKinds:
+                    new[]
+                    {
+                        OptimizationObjectiveKind.Economic
+                    },
+                evidence:
+                    new[]
+                    {
+                        "SmallBucketSetupStateVariableFamilyBuilder",
+                        "SmallBucketProductionActivationVariableFamilyBuilder",
+                        "SmallBucketSetupStartVariableFamilyBuilder",
+                        "SmallBucketSingleSetupStateConstraintFamilyBuilder",
+                        "SmallBucketSetupStartDefinitionConstraintFamilyBuilder",
+                        "SmallBucketProductionStateConstraintFamilyBuilder",
+                        "SmallBucketSetupStartCostObjectiveTermBuilder"
+                    });
+
+    public static MathematicalFormulationScientificProfile
+        CslpSmallBucket { get; } =
+            new(
+                formulationId:
+                    SmallBucketSchedulingFormulation.CslpFormulationId,
+                formulationFamily:
+                    "Executable single-resource CSLP small-bucket MILP",
+                supportedProblemClasses:
+                    new[]
+                    {
+                        CanonicalLotSizingProblemClassId
+                            .ContinuousSetupLotSizing
+                    },
+                supportedExtensions:
+                    new[]
+                    {
+                        LotSizingProblemClassExtensionKind.InitialInventory,
+                        LotSizingProblemClassExtensionKind.SafetyStock,
+                        LotSizingProblemClassExtensionKind.Backlogging,
+                        LotSizingProblemClassExtensionKind
+                            .AdditionalWarehouseCapacity,
+                        LotSizingProblemClassExtensionKind
+                            .AdditionalTransportCapacity,
+                        LotSizingProblemClassExtensionKind.Purchasing,
+                        LotSizingProblemClassExtensionKind.SupplierCapacity,
+                        LotSizingProblemClassExtensionKind.SupplierLeadTime,
+                        LotSizingProblemClassExtensionKind.Transportation,
+                        LotSizingProblemClassExtensionKind.TransportCapacity,
+                        LotSizingProblemClassExtensionKind.TransportLeadTime,
+                        LotSizingProblemClassExtensionKind.Distribution,
+                        LotSizingProblemClassExtensionKind.WarehouseCapacity,
+                        LotSizingProblemClassExtensionKind.FinancialConstraints,
+                        LotSizingProblemClassExtensionKind.SetupCarryOver
+                    },
+                knownUnsupportedExtensions:
+                    SmallBucketKnownUnsupportedExtensions,
+                supportedObjectiveKinds:
+                    new[]
+                    {
+                        OptimizationObjectiveKind.Economic
+                    },
+                evidence:
+                    new[]
+                    {
+                        "SmallBucketSetupStateVariableFamilyBuilder",
+                        "SmallBucketSetupStartVariableFamilyBuilder",
+                        "SmallBucketSingleSetupStateConstraintFamilyBuilder",
+                        "SmallBucketSetupStartDefinitionConstraintFamilyBuilder",
+                        "SmallBucketProductionStateConstraintFamilyBuilder",
+                        "SmallBucketSetupStartCostObjectiveTermBuilder"
+                    });
+
     public static IReadOnlyList<MathematicalFormulationScientificProfile>
         All { get; } =
             new[]
             {
-                Standard
+                Standard,
+                DlspSmallBucket,
+                CslpSmallBucket
             };
 
     public static bool TryGet(

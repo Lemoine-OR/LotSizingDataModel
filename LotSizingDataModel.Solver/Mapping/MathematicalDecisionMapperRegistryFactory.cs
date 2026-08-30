@@ -1,4 +1,4 @@
-namespace LotSizingDataModel.Solver.Mapping;
+﻿namespace LotSizingDataModel.Solver.Mapping;
 
 /// <summary>
 /// Creates preconfigured mathematical decision-mapper
@@ -47,6 +47,10 @@ public static class MathematicalDecisionMapperRegistryFactory
         // written to LotSizingSolution.
         registry.Register(
             new AuxiliaryLotSizeMultiplierDecisionMapper());
+        registry.Register(
+            new AuxiliarySmallBucketProductionActivationDecisionMapper());
+        registry.Register(
+            new AuxiliarySchedulingSetupStartDecisionMapper());
 
         return registry;
     }

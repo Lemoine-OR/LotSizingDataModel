@@ -1,4 +1,4 @@
-namespace LotSizingDataModel.Solver.Mapping;
+﻿namespace LotSizingDataModel.Solver.Mapping;
 
 /// <summary>
 /// Provides the canonical mathematical domain-key categories
@@ -132,4 +132,16 @@ public static class MathematicalDecisionCategory
     /// </remarks>
     public const string AuxiliaryLotSizeMultiplier =
         "auxiliaryLotSizeMultiplier";
+
+    /// <summary>
+    /// Mathematical-only DLSP full-bucket production activation.
+    /// </summary>
+    public const string AuxiliarySmallBucketProductionActivation =
+        "auxiliarySmallBucketProductionActivation";
+
+    /// <summary>
+    /// Mathematical-only start of a persistent scheduling setup state.
+    /// </summary>
+    public const string AuxiliarySchedulingSetupStart =
+        "auxiliarySchedulingSetupStart";
 }

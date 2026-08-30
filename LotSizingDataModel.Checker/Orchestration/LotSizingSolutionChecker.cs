@@ -75,11 +75,10 @@ public sealed class LotSizingSolutionChecker :
             new MathematicalModelBuildService();
 
         _formulationRegistry =
-            StandardLotSizingFormulationRegistryFactory.Create(
-                new StandardLotSizingFormulationOptions());
+            LotSizingFormulationRegistryFactory.CreateDefault();
 
         _formulationId =
-            StandardLotSizingFormulation.StandardFormulationId;
+            string.Empty;
     }
 
     /// <summary>

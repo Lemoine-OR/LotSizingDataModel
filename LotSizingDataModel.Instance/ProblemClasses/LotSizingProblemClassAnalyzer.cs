@@ -57,8 +57,15 @@ public sealed class LotSizingProblemClassAnalyzer
         }
 
         if (
-            definition.SupportLevel ==
-            LotSizingProblemClassSupportLevel.Classifiable)
+            definition.Id ==
+                CanonicalLotSizingProblemClassId
+                    .DiscreteLotSizingAndScheduling ||
+            definition.Id ==
+                CanonicalLotSizingProblemClassId
+                    .ContinuousSetupLotSizing ||
+            definition.Id ==
+                CanonicalLotSizingProblemClassId
+                    .ProportionalLotSizingAndScheduling)
         {
             return _smallBucketSchedulingAnalyzer.Assess(
                 descriptor,

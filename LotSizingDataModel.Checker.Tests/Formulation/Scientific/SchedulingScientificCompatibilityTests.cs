@@ -12,7 +12,7 @@ namespace LotSizingDataModel.Checker.Tests.Formulation.Scientific;
 public sealed class SchedulingScientificCompatibilityTests
 {
     [Fact]
-    public void ClassifiableCslp_IsScientificallyIncompatibleWithStandardMilp()
+    public void ExecutableCslp_IsStillIncompatibleWithStandardMilp()
     {
         var features =
             new LotSizingProblemFeatures
@@ -53,7 +53,7 @@ public sealed class SchedulingScientificCompatibilityTests
                 .Definition.Id);
 
         Assert.Equal(
-            LotSizingProblemClassSupportLevel.Classifiable,
+            LotSizingProblemClassSupportLevel.Executable,
             classification.PrimaryProblemClass!
                 .Definition.SupportLevel);
 

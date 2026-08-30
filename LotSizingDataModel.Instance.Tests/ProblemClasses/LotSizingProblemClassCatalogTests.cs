@@ -6,19 +6,24 @@ namespace LotSizingDataModel.Instance.Tests.ProblemClasses;
 public sealed class LotSizingProblemClassCatalogTests
 {
     [Fact]
-    public void Catalog_HasSixExecutableThreeClassifiableAndOneCatalogOnly()
+    public void Catalog_HasEightExecutableOneClassifiableAndOneCatalogOnly()
     {
         Assert.Equal(
             10,
             LotSizingProblemClassCatalog.All.Count);
 
         Assert.Equal(
-            6,
+            8,
             LotSizingProblemClassCatalog.ExecutableClasses.Count);
 
+        Assert.Single(
+            LotSizingProblemClassCatalog.ClassifiableClasses);
+
         Assert.Equal(
-            3,
-            LotSizingProblemClassCatalog.ClassifiableClasses.Count);
+            CanonicalLotSizingProblemClassId
+                .ProportionalLotSizingAndScheduling,
+            LotSizingProblemClassCatalog
+                .ClassifiableClasses[0].Id);
 
         Assert.Single(
             LotSizingProblemClassCatalog.All,
@@ -57,24 +62,31 @@ public sealed class LotSizingProblemClassCatalogTests
     }
 
     [Fact]
-    public void SmallBucketClasses_AreClassifiableButNotExecutable()
+    public void SmallBucketSupportLevels_ReflectExecutableMilestone()
     {
         Assert.All(
             new[]
             {
                 LotSizingProblemClassCatalog.Dlsp,
-                LotSizingProblemClassCatalog.Cslp,
-                LotSizingProblemClassCatalog.Plsp
+                LotSizingProblemClassCatalog.Cslp
             },
             definition =>
             {
                 Assert.Equal(
-                    LotSizingProblemClassSupportLevel.Classifiable,
+                    LotSizingProblemClassSupportLevel.Executable,
                     definition.SupportLevel);
 
-                Assert.Null(
+                Assert.NotNull(
                     definition.UniversalCoreSpecification);
             });
+
+        Assert.Equal(
+            LotSizingProblemClassSupportLevel.Classifiable,
+            LotSizingProblemClassCatalog.Plsp.SupportLevel);
+
+        Assert.Null(
+            LotSizingProblemClassCatalog.Plsp
+                .UniversalCoreSpecification);
 
         Assert.Equal(
             LotSizingProblemClassSupportLevel.CatalogOnly,

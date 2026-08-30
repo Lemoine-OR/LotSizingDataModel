@@ -117,22 +117,26 @@ public static class LotSizingProblemClassCatalog
 
     public static LotSizingProblemClassDefinition
         Dlsp { get; } =
-            Classifiable(
+            Executable(
                 CanonicalLotSizingProblemClassId
                     .DiscreteLotSizingAndScheduling,
                 "DLSP",
                 "Discrete lot-sizing and scheduling problem",
+                "m,SL,Net:UNK | Dem,Det,Prod,Cap:P,Cap:Shared,Sched," +
+                "Bucket:SB,SchedRes:1,SBProd:0F,BucketItems:1 | Obj:?",
                 note:
                     "Single-resource small-bucket class with at most one " +
                     "produced item per bucket and all-or-nothing production.");
 
     public static LotSizingProblemClassDefinition
         Cslp { get; } =
-            Classifiable(
+            Executable(
                 CanonicalLotSizingProblemClassId
                     .ContinuousSetupLotSizing,
                 "CSLP",
                 "Continuous setup lot-sizing problem",
+                "m,SL,Net:UNK | Dem,Det,Prod,Cap:P,Cap:Shared,Sched," +
+                "Bucket:SB,SchedRes:1,SBProd:Cont,BucketItems:1 | Obj:?",
                 note:
                     "Single-resource small-bucket class with at most one " +
                     "produced item per bucket and continuous lot quantity.");
@@ -205,6 +209,15 @@ public static class LotSizingProblemClassCatalog
                         definition.SupportLevel !=
                         LotSizingProblemClassSupportLevel.CatalogOnly)
                 .ToArray();
+
+    public static IReadOnlyList<LotSizingProblemClassDefinition>
+        SchedulingDetectableClasses =>
+            new[]
+            {
+                Dlsp,
+                Cslp,
+                Plsp
+            };
 
     public static LotSizingProblemClassDefinition? FindById(
         CanonicalLotSizingProblemClassId id) =>
