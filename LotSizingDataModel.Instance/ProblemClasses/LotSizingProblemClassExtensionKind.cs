@@ -35,5 +35,15 @@ public enum LotSizingProblemClassExtensionKind
 
     MultiSite,
     FinancialConstraints,
-    MultipleObjectives
+    MultipleObjectives,
+
+    IntegratedScheduling,
+    BigBucketScheduling,
+    SmallBucketScheduling,
+    MacroMicroScheduling,
+    InitialSetupState,
+    SetupCarryOver,
+    SequenceDependentChangeoverTimes,
+    SequenceDependentChangeoverCosts,
+    MaximumSetupCount
 }

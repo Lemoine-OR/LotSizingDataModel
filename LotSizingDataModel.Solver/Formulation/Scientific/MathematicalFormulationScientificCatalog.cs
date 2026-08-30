@@ -63,7 +63,18 @@ public static class MathematicalFormulationScientificCatalog
                 {
                     LotSizingProblemClassExtensionKind.StartUpCosts,
                     LotSizingProblemClassExtensionKind.StartUpTimes,
-                    LotSizingProblemClassExtensionKind.MultipleObjectives
+                    LotSizingProblemClassExtensionKind.MultipleObjectives,
+                    LotSizingProblemClassExtensionKind.IntegratedScheduling,
+                    LotSizingProblemClassExtensionKind.BigBucketScheduling,
+                    LotSizingProblemClassExtensionKind.SmallBucketScheduling,
+                    LotSizingProblemClassExtensionKind.MacroMicroScheduling,
+                    LotSizingProblemClassExtensionKind.InitialSetupState,
+                    LotSizingProblemClassExtensionKind.SetupCarryOver,
+                    LotSizingProblemClassExtensionKind
+                        .SequenceDependentChangeoverTimes,
+                    LotSizingProblemClassExtensionKind
+                        .SequenceDependentChangeoverCosts,
+                    LotSizingProblemClassExtensionKind.MaximumSetupCount
                 },
             supportedObjectiveKinds:
                 new[]

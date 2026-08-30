@@ -141,6 +141,51 @@ public sealed class LotSizingProblemClassExtensionAnalyzer
             LotSizingProblemClassExtensionKind.MultipleObjectives,
             extensions);
 
+        Add(
+            descriptor.Scheduling.HasIntegratedScheduling,
+            LotSizingProblemClassExtensionKind.IntegratedScheduling,
+            extensions);
+
+        Add(
+            descriptor.Scheduling.HasBigBucketStructure,
+            LotSizingProblemClassExtensionKind.BigBucketScheduling,
+            extensions);
+
+        Add(
+            descriptor.Scheduling.HasSmallBucketStructure,
+            LotSizingProblemClassExtensionKind.SmallBucketScheduling,
+            extensions);
+
+        Add(
+            descriptor.Scheduling.HasMicroPeriodStructure,
+            LotSizingProblemClassExtensionKind.MacroMicroScheduling,
+            extensions);
+
+        Add(
+            descriptor.Scheduling.HasInitialSetupState,
+            LotSizingProblemClassExtensionKind.InitialSetupState,
+            extensions);
+
+        Add(
+            descriptor.Scheduling.HasSetupCarryOver,
+            LotSizingProblemClassExtensionKind.SetupCarryOver,
+            extensions);
+
+        Add(
+            descriptor.Scheduling.HasSequenceDependentChangeoverTimes,
+            LotSizingProblemClassExtensionKind.SequenceDependentChangeoverTimes,
+            extensions);
+
+        Add(
+            descriptor.Scheduling.HasSequenceDependentChangeoverCosts,
+            LotSizingProblemClassExtensionKind.SequenceDependentChangeoverCosts,
+            extensions);
+
+        Add(
+            descriptor.Scheduling.HasMaximumSetupCountConstraints,
+            LotSizingProblemClassExtensionKind.MaximumSetupCount,
+            extensions);
+
         return extensions
             .Distinct()
             .OrderBy(extension => (int)extension)

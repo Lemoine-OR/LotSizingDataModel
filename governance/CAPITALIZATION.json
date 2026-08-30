@@ -649,6 +649,69 @@
       "correctiveAction": "Before packaging, audit all newly referenced modeling enum/type names against existing source contracts; use ObjectiveSense for MathematicalObjective.Sense.",
       "permanentGuard": "New formulation builders must pass a source-contract symbol audit for objective sense, constraint sense, domain keys and model context APIs before delivery.",
       "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-073",
+      "category": "scheduling-data-vs-executable-problem-class",
+      "symptom": "Presence of scheduling data automatically classifies or enables DLSP/CSLP/PLSP/GLSP.",
+      "rootCause": "Necessary scheduling facts are confused with the complete mathematical semantics of a named scheduling problem class.",
+      "correctiveAction": "Represent bucket/setup/changeover facts generically and keep named scheduling classes CatalogOnly until exact production and transition semantics are executable.",
+      "permanentGuard": "SchedulingProfile never by itself promotes DLSP/CSLP/PLSP/GLSP to Executable.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-074",
+      "category": "grouping-vs-scheduling-count",
+      "symptom": "GroupingConstraint is reused as MaximumSetupCount or as a bucket definition.",
+      "rootCause": "Different restrictions on setup events are conflated.",
+      "correctiveAction": "Keep GroupingConstraint as minimum setup spacing and introduce MaximumSetupCount separately.",
+      "permanentGuard": "GroupingConstraint semantics remain the sliding-window spacing invariant and are never reinterpreted by scheduling code.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-075",
+      "category": "directional-changeover-semantics",
+      "symptom": "Sequence-dependent setup/changeover data are stored as an unordered item pair.",
+      "rootCause": "Directional setup-state transitions are treated as symmetric.",
+      "correctiveAction": "ProductionChangeover stores ordered FromItemId and ToItemId plus directional time/cost.",
+      "permanentGuard": "A->B and B->A are distinct scheduling definitions.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-076",
+      "category": "historical-bucket-mapping-non-speculation",
+      "symptom": "Wolsey SB1/SB2/BB are mapped directly to newly added generic bucket tokens without a source-complete semantic proof.",
+      "rootCause": "The existence of a generic scheduling vocabulary is mistaken for evidence that a historical field is fully equivalent.",
+      "correctiveAction": "Close only SQT/SQC in alpha.24; retain machine bucket dimensions as explicit historical gaps.",
+      "permanentGuard": "Generic bucket support does not automatically close Wolsey Machines.Bucket.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-077",
+      "category": "scheduling-formulation-support",
+      "symptom": "Standard MILP accepts scheduling extensions because Core and notation can represent them.",
+      "rootCause": "Representability is confused with formulation executability.",
+      "correctiveAction": "Register all alpha.24 scheduling extensions as KnownUnsupported in the standard formulation profile.",
+      "permanentGuard": "No scheduling extension becomes scientifically compatible until state/transition variables and constraints are implemented.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-078",
+      "category": "test-fixture-constructor-contract",
+      "symptom": "A new test fixture instantiates a domain entity with a constructor signature that does not exist or omits a mandatory composition such as PlantWarehouse.",
+      "rootCause": "Fixture code is authored from an assumed convenience constructor instead of the actual domain constructor/cardinality contract.",
+      "correctiveAction": "Construct test entities with their real mandatory composed objects; for Plant use Plant(int, string, PlantWarehouse).",
+      "permanentGuard": "Before delivery, new domain-entity fixture constructors must be checked against the actual Core source contract. Scheduling fixtures must include an explicit PlantWarehouse when using the Plant parameterized constructor.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-079",
+      "category": "historical-gap-closure-test-migration",
+      "symptom": "A historical mapping gap is intentionally closed, but an older test still asserts that the same dimension must remain in UnrepresentedHistoricalDimensions.",
+      "rootCause": "The implementation and new positive tests are updated without auditing inherited negative-coverage tests for the same historical dimension.",
+      "correctiveAction": "When a historical dimension becomes representable, search the whole test suite for the old gap identifier and migrate stale negative assertions into positive mapping assertions while retaining unrelated gaps.",
+      "permanentGuard": "Pack fabrication must prove that each newly closed historical gap identifier is absent from inherited Assert.Contains gap assertions and that at least one positive semantic-feature assertion exists.",
+      "status": "active"
     }
   ]
 }

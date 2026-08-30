@@ -4,6 +4,7 @@ using System.Linq;
 using LotSizingDataModel.Core;
 using LotSizingDataModel.Core.PhysicalModel;
 using LotSizingDataModel.Core.DecisionModel.Objectives;
+using LotSizingDataModel.Core.DecisionModel.Scheduling;
 using LotSizingDataModel.Instance.Analysis;
 
 namespace LotSizingDataModel.Instance.Classification;
@@ -396,7 +397,53 @@ public static class LotSizingProblemFeatureExtractor
                 ObjectiveAggregationMode =
                     supplyChain.ObjectivePolicy?
                         .AggregationMode ??
-                    ObjectiveAggregationMode.Single
+                    ObjectiveAggregationMode.Single,
+
+                HasIntegratedScheduling =
+                    supplyChain.WorkCenters.Any(
+                        workCenter =>
+                            workCenter.SchedulingProfile is not null),
+
+                SchedulingBucketMode =
+                    supplyChain.WorkCenters
+                        .Select(
+                            workCenter =>
+                                workCenter.SchedulingProfile?
+                                    .BucketMode ??
+                                SchedulingBucketMode.Unspecified)
+                        .FirstOrDefault(
+                            mode =>
+                                mode != SchedulingBucketMode.Unspecified),
+
+                HasInitialSetupState =
+                    supplyChain.WorkCenters.Any(
+                        workCenter =>
+                            workCenter.SchedulingProfile?
+                                .HasInitialSetupState == true),
+
+                HasSetupCarryOver =
+                    supplyChain.WorkCenters.Any(
+                        workCenter =>
+                            workCenter.SchedulingProfile?
+                                .HasSetupCarryOver == true),
+
+                HasSequenceDependentChangeoverTimes =
+                    supplyChain.WorkCenters.Any(
+                        workCenter =>
+                            workCenter.SchedulingProfile?
+                                .HasSequenceDependentChangeoverTimes == true),
+
+                HasSequenceDependentChangeoverCosts =
+                    supplyChain.WorkCenters.Any(
+                        workCenter =>
+                            workCenter.SchedulingProfile?
+                                .HasSequenceDependentChangeoverCosts == true),
+
+                HasMaximumSetupCountConstraints =
+                    supplyChain.WorkCenters.Any(
+                        workCenter =>
+                            workCenter.SchedulingProfile?
+                                .MaximumSetupCount is not null)
             };
 
         return features;

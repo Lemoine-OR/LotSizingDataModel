@@ -75,5 +75,15 @@ public enum UniversalNotationFeature
     TransportLeadTime = 63,
     Distribution = 64,
 
-    FinancialConstraint = 70
+    FinancialConstraint = 70,
+
+    IntegratedScheduling = 80,
+    BigBucketScheduling = 81,
+    SmallBucketScheduling = 82,
+    MacroMicroScheduling = 83,
+    InitialSetupState = 84,
+    SetupCarryOver = 85,
+    SequenceDependentChangeoverTime = 86,
+    SequenceDependentChangeoverCost = 87,
+    MaximumSetupCount = 88
 }

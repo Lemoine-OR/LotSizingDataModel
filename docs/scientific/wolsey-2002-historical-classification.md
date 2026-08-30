@@ -158,3 +158,18 @@ that extension because the distinct additional-sales bound/decision is absent.
 
 Likewise the DLSI/DLS initial-stock distinction remains open: current initial
 inventory is input data, not Wolsey's variable initial stock decision.
+
+
+## alpha.24 sequence-dependent changeovers
+
+Wolsey machine features:
+
+- `SQT` now maps to generic `SDCT`
+  (`SequenceDependentChangeoverTime`);
+- `SQC` now maps to generic `SDCC`
+  (`SequenceDependentChangeoverCost`).
+
+These representation gaps are closed.
+
+Machine mode, exact machine count and `SB1/SB2/BB` bucket semantics remain
+explicitly unrepresented where their generic projection is not yet secured.

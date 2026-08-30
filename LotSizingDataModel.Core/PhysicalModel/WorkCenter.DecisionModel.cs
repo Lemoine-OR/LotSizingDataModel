@@ -118,7 +118,8 @@ public sealed partial class WorkCenter :
         CapacityConstraint is not null ||
         AdditionalCapacity is not null ||
         FixedUsageCost is not null ||
-        AdditionalCapacityCost is not null;
+        AdditionalCapacityCost is not null ||
+        SchedulingProfile is not null;
 
     /// <summary>
     /// Gets a value indicating whether every active parameter
@@ -206,6 +207,7 @@ public sealed partial class WorkCenter :
         AdditionalCapacity = null;
         FixedUsageCost = null;
         AdditionalCapacityCost = null;
+        SchedulingProfile = null;
     }
 
     private void SetDecisionParameter<T>(
@@ -267,6 +269,11 @@ public sealed partial class WorkCenter :
         {
             yield return AdditionalCapacityCost;
         }
+
+        if (SchedulingProfile is not null)
+        {
+            yield return SchedulingProfile;
+        }
     }
 
     private void OnDecisionParameterPropertyChanged(
@@ -291,6 +298,10 @@ public sealed partial class WorkCenter :
                      AdditionalCapacityCost))
         {
             OnPropertyChanged(nameof(AdditionalCapacityCost));
+        }
+        else if (ReferenceEquals(sender, SchedulingProfile))
+        {
+            OnPropertyChanged(nameof(SchedulingProfile));
         }
 
         // Update all computed properties that may be affected.

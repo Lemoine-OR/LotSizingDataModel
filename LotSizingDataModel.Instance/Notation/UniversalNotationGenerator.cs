@@ -296,6 +296,54 @@ public sealed class UniversalNotationGenerator
             yield return UniversalNotationFeature.Distribution;
         }
 
+
+        if (descriptor.Scheduling.HasIntegratedScheduling)
+        {
+            yield return UniversalNotationFeature.IntegratedScheduling;
+        }
+
+        if (descriptor.Scheduling.HasBigBucketStructure)
+        {
+            yield return UniversalNotationFeature.BigBucketScheduling;
+        }
+
+        if (descriptor.Scheduling.HasSmallBucketStructure)
+        {
+            yield return UniversalNotationFeature.SmallBucketScheduling;
+        }
+
+        if (descriptor.Scheduling.HasMicroPeriodStructure)
+        {
+            yield return UniversalNotationFeature.MacroMicroScheduling;
+        }
+
+        if (descriptor.Scheduling.HasInitialSetupState)
+        {
+            yield return UniversalNotationFeature.InitialSetupState;
+        }
+
+        if (descriptor.Scheduling.HasSetupCarryOver)
+        {
+            yield return UniversalNotationFeature.SetupCarryOver;
+        }
+
+        if (descriptor.Scheduling.HasSequenceDependentChangeoverTimes)
+        {
+            yield return
+                UniversalNotationFeature.SequenceDependentChangeoverTime;
+        }
+
+        if (descriptor.Scheduling.HasSequenceDependentChangeoverCosts)
+        {
+            yield return
+                UniversalNotationFeature.SequenceDependentChangeoverCost;
+        }
+
+        if (descriptor.Scheduling.HasMaximumSetupCountConstraints)
+        {
+            yield return UniversalNotationFeature.MaximumSetupCount;
+        }
+
         if (descriptor.ObjectiveFinance.HasFinancialConstraints)
         {
             yield return UniversalNotationFeature.FinancialConstraint;

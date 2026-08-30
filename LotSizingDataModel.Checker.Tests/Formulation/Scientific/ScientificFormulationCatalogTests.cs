@@ -54,6 +54,15 @@ public sealed class ScientificFormulationCatalogTests
     [InlineData(LotSizingProblemClassExtensionKind.StartUpCosts)]
     [InlineData(LotSizingProblemClassExtensionKind.StartUpTimes)]
     [InlineData(LotSizingProblemClassExtensionKind.MultipleObjectives)]
+    [InlineData(LotSizingProblemClassExtensionKind.IntegratedScheduling)]
+    [InlineData(LotSizingProblemClassExtensionKind.BigBucketScheduling)]
+    [InlineData(LotSizingProblemClassExtensionKind.SmallBucketScheduling)]
+    [InlineData(LotSizingProblemClassExtensionKind.MacroMicroScheduling)]
+    [InlineData(LotSizingProblemClassExtensionKind.InitialSetupState)]
+    [InlineData(LotSizingProblemClassExtensionKind.SetupCarryOver)]
+    [InlineData(LotSizingProblemClassExtensionKind.SequenceDependentChangeoverTimes)]
+    [InlineData(LotSizingProblemClassExtensionKind.SequenceDependentChangeoverCosts)]
+    [InlineData(LotSizingProblemClassExtensionKind.MaximumSetupCount)]
     public void KnownUnsupportedExtensions_AreExplicit(
         LotSizingProblemClassExtensionKind extension)
     {

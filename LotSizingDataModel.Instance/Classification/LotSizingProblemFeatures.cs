@@ -2,6 +2,7 @@
 using System.Xml.Serialization;
 using LotSizingDataModel.Core.Common;
 using LotSizingDataModel.Core.DecisionModel.Objectives;
+using LotSizingDataModel.Core.DecisionModel.Scheduling;
 using LotSizingDataModel.Instance.Common;
 
 namespace LotSizingDataModel.Instance.Classification;
@@ -82,6 +83,13 @@ public sealed class LotSizingProblemFeatures : ModelObject
         OptimizationObjectiveKind.Economic;
     private ObjectiveAggregationMode _objectiveAggregationMode =
         ObjectiveAggregationMode.Single;
+    private bool _hasIntegratedScheduling;
+    private SchedulingBucketMode _schedulingBucketMode;
+    private bool _hasInitialSetupState;
+    private bool _hasSetupCarryOver;
+    private bool _hasSequenceDependentChangeoverTimes;
+    private bool _hasSequenceDependentChangeoverCosts;
+    private bool _hasMaximumSetupCountConstraints;
 
     /// <summary>
     /// Initializes an empty lot-sizing problem-feature profile.
@@ -943,6 +951,61 @@ public sealed class LotSizingProblemFeatures : ModelObject
         get => _objectiveAggregationMode;
         set => SetProperty(
             ref _objectiveAggregationMode,
+            value);
+    }
+
+    [XmlAttribute("hasIntegratedScheduling")]
+    public bool HasIntegratedScheduling
+    {
+        get => _hasIntegratedScheduling;
+        set => SetProperty(ref _hasIntegratedScheduling, value);
+    }
+
+    [XmlAttribute("schedulingBucketMode")]
+    public SchedulingBucketMode SchedulingBucketMode
+    {
+        get => _schedulingBucketMode;
+        set => SetProperty(ref _schedulingBucketMode, value);
+    }
+
+    [XmlAttribute("hasInitialSetupState")]
+    public bool HasInitialSetupState
+    {
+        get => _hasInitialSetupState;
+        set => SetProperty(ref _hasInitialSetupState, value);
+    }
+
+    [XmlAttribute("hasSetupCarryOver")]
+    public bool HasSetupCarryOver
+    {
+        get => _hasSetupCarryOver;
+        set => SetProperty(ref _hasSetupCarryOver, value);
+    }
+
+    [XmlAttribute("hasSequenceDependentChangeoverTimes")]
+    public bool HasSequenceDependentChangeoverTimes
+    {
+        get => _hasSequenceDependentChangeoverTimes;
+        set => SetProperty(
+            ref _hasSequenceDependentChangeoverTimes,
+            value);
+    }
+
+    [XmlAttribute("hasSequenceDependentChangeoverCosts")]
+    public bool HasSequenceDependentChangeoverCosts
+    {
+        get => _hasSequenceDependentChangeoverCosts;
+        set => SetProperty(
+            ref _hasSequenceDependentChangeoverCosts,
+            value);
+    }
+
+    [XmlAttribute("hasMaximumSetupCountConstraints")]
+    public bool HasMaximumSetupCountConstraints
+    {
+        get => _hasMaximumSetupCountConstraints;
+        set => SetProperty(
+            ref _hasMaximumSetupCountConstraints,
             value);
     }
 

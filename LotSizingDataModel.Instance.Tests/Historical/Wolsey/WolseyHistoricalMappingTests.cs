@@ -283,7 +283,24 @@ public sealed class WolseyHistoricalMappingTests
             mapping.Coverage);
 
         Assert.Contains(
+            UniversalNotationFeature.SequenceDependentChangeoverCost,
+            mapping.UniversalSpecification.Notation
+                .Beta.Features);
+
+        Assert.DoesNotContain(
             "Machines.SQC:SequenceDependentChangeoverCost",
+            mapping.UnrepresentedHistoricalDimensions);
+
+        Assert.Contains(
+            "Machines.Bucket=BB",
+            mapping.UnrepresentedHistoricalDimensions);
+
+        Assert.Contains(
+            "Machines.Mode=IM",
+            mapping.UnrepresentedHistoricalDimensions);
+
+        Assert.Contains(
+            "Machines.NK=2",
             mapping.UnrepresentedHistoricalDimensions);
 
         Assert.Contains(

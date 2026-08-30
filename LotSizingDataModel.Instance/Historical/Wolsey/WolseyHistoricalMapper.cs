@@ -331,13 +331,15 @@ public sealed class WolseyHistoricalMapper
                         break;
 
                     case WolseyMachineFeature.SQT:
-                        missing.Add(
-                            "Machines.SQT:SequenceDependentChangeoverTime");
+                        features.Add(
+                            UniversalNotationFeature
+                                .SequenceDependentChangeoverTime);
                         break;
 
                     case WolseyMachineFeature.SQC:
-                        missing.Add(
-                            "Machines.SQC:SequenceDependentChangeoverCost");
+                        features.Add(
+                            UniversalNotationFeature
+                                .SequenceDependentChangeoverCost);
                         break;
 
                     default:

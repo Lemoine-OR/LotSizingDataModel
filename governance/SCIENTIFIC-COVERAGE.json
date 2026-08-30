@@ -740,6 +740,30 @@
       "notation": "Obj:Econ/Fin/Sust/Service/Multi",
       "checker": "Scientific formulation compatibility rejects unsupported objective kinds and true multiobjective policies",
       "notes": "WeightedSum/Lexicographic data model exists; execution engine remains future work."
+    },
+    {
+      "id": "integrated-lot-sizing-scheduling-core",
+      "domain": "scheduling",
+      "scientificStatus": "implemented",
+      "implementationStatus": "partial",
+      "core": "ProductionSchedulingProfile on WorkCenter with bucket mode, micro-period count, maximum setup count, setup carry-over, initial setup state and directional changeovers",
+      "instance": "Scheduling facts extracted into legacy features and typed SchedulingDescriptor",
+      "mathematics": "No state/transition formulation yet",
+      "notation": "Sched, Bucket:BB/SB/MM, InitSetup, SCO, SDCT, SDCC, MaxSetup",
+      "checker": "Scientific formulation compatibility blocks scheduling extensions in the standard formulation",
+      "notes": "Representation complete enough for next formulation phase; DLSP/CSLP/PLSP/GLSP remain CatalogOnly."
+    },
+    {
+      "id": "wolsey-sequence-dependent-changeovers",
+      "domain": "historical-classification",
+      "scientificStatus": "implemented",
+      "implementationStatus": "implemented",
+      "core": "Directional ProductionChangeover with time/cost",
+      "instance": "Generic sequence-dependent changeover features",
+      "mathematics": "No scheduling formulation claimed",
+      "notation": "SQT->SDCT; SQC->SDCC",
+      "checker": "Historical mapping tests ensure SQT/SQC gaps close while bucket gap remains",
+      "notes": "Machine bucket semantics remain explicitly unresolved."
     }
   ]
 }

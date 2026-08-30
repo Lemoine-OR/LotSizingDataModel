@@ -128,3 +128,18 @@ lexicographic execution layer exists.
 
 This prevents "one objective with many cost terms" from being mislabeled as
 multiobjective optimization.
+
+
+## alpha.24 scheduling core
+
+The standard formulation explicitly marks all new scheduling extensions as
+`KnownUnsupported`.
+
+The Core/Instance/notation layers can now describe scheduling bucket
+structures, setup states and sequence-dependent changeovers, but the standard
+MILP still has no scheduling-state/transition variables.
+
+Consequently automatic scientific formulation selection rejects scheduling
+instances rather than silently ignoring their scheduling semantics.
+
+DLSP, CSLP, PLSP and GLSP remain catalog-only problem classes.

@@ -52,7 +52,17 @@ internal static class UniversalNotationTokenCatalog
                 [UniversalNotationFeature.TransportLeadTime] = "LT:T",
                 [UniversalNotationFeature.Distribution] = "Dist",
 
-                [UniversalNotationFeature.FinancialConstraint] = "Fin"
+                [UniversalNotationFeature.FinancialConstraint] = "Fin",
+
+                [UniversalNotationFeature.IntegratedScheduling] = "Sched",
+                [UniversalNotationFeature.BigBucketScheduling] = "Bucket:BB",
+                [UniversalNotationFeature.SmallBucketScheduling] = "Bucket:SB",
+                [UniversalNotationFeature.MacroMicroScheduling] = "Bucket:MM",
+                [UniversalNotationFeature.InitialSetupState] = "InitSetup",
+                [UniversalNotationFeature.SetupCarryOver] = "SCO",
+                [UniversalNotationFeature.SequenceDependentChangeoverTime] = "SDCT",
+                [UniversalNotationFeature.SequenceDependentChangeoverCost] = "SDCC",
+                [UniversalNotationFeature.MaximumSetupCount] = "MaxSetup"
             };
 
     private static readonly IReadOnlyDictionary<

@@ -1,5 +1,6 @@
 using LotSizingDataModel.Core;
 using LotSizingDataModel.Core.DecisionModel.Objectives;
+using LotSizingDataModel.Core.DecisionModel.Scheduling;
 using LotSizingDataModel.Instance.Classification;
 using LotSizingDataModel.Instance.Descriptors.Network;
 
@@ -26,6 +27,7 @@ public sealed class LotSizingProblemDescriptor
     public ProcurementDescriptor Procurement { get; init; } = new();
     public TransportationDistributionDescriptor TransportationDistribution { get; init; } = new();
     public ObjectiveFinanceDescriptor ObjectiveFinance { get; init; } = new();
+    public SchedulingDescriptor Scheduling { get; init; } = new();
 
     /// <summary>Gets the physical supply-flow network descriptor.</summary>
     public SupplyNetworkDescriptor SupplyNetwork { get; private set; } = new();
@@ -126,6 +128,19 @@ public sealed class LotSizingProblemDescriptor
                 ObjectiveCriterionCount = features.ObjectiveCriterionCount,
                 PrimaryObjectiveKind = features.PrimaryObjectiveKind,
                 AggregationMode = features.ObjectiveAggregationMode
+            },
+            Scheduling = new SchedulingDescriptor
+            {
+                HasIntegratedScheduling = features.HasIntegratedScheduling,
+                BucketMode = features.SchedulingBucketMode,
+                HasInitialSetupState = features.HasInitialSetupState,
+                HasSetupCarryOver = features.HasSetupCarryOver,
+                HasSequenceDependentChangeoverTimes =
+                    features.HasSequenceDependentChangeoverTimes,
+                HasSequenceDependentChangeoverCosts =
+                    features.HasSequenceDependentChangeoverCosts,
+                HasMaximumSetupCountConstraints =
+                    features.HasMaximumSetupCountConstraints
             }
         };
     }
@@ -209,7 +224,18 @@ public sealed class LotSizingProblemDescriptor
             HasMultipleObjectives = ObjectiveFinance.HasMultipleObjectives,
             ObjectiveCriterionCount = ObjectiveFinance.ObjectiveCriterionCount,
             PrimaryObjectiveKind = ObjectiveFinance.PrimaryObjectiveKind,
-            ObjectiveAggregationMode = ObjectiveFinance.AggregationMode
+            ObjectiveAggregationMode = ObjectiveFinance.AggregationMode,
+
+            HasIntegratedScheduling = Scheduling.HasIntegratedScheduling,
+            SchedulingBucketMode = Scheduling.BucketMode,
+            HasInitialSetupState = Scheduling.HasInitialSetupState,
+            HasSetupCarryOver = Scheduling.HasSetupCarryOver,
+            HasSequenceDependentChangeoverTimes =
+                Scheduling.HasSequenceDependentChangeoverTimes,
+            HasSequenceDependentChangeoverCosts =
+                Scheduling.HasSequenceDependentChangeoverCosts,
+            HasMaximumSetupCountConstraints =
+                Scheduling.HasMaximumSetupCountConstraints
         };
     }
 }
