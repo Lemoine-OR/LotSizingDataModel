@@ -860,6 +860,30 @@
       "notation": "N/A",
       "checker": "Work-center, grid, item and routing references checked",
       "notes": "No solver-specific duration/changeover auxiliary persisted."
+    },
+    {
+      "id": "glsp-executable-formulation",
+      "domain": "scheduling",
+      "scientificStatus": "implemented",
+      "implementationStatus": "implemented",
+      "core": "Single-resource macro/micro GLSP with micro production, setup state and exact changeovers",
+      "instance": "Canonical GLSP promoted to Executable",
+      "mathematics": "macro-micro-glsp formulation with aggregate production bridge and macro capacity",
+      "notation": "Macro/micro tokens from alpha.28",
+      "checker": "x/y/z projected independently from WorkCenterSchedulingDecision",
+      "notes": "Initial setup state and forbidden carry-over remain future executable extensions."
+    },
+    {
+      "id": "glsp-sequence-dependent-changeovers",
+      "domain": "scheduling",
+      "scientificStatus": "implemented",
+      "implementationStatus": "implemented",
+      "core": "Directional ProductionChangeover time/cost",
+      "instance": "SQT/SQC remain represented GLSP extensions",
+      "mathematics": "Exact z transitions consume capacity and objective cost",
+      "notation": "SDCT / SDCC",
+      "checker": "z derived from consecutive normalized setup states",
+      "notes": "No transition before the first modeled micro-period in alpha.29."
     }
   ]
 }

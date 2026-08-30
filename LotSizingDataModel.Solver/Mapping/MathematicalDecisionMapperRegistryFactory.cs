@@ -17,6 +17,9 @@ public static class MathematicalDecisionMapperRegistryFactory
             new MathematicalDecisionMapperRegistry();
 
         registry.Register(new ProductionDecisionMapper());
+        registry.Register(new GlspMicroPeriodSetupStateDecisionMapper());
+        registry.Register(new GlspMicroPeriodProductionDecisionMapper());
+        registry.Register(new AuxiliaryMicroPeriodChangeoverDecisionMapper());
         registry.Register(new SetupDecisionMapper());
         registry.Register(new InventoryDecisionMapper());
         registry.Register(new InventorySetupDecisionMapper());

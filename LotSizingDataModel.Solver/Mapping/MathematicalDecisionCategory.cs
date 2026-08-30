@@ -144,4 +144,13 @@ public static class MathematicalDecisionCategory
     /// </summary>
     public const string AuxiliarySchedulingSetupStart =
         "auxiliarySchedulingSetupStart";
+
+    public const string MicroPeriodProduction =
+        "microPeriodProduction";
+
+    public const string MicroPeriodSetupState =
+        "microPeriodSetupState";
+
+    public const string AuxiliaryMicroPeriodChangeover =
+        "auxiliaryMicroPeriodChangeover";
 }

@@ -290,6 +290,79 @@ public static class MathematicalFormulationScientificCatalog
                         "SmallBucketSetupStartCostObjectiveTermBuilder"
                     });
 
+    public static MathematicalFormulationScientificProfile
+        GlspMacroMicro { get; } =
+            new(
+                formulationId:
+                    GlspSchedulingFormulation.FormulationIdValue,
+                formulationFamily:
+                    "Executable single-resource GLSP macro/micro MILP",
+                supportedProblemClasses:
+                    new[]
+                    {
+                        CanonicalLotSizingProblemClassId
+                            .GeneralLotSizingAndScheduling
+                    },
+                supportedExtensions:
+                    new[]
+                    {
+                        LotSizingProblemClassExtensionKind.InitialInventory,
+                        LotSizingProblemClassExtensionKind.SafetyStock,
+                        LotSizingProblemClassExtensionKind.Backlogging,
+                        LotSizingProblemClassExtensionKind.AdditionalWarehouseCapacity,
+                        LotSizingProblemClassExtensionKind.AdditionalTransportCapacity,
+                        LotSizingProblemClassExtensionKind.Purchasing,
+                        LotSizingProblemClassExtensionKind.SupplierCapacity,
+                        LotSizingProblemClassExtensionKind.SupplierLeadTime,
+                        LotSizingProblemClassExtensionKind.Transportation,
+                        LotSizingProblemClassExtensionKind.TransportCapacity,
+                        LotSizingProblemClassExtensionKind.TransportLeadTime,
+                        LotSizingProblemClassExtensionKind.Distribution,
+                        LotSizingProblemClassExtensionKind.WarehouseCapacity,
+                        LotSizingProblemClassExtensionKind.ProductionLeadTimes,
+                        LotSizingProblemClassExtensionKind.SetupCarryOver,
+                        LotSizingProblemClassExtensionKind.SequenceDependentChangeoverTimes,
+                        LotSizingProblemClassExtensionKind.SequenceDependentChangeoverCosts
+                    },
+                knownUnsupportedExtensions:
+                    new[]
+                    {
+                        LotSizingProblemClassExtensionKind.SetupTimes,
+                        LotSizingProblemClassExtensionKind.StartUpCosts,
+                        LotSizingProblemClassExtensionKind.StartUpTimes,
+                        LotSizingProblemClassExtensionKind.MinimumLotSize,
+                        LotSizingProblemClassExtensionKind.MaximumLotSize,
+                        LotSizingProblemClassExtensionKind.LotSizeMultiple,
+                        LotSizingProblemClassExtensionKind.AdditionalProductionCapacity,
+                        LotSizingProblemClassExtensionKind.MultiSite,
+                        LotSizingProblemClassExtensionKind.MultipleObjectives,
+                        LotSizingProblemClassExtensionKind.FinancialConstraints,
+                        LotSizingProblemClassExtensionKind.BigBucketScheduling,
+                        LotSizingProblemClassExtensionKind.SmallBucketScheduling,
+                        LotSizingProblemClassExtensionKind.InitialSetupState,
+                        LotSizingProblemClassExtensionKind.MaximumSetupCount
+                    },
+                supportedObjectiveKinds:
+                    new[]
+                    {
+                        OptimizationObjectiveKind.Economic
+                    },
+                evidence:
+                    new[]
+                    {
+                        "GlspMicroProductionVariableFamilyBuilder",
+                        "GlspMicroSetupStateVariableFamilyBuilder",
+                        "GlspChangeoverVariableFamilyBuilder",
+                        "GlspAggregateProductionConstraintFamilyBuilder",
+                        "GlspSingleSetupStateConstraintFamilyBuilder",
+                        "GlspMicroProductionLinkConstraintFamilyBuilder",
+                        "GlspChangeoverDefinitionConstraintFamilyBuilder",
+                        "GlspMacroCapacityConstraintFamilyBuilder",
+                        "GlspChangeoverCostObjectiveTermBuilder",
+                        "GlspMicroPeriodSetupStateDecisionMapper",
+                        "MathematicalSolutionValueProjector"
+                    });
+
     public static IReadOnlyList<MathematicalFormulationScientificProfile>
         All { get; } =
             new[]
@@ -297,7 +370,8 @@ public static class MathematicalFormulationScientificCatalog
                 Standard,
                 DlspSmallBucket,
                 CslpSmallBucket,
-                PlspSmallBucket
+                PlspSmallBucket,
+                GlspMacroMicro
             };
 
     public static bool TryGet(

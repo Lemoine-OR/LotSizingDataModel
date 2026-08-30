@@ -955,6 +955,78 @@
       "correctiveAction": "Resolve Checker symbols against source declarations. SolutionCheckIssue is in LotSizingDataModel.Checker.Results; SolutionCheckSeverity and SolutionCheckIssueKind are in LotSizingDataModel.Checker.Common.",
       "permanentGuard": "Every new or modified Checker component using SolutionCheckIssue, SolutionCheckSeverity or SolutionCheckIssueKind must import the source-declared namespaces or use fully qualified names before candidate delivery.",
       "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-107",
+      "category": "glsp-macro-production-bridge",
+      "symptom": "GLSP micro production replaces macro production directly, breaking the established inventory/network layer.",
+      "rootCause": "Incomplete propagation of GLSP execution semantics.",
+      "correctiveAction": "Keep macro production and impose exact aggregate-to-micro production equality.",
+      "permanentGuard": "Keep macro production and impose exact aggregate-to-micro production equality.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-108",
+      "category": "glsp-transition-exactness",
+      "symptom": "GLSP changeover variables are only lower-bounded and may be spuriously active.",
+      "rootCause": "Incomplete propagation of GLSP execution semantics.",
+      "correctiveAction": "Use the complete three-inequality binary product linearization.",
+      "permanentGuard": "Use the complete three-inequality binary product linearization.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-109",
+      "category": "glsp-cross-macro-sequence",
+      "symptom": "Micro-period ordering resets at macro boundaries and loses boundary changeovers.",
+      "rootCause": "Incomplete propagation of GLSP execution semantics.",
+      "correctiveAction": "Flatten the macro/micro grid into one ordered sequence across boundaries.",
+      "permanentGuard": "Flatten the macro/micro grid into one ordered sequence across boundaries.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-110",
+      "category": "glsp-changeover-capacity",
+      "symptom": "Sequence-dependent changeover time is omitted from executable capacity.",
+      "rootCause": "Incomplete propagation of GLSP execution semantics.",
+      "correctiveAction": "Use a GLSP macro capacity family including z-weighted changeover time.",
+      "permanentGuard": "Use a GLSP macro capacity family including z-weighted changeover time.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-111",
+      "category": "glsp-normalized-solution-projection",
+      "symptom": "GLSP solver variables lack an independent checker projection.",
+      "rootCause": "Incomplete propagation of GLSP execution semantics.",
+      "correctiveAction": "Map normalized micro schedules and project x/y/z independently.",
+      "permanentGuard": "Map normalized micro schedules and project x/y/z independently.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-112",
+      "category": "glsp-initial-state-non-speculation",
+      "symptom": "A declared initial setup state is silently ignored or treated as a free first setup.",
+      "rootCause": "Incomplete propagation of GLSP execution semantics.",
+      "correctiveAction": "Reject InitialSetupState until formulation, mapping and independent first-transition projection exist.",
+      "permanentGuard": "Reject InitialSetupState until formulation, mapping and independent first-transition projection exist.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-113",
+      "category": "formulation-canbuild-total-predicate",
+      "symptom": "Automatic formulation discovery calls GLSP CanBuild on a normal non-scheduling instance and the predicate throws instead of returning false, causing reference checks, scientific pipelines and campaigns to fail before execution.",
+      "rootCause": "GlspSchedulingApplicabilityService reused required-data helpers that throw on missing scheduling resources or production characteristics inside the CanBuild predicate.",
+      "correctiveAction": "Introduce non-throwing TryGet scheduling/characteristic helpers and make CanBuild validate all required horizons/data through false-return guards. Keep throwing required helpers only for the build phase after CanBuild has accepted the instance.",
+      "permanentGuard": "Every formulation CanBuild implementation is a total discovery predicate: normal scientific/technical non-applicability returns false. Registry-wide regression tests must call every built-in CanBuild on a valid non-applicable instance without exception.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-114",
+      "category": "test-core-business-symbol-namespace-contract",
+      "symptom": "A new regression test constructs Item by simple name without importing LotSizingDataModel.Core.LogicalModel.",
+      "rootCause": "The existing test namespace guard covered Solver helpers but not Core business fixture types.",
+      "correctiveAction": "Resolve Core fixture types against their source namespaces; Item requires LotSizingDataModel.Core.LogicalModel.",
+      "permanentGuard": "Every new/modified C# test containing 'new Item(' must import LotSizingDataModel.Core.LogicalModel or use the fully qualified type.",
+      "status": "active"
     }
   ]
 }

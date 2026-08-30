@@ -158,11 +158,14 @@ public static class LotSizingProblemClassCatalog
 
     public static LotSizingProblemClassDefinition
         Glsp { get; } =
-            Classifiable(
+            Executable(
                 CanonicalLotSizingProblemClassId
                     .GeneralLotSizingAndScheduling,
                 "GLSP",
                 "General lot-sizing and scheduling problem",
+                "m,SL,Net:UNK | Dem,Det,Prod,Cap:P,Cap:Shared,Sched," +
+                "Bucket:MM,SchedRes:1,MicroGrid,MicroLen:Var," +
+                "MicroItem:1 | Obj:?",
                 note:
                     "Single-resource two-level macro/micro scheduling class " +
                     "with a predefined micro-period grid, variable micro-period " +

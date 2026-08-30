@@ -42,6 +42,19 @@ public sealed class MacroMicroSchedulingStructuralValidatorTests
                     StringComparison.Ordinal));
     }
 
+    [Fact]
+    public void Validator_RejectsMissingExecutableMicroSchedule()
+    {
+        LotSizingInstance instance = CreateInstance();
+        var solution = new LotSizingSolution(2);
+
+        var issues = new MacroMicroSchedulingStructuralValidator().Validate(instance, solution);
+
+        Assert.Contains(
+            issues,
+            issue => issue.Message.Contains("DECSCHED005", StringComparison.Ordinal));
+    }
+
     private static LotSizingInstance CreateInstance()
     {
         var chain = new SupplyChain(2);

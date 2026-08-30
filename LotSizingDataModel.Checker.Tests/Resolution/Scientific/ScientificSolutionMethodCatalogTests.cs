@@ -23,10 +23,10 @@ public sealed class ScientificSolutionMethodCatalogTests
     }
 
     [Fact]
-    public void GeneralMilp_CoversAllNineExecutableCanonicalClasses()
+    public void GeneralMilp_CoversAllTenExecutableCanonicalClasses()
     {
         Assert.Equal(
-            9,
+            10,
             ScientificSolutionMethodCatalog.GeneralMilp
                 .ApplicableProblemClasses.Count);
 

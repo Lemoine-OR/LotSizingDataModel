@@ -5,7 +5,7 @@ namespace LotSizingDataModel.Checker.Tests.Formulation;
 public sealed class LotSizingFormulationRegistryFactoryTests
 {
     [Fact]
-    public void DefaultRegistry_ContainsStandardDlspCslpAndPlsp()
+    public void DefaultRegistry_ContainsStandardSmallBucketAndGlsp()
     {
         MathematicalModelFormulationRegistry registry =
             LotSizingFormulationRegistryFactory.CreateDefault();
@@ -30,8 +30,13 @@ public sealed class LotSizingFormulationRegistryFactoryTests
                 SmallBucketSchedulingFormulation.PlspFormulationId,
                 out _));
 
+        Assert.True(
+            registry.TryGet(
+                GlspSchedulingFormulation.FormulationIdValue,
+                out _));
+
         Assert.Equal(
-            4,
+            5,
             registry.GetAll().Count);
     }
 }

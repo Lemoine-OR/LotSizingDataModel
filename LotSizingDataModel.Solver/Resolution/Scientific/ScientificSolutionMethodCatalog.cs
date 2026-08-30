@@ -42,7 +42,9 @@ public static class ScientificSolutionMethodCatalog
                         CanonicalLotSizingProblemClassId
                             .ContinuousSetupLotSizing,
                         CanonicalLotSizingProblemClassId
-                            .ProportionalLotSizingAndScheduling
+                            .ProportionalLotSizingAndScheduling,
+                        CanonicalLotSizingProblemClassId
+                            .GeneralLotSizingAndScheduling
                     })
                 .ToArray();
 

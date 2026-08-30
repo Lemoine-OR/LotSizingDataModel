@@ -1,4 +1,4 @@
-namespace LotSizingDataModel.Solver.Mapping;
+﻿namespace LotSizingDataModel.Solver.Mapping;
 
 /// <summary>
 /// Provides the canonical mathematical domain-key segment names
@@ -119,6 +119,15 @@ public static class MathematicalDomainKeySegment
     /// </summary>
     public const string Period =
         "period";
+
+    public const string MicroPeriod =
+        "microPeriod";
+
+    public const string FromItem =
+        "fromItem";
+
+    public const string ToItem =
+        "toItem";
 
     /// <summary>
     /// Operation identifier segment.

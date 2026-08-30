@@ -20,7 +20,7 @@ public sealed class GlspProblemClassTests
             CanonicalLotSizingProblemClassId.GeneralLotSizingAndScheduling,
             result.Definition.Id);
         Assert.Equal(
-            LotSizingProblemClassSupportLevel.Classifiable,
+            LotSizingProblemClassSupportLevel.Executable,
             result.Definition.SupportLevel);
         Assert.Equal(
             LotSizingProblemClassMatchKind.ExactCore,

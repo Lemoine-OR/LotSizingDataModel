@@ -67,13 +67,13 @@ public sealed class ExecutableSmallBucketFormulationScientificTests
     }
 
     [Fact]
-    public void Glsp_IsClassifiableButNotExecutable()
+    public void Glsp_IsExecutableThroughDedicatedMacroMicroFormulation()
     {
         Assert.Equal(
-            LotSizingProblemClassSupportLevel.Classifiable,
+            LotSizingProblemClassSupportLevel.Executable,
             LotSizingProblemClassCatalog.Glsp.SupportLevel);
 
-        Assert.DoesNotContain(
+        Assert.Contains(
             LotSizingProblemClassCatalog.ExecutableClasses,
             definition =>
                 definition.Id ==
