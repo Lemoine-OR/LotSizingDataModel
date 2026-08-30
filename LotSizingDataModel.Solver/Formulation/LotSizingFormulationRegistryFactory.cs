@@ -11,6 +11,9 @@ public static class LotSizingFormulationRegistryFactory
             new MathematicalModelFormulationRegistry();
 
         registry.Register(
+            SmallBucketSchedulingFormulationFactory.CreatePlsp());
+
+        registry.Register(
             SmallBucketSchedulingFormulationFactory.CreateCslp());
 
         registry.Register(

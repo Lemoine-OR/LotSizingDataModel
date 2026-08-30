@@ -4,8 +4,8 @@ using LotSizingDataModel.Instance.Descriptors;
 namespace LotSizingDataModel.Instance.ProblemClasses;
 
 /// <summary>
-/// Canonical membership analyzer for the small-bucket scheduling families
-/// that are representable after alpha.25 but not yet solver-executable.
+/// Canonical membership analyzer for the DLSP, CSLP and PLSP small-bucket
+/// scheduling families independently of their current solver support state.
 /// </summary>
 public sealed class SmallBucketSchedulingProblemClassAnalyzer
 {

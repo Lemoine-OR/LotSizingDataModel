@@ -13,15 +13,15 @@ public sealed class ExecutableSmallBucketFormulationScientificTests
 {
     [Theory]
     [InlineData(
-        SmallBucketProductionMode.AllOrNothing,
         CanonicalLotSizingProblemClassId.DiscreteLotSizingAndScheduling,
         SmallBucketSchedulingFormulation.DlspFormulationId)]
     [InlineData(
-        SmallBucketProductionMode.Continuous,
         CanonicalLotSizingProblemClassId.ContinuousSetupLotSizing,
         SmallBucketSchedulingFormulation.CslpFormulationId)]
+    [InlineData(
+        CanonicalLotSizingProblemClassId.ProportionalLotSizingAndScheduling,
+        SmallBucketSchedulingFormulation.PlspFormulationId)]
     public void CanonicalSmallBucketClass_SelectsDedicatedCompatibleFormulation(
-        SmallBucketProductionMode mode,
         CanonicalLotSizingProblemClassId expectedClass,
         string formulationId)
     {
@@ -30,7 +30,7 @@ public sealed class ExecutableSmallBucketFormulationScientificTests
                 .Analyze(
                     LotSizingProblemDescriptor
                         .FromLegacyFeatures(
-                            Features(mode)));
+                            Features(expectedClass)));
 
         Assert.NotNull(
             classification.PrimaryProblemClass);
@@ -67,33 +67,53 @@ public sealed class ExecutableSmallBucketFormulationScientificTests
     }
 
     [Fact]
-    public void Plsp_RemainsClassifiableNotExecutable()
+    public void Glsp_RemainsCatalogOnly()
     {
         Assert.Equal(
-            LotSizingProblemClassSupportLevel.Classifiable,
-            LotSizingProblemClassCatalog.Plsp.SupportLevel);
+            LotSizingProblemClassSupportLevel.CatalogOnly,
+            LotSizingProblemClassCatalog.Glsp.SupportLevel);
     }
 
     private static LotSizingProblemFeatures Features(
-        SmallBucketProductionMode mode) =>
-            new()
-            {
-                ItemCount = 3,
-                WorkCenterCount = 1,
-                PlanningHorizon = 6,
-                ProductStructureType =
-                    ProductStructureType.IndependentItems,
-                HasDemand = true,
-                HasDeterministicDemand = true,
-                HasProduction = true,
-                HasProductionCapacityConstraints = true,
-                HasSharedProductionCapacity = true,
-                HasIntegratedScheduling = true,
-                SchedulingBucketMode =
-                    SchedulingBucketMode.SmallBucket,
-                SmallBucketProductionMode = mode,
-                SchedulingResourceCount = 1,
-                HasMaximumProducedItemCountConstraint = true,
-                MaximumProducedItemCountPerBucket = 1
-            };
+        CanonicalLotSizingProblemClassId problemClass)
+    {
+        bool isDlsp =
+            problemClass ==
+            CanonicalLotSizingProblemClassId
+                .DiscreteLotSizingAndScheduling;
+
+        bool isPlsp =
+            problemClass ==
+            CanonicalLotSizingProblemClassId
+                .ProportionalLotSizingAndScheduling;
+
+        return new LotSizingProblemFeatures
+        {
+            ItemCount = 3,
+            WorkCenterCount = 1,
+            PlanningHorizon = 6,
+            ProductStructureType =
+                ProductStructureType.IndependentItems,
+            HasDemand = true,
+            HasDeterministicDemand = true,
+            HasProduction = true,
+            HasProductionCapacityConstraints = true,
+            HasSharedProductionCapacity = true,
+            HasIntegratedScheduling = true,
+            SchedulingBucketMode =
+                SchedulingBucketMode.SmallBucket,
+            SmallBucketProductionMode =
+                isDlsp
+                    ? SmallBucketProductionMode.AllOrNothing
+                    : SmallBucketProductionMode.Continuous,
+            SchedulingResourceCount = 1,
+            HasMaximumProducedItemCountConstraint = true,
+            MaximumProducedItemCountPerBucket =
+                isPlsp ? 2 : 1,
+            HasMaximumSetupCountConstraints =
+                isPlsp,
+            MaximumSetupTransitionsPerBucket =
+                isPlsp ? 1 : 0
+        };
+    }
 }

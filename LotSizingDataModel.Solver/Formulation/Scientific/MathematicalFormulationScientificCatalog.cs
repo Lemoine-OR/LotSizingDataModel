@@ -178,6 +178,7 @@ public static class MathematicalFormulationScientificCatalog
                         "SmallBucketSingleSetupStateConstraintFamilyBuilder",
                         "SmallBucketSetupStartDefinitionConstraintFamilyBuilder",
                         "SmallBucketProductionStateConstraintFamilyBuilder",
+                        "SmallBucketProducedItemCountConstraintFamilyBuilder",
                         "SmallBucketSetupStartCostObjectiveTermBuilder"
                     });
 
@@ -230,6 +231,62 @@ public static class MathematicalFormulationScientificCatalog
                         "SmallBucketSingleSetupStateConstraintFamilyBuilder",
                         "SmallBucketSetupStartDefinitionConstraintFamilyBuilder",
                         "SmallBucketProductionStateConstraintFamilyBuilder",
+                        "SmallBucketProducedItemCountConstraintFamilyBuilder",
+                        "SmallBucketSetupStartCostObjectiveTermBuilder"
+                    });
+
+    public static MathematicalFormulationScientificProfile
+        PlspSmallBucket { get; } =
+            new(
+                formulationId:
+                    SmallBucketSchedulingFormulation.PlspFormulationId,
+                formulationFamily:
+                    "Executable single-resource PLSP small-bucket MILP",
+                supportedProblemClasses:
+                    new[]
+                    {
+                        CanonicalLotSizingProblemClassId
+                            .ProportionalLotSizingAndScheduling
+                    },
+                supportedExtensions:
+                    new[]
+                    {
+                        LotSizingProblemClassExtensionKind.InitialInventory,
+                        LotSizingProblemClassExtensionKind.SafetyStock,
+                        LotSizingProblemClassExtensionKind.Backlogging,
+                        LotSizingProblemClassExtensionKind
+                            .AdditionalWarehouseCapacity,
+                        LotSizingProblemClassExtensionKind
+                            .AdditionalTransportCapacity,
+                        LotSizingProblemClassExtensionKind.Purchasing,
+                        LotSizingProblemClassExtensionKind.SupplierCapacity,
+                        LotSizingProblemClassExtensionKind.SupplierLeadTime,
+                        LotSizingProblemClassExtensionKind.Transportation,
+                        LotSizingProblemClassExtensionKind.TransportCapacity,
+                        LotSizingProblemClassExtensionKind.TransportLeadTime,
+                        LotSizingProblemClassExtensionKind.Distribution,
+                        LotSizingProblemClassExtensionKind.WarehouseCapacity,
+                        LotSizingProblemClassExtensionKind.FinancialConstraints,
+                        LotSizingProblemClassExtensionKind.SetupCarryOver
+                    },
+                knownUnsupportedExtensions:
+                    SmallBucketKnownUnsupportedExtensions,
+                supportedObjectiveKinds:
+                    new[]
+                    {
+                        OptimizationObjectiveKind.Economic
+                    },
+                evidence:
+                    new[]
+                    {
+                        "SmallBucketSetupStateVariableFamilyBuilder",
+                        "SmallBucketProductionActivationVariableFamilyBuilder",
+                        "SmallBucketSetupStartVariableFamilyBuilder",
+                        "PlspSingleSetupStateConstraintFamilyBuilder",
+                        "SmallBucketSetupStartDefinitionConstraintFamilyBuilder",
+                        "SmallBucketProductionStateConstraintFamilyBuilder",
+                        "SmallBucketProducedItemCountConstraintFamilyBuilder",
+                        "PlspSetupTransitionLimitConstraintFamilyBuilder",
                         "SmallBucketSetupStartCostObjectiveTermBuilder"
                     });
 
@@ -239,7 +296,8 @@ public static class MathematicalFormulationScientificCatalog
             {
                 Standard,
                 DlspSmallBucket,
-                CslpSmallBucket
+                CslpSmallBucket,
+                PlspSmallBucket
             };
 
     public static bool TryGet(

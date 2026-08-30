@@ -15,11 +15,11 @@ namespace LotSizingDataModel.Checker.Tests.Formulation;
 public sealed class SmallBucketSchedulingFormulationModelTests
 {
     [Fact]
-    public async Task Dlsp_ModelContainsStateStartAndFullBucketActivation()
+    public async Task Dlsp_ModelContainsStateStartActivationAndProducedItemCount()
     {
         LotSizingInstance instance =
             CreateInstance(
-                SmallBucketProductionMode.AllOrNothing);
+                SmallBucketSchedulingFormulationKind.Dlsp);
 
         MathematicalModel model =
             await SmallBucketSchedulingFormulationFactory
@@ -55,21 +55,27 @@ public sealed class SmallBucketSchedulingFormulationModelTests
                 constraint.Name.StartsWith(
                     "dlspProductionFullBucket_",
                     StringComparison.Ordinal));
+
+        Assert.Contains(
+            model.Constraints,
+            constraint =>
+                constraint.Name ==
+                    "smallBucketProducedItemCount_t1");
     }
 
     [Fact]
-    public async Task Cslp_ModelContainsStateAndStartWithoutDlspActivation()
+    public async Task Cslp_ModelUsesProductionActivationForRealPeriodCountLimit()
     {
         LotSizingInstance instance =
             CreateInstance(
-                SmallBucketProductionMode.Continuous);
+                SmallBucketSchedulingFormulationKind.Cslp);
 
         MathematicalModel model =
             await SmallBucketSchedulingFormulationFactory
                 .CreateCslp()
                 .BuildAsync(instance);
 
-        Assert.DoesNotContain(
+        Assert.Contains(
             model.Variables,
             variable =>
                 variable.DomainKey.StartsWith(
@@ -83,10 +89,121 @@ public sealed class SmallBucketSchedulingFormulationModelTests
                 constraint.Name.StartsWith(
                     "cslpProductionState_",
                     StringComparison.Ordinal));
+
+        Assert.Contains(
+            model.Constraints,
+            constraint =>
+                constraint.Name ==
+                    "smallBucketProducedItemCount_t1");
+    }
+
+    [Fact]
+    public async Task Plsp_ModelUsesIncomingAndOutgoingStates()
+    {
+        LotSizingInstance instance =
+            CreateInstance(
+                SmallBucketSchedulingFormulationKind.Plsp);
+
+        MathematicalModel model =
+            await SmallBucketSchedulingFormulationFactory
+                .CreatePlsp()
+                .BuildAsync(instance);
+
+        LinearConstraint state =
+            Assert.Single(
+                model.Constraints,
+                constraint =>
+                    constraint.Name ==
+                        "plspSingleSetupState_t1");
+
+        Assert.Equal(
+            MathematicalConstraintSense.Equal,
+            state.Sense);
+
+        Assert.Equal(
+            1.0,
+            state.RightHandSide);
+
+        Assert.Contains(
+            model.Constraints,
+            constraint =>
+                constraint.Name ==
+                    "plspProductionState_r1_t2");
+
+        Assert.Contains(
+            model.Constraints,
+            constraint =>
+                constraint.Name ==
+                    "smallBucketProducedItemCount_t2");
+    }
+
+    [Fact]
+    public async Task Plsp_ZeroTransitionPeriodPreservesSetupState()
+    {
+        LotSizingInstance instance =
+            CreateInstance(
+                SmallBucketSchedulingFormulationKind.Plsp);
+
+        ProductionSchedulingProfile profile =
+            instance.SupplyChain.WorkCenters
+                .Single()
+                .SchedulingProfile!;
+
+        profile.MaximumSetupCount!
+            .SetCount(
+                period: 2,
+                count: 0);
+
+        MathematicalModel model =
+            await SmallBucketSchedulingFormulationFactory
+                .CreatePlsp()
+                .BuildAsync(instance);
+
+        Assert.Equal(
+            2,
+            model.Constraints.Count(
+                constraint =>
+                    constraint.Name.StartsWith(
+                        "plspNoSetupTransition_",
+                        StringComparison.Ordinal)));
+    }
+
+    [Fact]
+    public async Task Cslp_ZeroProducedItemLimitIsRepresented()
+    {
+        LotSizingInstance instance =
+            CreateInstance(
+                SmallBucketSchedulingFormulationKind.Cslp);
+
+        ProductionSchedulingProfile profile =
+            instance.SupplyChain.WorkCenters
+                .Single()
+                .SchedulingProfile!;
+
+        profile.MaximumProducedItemCount!
+            .SetCount(
+                period: 2,
+                count: 0);
+
+        MathematicalModel model =
+            await SmallBucketSchedulingFormulationFactory
+                .CreateCslp()
+                .BuildAsync(instance);
+
+        LinearConstraint limit =
+            Assert.Single(
+                model.Constraints,
+                constraint =>
+                    constraint.Name ==
+                        "smallBucketProducedItemCount_t2");
+
+        Assert.Equal(
+            0.0,
+            limit.RightHandSide);
     }
 
     private static LotSizingInstance CreateInstance(
-        SmallBucketProductionMode mode)
+        SmallBucketSchedulingFormulationKind kind)
     {
         const int horizon = 2;
 
@@ -99,6 +216,37 @@ public sealed class SmallBucketSchedulingFormulationModelTests
         chain.Items.Add(
             new Item(2, "I2", 0));
 
+        bool isDlsp =
+            kind ==
+            SmallBucketSchedulingFormulationKind.Dlsp;
+
+        bool isPlsp =
+            kind ==
+            SmallBucketSchedulingFormulationKind.Plsp;
+
+        var profile =
+            new ProductionSchedulingProfile
+            {
+                BucketMode =
+                    SchedulingBucketMode.SmallBucket,
+                SmallBucketProductionMode =
+                    isDlsp
+                        ? SmallBucketProductionMode.AllOrNothing
+                        : SmallBucketProductionMode.Continuous,
+                MaximumProducedItemCount =
+                    new MaximumProducedItemCount(
+                        horizon,
+                        isPlsp ? 2 : 1)
+            };
+
+        if (isPlsp)
+        {
+            profile.MaximumSetupCount =
+                new MaximumSetupCount(
+                    horizon,
+                    1);
+        }
+
         var workCenter =
             new WorkCenter(1, "M1")
             {
@@ -107,17 +255,7 @@ public sealed class SmallBucketSchedulingFormulationModelTests
                         horizon,
                         10.0),
                 SchedulingProfile =
-                    new ProductionSchedulingProfile
-                    {
-                        BucketMode =
-                            SchedulingBucketMode.SmallBucket,
-                        SmallBucketProductionMode =
-                            mode,
-                        MaximumProducedItemCount =
-                            new MaximumProducedItemCount(
-                                horizon,
-                                1)
-                    }
+                    profile
             };
 
         var plant =

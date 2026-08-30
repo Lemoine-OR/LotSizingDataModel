@@ -812,6 +812,30 @@
       "notation": "CSLP generic semantics retained from alpha.25",
       "checker": "Setup-start auxiliary independently projected from normalized solution",
       "notes": "PLSP remains Classifiable."
+    },
+    {
+      "id": "plsp-executable-formulation",
+      "domain": "scheduling",
+      "scientificStatus": "implemented",
+      "implementationStatus": "implemented",
+      "core": "Incoming/outgoing setup-state PLSP with at most one transition",
+      "instance": "Canonical PLSP classifier uses continuous production, at most two produced items and MaximumSetupCount<=1",
+      "mathematics": "Dedicated solver-independent small-bucket-plsp MILP",
+      "notation": "Sched, Bucket:SB, MaxSetup, SchedRes:1, SBProd:Cont, BucketItems:2, SetupTrans:1",
+      "checker": "Setup-start and positive-production auxiliaries reconstructed from normalized ProductionDecision",
+      "notes": "Initial setup state and sequence-dependent changeovers remain unsupported."
+    },
+    {
+      "id": "small-bucket-period-produced-item-count",
+      "domain": "scheduling",
+      "scientificStatus": "implemented",
+      "implementationStatus": "implemented",
+      "core": "MaximumProducedItemCount consumed period by period",
+      "instance": "Original time-series business parameter retained",
+      "mathematics": "sum(q[r,t]) <= MaximumProducedItemCount[t]",
+      "notation": "Existing BucketItems summary tokens unchanged",
+      "checker": "q is reconstructed from positive production quantity",
+      "notes": "Applies to DLSP, CSLP and PLSP."
     }
   ]
 }

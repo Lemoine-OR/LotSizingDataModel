@@ -16,6 +16,9 @@ public sealed class SmallBucketSchedulingFormulation :
     public const string CslpFormulationId =
         "small-bucket-cslp";
 
+    public const string PlspFormulationId =
+        "small-bucket-plsp";
+
     private readonly SmallBucketSchedulingFormulationKind _kind;
     private readonly IStandardLotSizingVariableBuilder _variableBuilder;
     private readonly IStandardLotSizingObjectiveBuilder _objectiveBuilder;
@@ -56,16 +59,38 @@ public sealed class SmallBucketSchedulingFormulation :
         _kind;
 
     public override string FormulationId =>
-        _kind ==
-            SmallBucketSchedulingFormulationKind.Dlsp
-            ? DlspFormulationId
-            : CslpFormulationId;
+        _kind switch
+        {
+            SmallBucketSchedulingFormulationKind.Dlsp =>
+                DlspFormulationId,
+
+            SmallBucketSchedulingFormulationKind.Cslp =>
+                CslpFormulationId,
+
+            SmallBucketSchedulingFormulationKind.Plsp =>
+                PlspFormulationId,
+
+            _ =>
+                throw new InvalidOperationException(
+                    "Unknown small-bucket formulation kind.")
+        };
 
     public override string Name =>
-        _kind ==
-            SmallBucketSchedulingFormulationKind.Dlsp
-            ? "DLSP small-bucket MILP formulation"
-            : "CSLP small-bucket MILP formulation";
+        _kind switch
+        {
+            SmallBucketSchedulingFormulationKind.Dlsp =>
+                "DLSP small-bucket MILP formulation",
+
+            SmallBucketSchedulingFormulationKind.Cslp =>
+                "CSLP small-bucket MILP formulation",
+
+            SmallBucketSchedulingFormulationKind.Plsp =>
+                "PLSP small-bucket MILP formulation",
+
+            _ =>
+                throw new InvalidOperationException(
+                    "Unknown small-bucket formulation kind.")
+        };
 
     public override string Description =>
         "Solver-independent single-resource small-bucket scheduling " +

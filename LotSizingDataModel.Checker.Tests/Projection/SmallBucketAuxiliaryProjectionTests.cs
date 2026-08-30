@@ -65,6 +65,62 @@ public sealed class SmallBucketAuxiliaryProjectionTests
             result.Values[2]);
     }
 
+    [Fact]
+    public void Projector_DerivesProductionActivationFromPositiveQuantity()
+    {
+        var solution =
+            new LotSizingSolution(2);
+
+        var production =
+            new ProductionDecision(
+                routingId: 1,
+                planningHorizon: 2);
+
+        production.SetQuantity(
+            period: 2,
+            quantity: 3.0);
+
+        solution.ProductionDecisions.Add(
+            production);
+
+        var model =
+            new MathematicalModel
+            {
+                Name = "production-activation-projection"
+            };
+
+        model.Variables.Add(
+            Variable(
+                1,
+                MathematicalDecisionCategory
+                    .AuxiliarySmallBucketProductionActivation,
+                period: 1));
+
+        model.Variables.Add(
+            Variable(
+                2,
+                MathematicalDecisionCategory
+                    .AuxiliarySmallBucketProductionActivation,
+                period: 2));
+
+        MathematicalSolutionProjectionResult result =
+            new MathematicalSolutionValueProjector()
+                .Project(
+                    model,
+                    solution);
+
+        Assert.Empty(
+            result.Issues);
+
+        Assert.Equal(
+            0.0,
+            result.Values[1]);
+
+        Assert.Equal(
+            1.0,
+            result.Values[2]);
+    }
+
     private static MathematicalVariable Variable(
         int id,
         string category,

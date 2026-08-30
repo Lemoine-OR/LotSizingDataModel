@@ -143,15 +143,18 @@ public static class LotSizingProblemClassCatalog
 
     public static LotSizingProblemClassDefinition
         Plsp { get; } =
-            Classifiable(
+            Executable(
                 CanonicalLotSizingProblemClassId
                     .ProportionalLotSizingAndScheduling,
                 "PLSP",
                 "Proportional lot-sizing and scheduling problem",
+                "m,SL,Net:UNK | Dem,Det,Prod,Cap:P,Cap:Shared,Sched," +
+                "Bucket:SB,MaxSetup,SchedRes:1,SBProd:Cont," +
+                "BucketItems:2,SetupTrans:1 | Obj:?",
                 note:
-                    "Single-resource small-bucket class with continuous lot " +
-                    "quantity, at most two produced items and at most one " +
-                    "setup transition per bucket.");
+                    "Single-resource PLSP with one setup-state carry-over, " +
+                    "continuous production of at most two items, and at most " +
+                    "one setup transition per bucket.");
 
     public static LotSizingProblemClassDefinition
         Glsp { get; } =

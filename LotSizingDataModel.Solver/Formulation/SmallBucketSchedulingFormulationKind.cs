@@ -6,5 +6,6 @@ namespace LotSizingDataModel.Solver.Formulation;
 public enum SmallBucketSchedulingFormulationKind
 {
     Dlsp = 0,
-    Cslp = 1
+    Cslp = 1,
+    Plsp = 2
 }

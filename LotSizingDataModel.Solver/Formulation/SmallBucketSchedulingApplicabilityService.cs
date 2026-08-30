@@ -7,14 +7,9 @@ using LotSizingDataModel.Instance.Classification;
 namespace LotSizingDataModel.Solver.Formulation;
 
 /// <summary>
-/// Technical applicability contract for the first executable DLSP/CSLP
-/// formulations.
+/// Conservative technical applicability contract for executable DLSP, CSLP
+/// and PLSP formulations.
 /// </summary>
-/// <remarks>
-/// The service is deliberately conservative. A scientifically related
-/// extension remains rejected until its mathematical interaction with the
-/// small-bucket formulation has been implemented and tested.
-/// </remarks>
 public sealed class SmallBucketSchedulingApplicabilityService
 {
     public bool CanBuild(
@@ -50,11 +45,9 @@ public sealed class SmallBucketSchedulingApplicabilityService
             profile.BucketMode !=
                 SchedulingBucketMode.SmallBucket ||
             profile.MaximumProducedItemCount is null ||
-            profile.MaximumProducedItemCountPerBucket > 1 ||
             profile.HasInitialSetupState ||
             profile.HasSequenceDependentChangeoverTimes ||
             profile.HasSequenceDependentChangeoverCosts ||
-            profile.MaximumSetupCount is not null ||
             profile.SetupCarryOverPolicy ==
                 SetupCarryOverPolicy.Forbidden ||
             profile.Changeovers.Count > 0)
@@ -62,15 +55,10 @@ public sealed class SmallBucketSchedulingApplicabilityService
             return false;
         }
 
-        SmallBucketProductionMode requiredMode =
-            kind ==
-                SmallBucketSchedulingFormulationKind.Dlsp
-                ? SmallBucketProductionMode.AllOrNothing
-                : SmallBucketProductionMode.Continuous;
-
-        if (
-            profile.SmallBucketProductionMode !=
-                requiredMode)
+        if (!HasValidCanonicalSchedulingSemantics(
+                profile,
+                instance.PlanningHorizon,
+                kind))
         {
             return false;
         }
@@ -116,14 +104,16 @@ public sealed class SmallBucketSchedulingApplicabilityService
             return false;
         }
 
+        int plantId =
+            GetPlantId(
+                instance,
+                workCenter);
+
         foreach (ProductionRouting routing in routings)
         {
             if (
                 routing.WorkCenters.Count != 1 ||
-                routing.WorkCenters[0].PlantId !=
-                    GetPlantId(
-                        instance,
-                        workCenter) ||
+                routing.WorkCenters[0].PlantId != plantId ||
                 routing.WorkCenters[0].WorkCenterId !=
                     workCenter.Id ||
                 routing.GroupingConstraint is not null)
@@ -167,6 +157,87 @@ public sealed class SmallBucketSchedulingApplicabilityService
                 {
                     return false;
                 }
+            }
+        }
+
+        return true;
+    }
+
+    private static bool HasValidCanonicalSchedulingSemantics(
+        ProductionSchedulingProfile profile,
+        int planningHorizon,
+        SmallBucketSchedulingFormulationKind kind)
+    {
+        SmallBucketProductionMode requiredMode =
+            kind ==
+                SmallBucketSchedulingFormulationKind.Dlsp
+                ? SmallBucketProductionMode.AllOrNothing
+                : SmallBucketProductionMode.Continuous;
+
+        if (
+            profile.SmallBucketProductionMode !=
+                requiredMode)
+        {
+            return false;
+        }
+
+        int maximumProducedItems =
+            kind ==
+                SmallBucketSchedulingFormulationKind.Plsp
+                ? 2
+                : 1;
+
+        for (
+            int period = 1;
+            period <= planningHorizon;
+            period++)
+        {
+            int count =
+                profile.MaximumProducedItemCount!
+                    .GetCount(period);
+
+            if (
+                count < 0 ||
+                count > maximumProducedItems)
+            {
+                return false;
+            }
+        }
+
+        if (
+            kind !=
+            SmallBucketSchedulingFormulationKind.Plsp)
+        {
+            return
+                profile.MaximumSetupCount is null;
+        }
+
+        if (profile.MaximumSetupCount is null)
+        {
+            return false;
+        }
+
+        for (
+            int period = 1;
+            period <= planningHorizon;
+            period++)
+        {
+            int count =
+                profile.MaximumSetupCount.GetCount(period);
+
+            if (count is < 0 or > 1)
+            {
+                return false;
+            }
+
+            // No initial setup state is currently executable. PLSP requires
+            // one end-of-period setup state, so period 1 must allow the
+            // initial setup operation.
+            if (
+                period == 1 &&
+                count == 0)
+            {
+                return false;
             }
         }
 

@@ -4,7 +4,7 @@ using LotSizingDataModel.Solver.Execution;
 namespace LotSizingDataModel.Solver.Mapping;
 
 /// <summary>
-/// Consumes mathematical-only DLSP production activation values.
+/// Consumes mathematical-only small-bucket production activation values.
 /// </summary>
 public sealed class AuxiliarySmallBucketProductionActivationDecisionMapper :
     MathematicalDecisionMapperBase

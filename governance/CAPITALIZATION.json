@@ -865,6 +865,42 @@
       "correctiveAction": "Resolve every non-local modeling helper used by new tests against its source namespace. MathematicalDomainKeyBuilder requires LotSizingDataModel.Solver.Building.",
       "permanentGuard": "Before delivery, every new/modified test file using MathematicalDomainKeyBuilder must import LotSizingDataModel.Solver.Building or use the fully qualified type; apply the same source-namespace contract rule to future helper types.",
       "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-097",
+      "category": "plsp-incoming-outgoing-setup-state",
+      "symptom": "PLSP is modeled as CSLP with only a cardinality limit of two produced items.",
+      "rootCause": "The incoming setup state y[t-1] and outgoing setup state y[t] are not both used in the production-admissibility equation.",
+      "correctiveAction": "PLSP production activation q[r,t] is allowed only by y[r,t-1]+y[r,t], while exactly one outgoing state is imposed.",
+      "permanentGuard": "Executable PLSP tests must prove incoming/outgoing state production semantics and exact one carried setup state.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-098",
+      "category": "period-dependent-produced-item-count",
+      "symptom": "MaximumProducedItemCount is used only through a horizon-wide maximum, so a stricter individual period can be ignored by the formulation.",
+      "rootCause": "Classification summary data is reused instead of the original period-dependent business parameter.",
+      "correctiveAction": "Introduce generic positive-production activation q and enforce sum(q)<=MaximumProducedItemCount[t] in every small-bucket period.",
+      "permanentGuard": "Executable DLSP/CSLP/PLSP must consume MaximumProducedItemCount.GetCount(period), never only MaximumProducedItemCountPerBucket.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-099",
+      "category": "plsp-zero-transition-period",
+      "symptom": "A PLSP instance with MaximumSetupCount[t]=0 can still change setup state because the generic PLSP model only guarantees at most one transition.",
+      "rootCause": "The period-specific transition upper bound is treated only as a classifying maximum.",
+      "correctiveAction": "For every PLSP period t>1 with limit zero, impose y[r,t]=y[r,t-1] for every routing.",
+      "permanentGuard": "PLSP formulation must inspect MaximumSetupCount.GetCount(period) for every period.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-100",
+      "category": "plsp-executable-promotion-parity",
+      "symptom": "PLSP is promoted to Executable without synchronized formulation profile, registry, method applicability, checker projection, tests and documentation.",
+      "rootCause": "Support promotion is applied only at the problem-class catalog layer.",
+      "correctiveAction": "Promote PLSP together with small-bucket-plsp formulation, scientific profile, registry entry, MILP-GENERAL applicability and independent checker evidence.",
+      "permanentGuard": "Executable promotion requires end-to-end class/formulation/method/checker parity.",
+      "status": "active"
     }
   ]
 }

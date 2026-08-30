@@ -51,10 +51,10 @@ public sealed class ScientificFormulationCatalogTests
     }
 
     [Fact]
-    public void DedicatedSmallBucketProfiles_CoverDlspAndCslp()
+    public void DedicatedSmallBucketProfiles_CoverDlspCslpAndPlsp()
     {
         Assert.Equal(
-            3,
+            4,
             MathematicalFormulationScientificCatalog.All.Count);
 
         Assert.True(
@@ -68,6 +68,12 @@ public sealed class ScientificFormulationCatalogTests
                 .SupportsProblemClass(
                     CanonicalLotSizingProblemClassId
                         .ContinuousSetupLotSizing));
+
+        Assert.True(
+            MathematicalFormulationScientificCatalog.PlspSmallBucket
+                .SupportsProblemClass(
+                    CanonicalLotSizingProblemClassId
+                        .ProportionalLotSizingAndScheduling));
     }
 
     [Theory]

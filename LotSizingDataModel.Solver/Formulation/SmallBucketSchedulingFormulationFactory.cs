@@ -1,8 +1,8 @@
 namespace LotSizingDataModel.Solver.Formulation;
 
 /// <summary>
-/// Creates executable DLSP and CSLP formulations by composing the standard
-/// lot-sizing builders with scheduling-specific state/transition families.
+/// Creates executable DLSP, CSLP and PLSP formulations by composing generic
+/// lot-sizing families with scheduling-specific state/transition families.
 /// </summary>
 public static class SmallBucketSchedulingFormulationFactory
 {
@@ -13,6 +13,10 @@ public static class SmallBucketSchedulingFormulationFactory
     public static SmallBucketSchedulingFormulation CreateCslp() =>
         Create(
             SmallBucketSchedulingFormulationKind.Cslp);
+
+    public static SmallBucketSchedulingFormulation CreatePlsp() =>
+        Create(
+            SmallBucketSchedulingFormulationKind.Plsp);
 
     public static SmallBucketSchedulingFormulation Create(
         SmallBucketSchedulingFormulationKind kind)
@@ -32,19 +36,12 @@ public static class SmallBucketSchedulingFormulationFactory
                         builder is not SetupVariableFamilyBuilder &&
                         builder is not LotSizeMultipleVariableFamilyBuilder)
                 .Concat(
-                    kind ==
-                        SmallBucketSchedulingFormulationKind.Dlsp
-                        ? new IStandardLotSizingVariableFamilyBuilder[]
-                        {
-                            new SmallBucketSetupStateVariableFamilyBuilder(),
-                            new SmallBucketProductionActivationVariableFamilyBuilder(),
-                            new SmallBucketSetupStartVariableFamilyBuilder()
-                        }
-                        : new IStandardLotSizingVariableFamilyBuilder[]
-                        {
-                            new SmallBucketSetupStateVariableFamilyBuilder(),
-                            new SmallBucketSetupStartVariableFamilyBuilder()
-                        })
+                    new IStandardLotSizingVariableFamilyBuilder[]
+                    {
+                        new SmallBucketSetupStateVariableFamilyBuilder(),
+                        new SmallBucketProductionActivationVariableFamilyBuilder(),
+                        new SmallBucketSetupStartVariableFamilyBuilder()
+                    })
                 .ToArray();
 
         var objectiveTerms =
@@ -57,6 +54,40 @@ public static class SmallBucketSchedulingFormulationFactory
                 .Append(
                     new SmallBucketSetupStartCostObjectiveTermBuilder())
                 .ToArray();
+
+        var schedulingConstraints =
+            new List<IStandardLotSizingConstraintFamilyBuilder>();
+
+        if (
+            kind ==
+            SmallBucketSchedulingFormulationKind.Plsp)
+        {
+            schedulingConstraints.Add(
+                new PlspSingleSetupStateConstraintFamilyBuilder());
+        }
+        else
+        {
+            schedulingConstraints.Add(
+                new SmallBucketSingleSetupStateConstraintFamilyBuilder());
+        }
+
+        schedulingConstraints.Add(
+            new SmallBucketSetupStartDefinitionConstraintFamilyBuilder());
+
+        schedulingConstraints.Add(
+            new SmallBucketProductionStateConstraintFamilyBuilder(
+                kind));
+
+        schedulingConstraints.Add(
+            new SmallBucketProducedItemCountConstraintFamilyBuilder());
+
+        if (
+            kind ==
+            SmallBucketSchedulingFormulationKind.Plsp)
+        {
+            schedulingConstraints.Add(
+                new PlspSetupTransitionLimitConstraintFamilyBuilder());
+        }
 
         var constraintFamilies =
             StandardLotSizingFormulationFactory
@@ -74,13 +105,7 @@ public static class SmallBucketSchedulingFormulationFactory
                         builder is not
                             GroupingConstraintFamilyBuilder)
                 .Concat(
-                    new IStandardLotSizingConstraintFamilyBuilder[]
-                    {
-                        new SmallBucketSingleSetupStateConstraintFamilyBuilder(),
-                        new SmallBucketSetupStartDefinitionConstraintFamilyBuilder(),
-                        new SmallBucketProductionStateConstraintFamilyBuilder(
-                            kind)
-                    })
+                    schedulingConstraints)
                 .ToArray();
 
         return new SmallBucketSchedulingFormulation(

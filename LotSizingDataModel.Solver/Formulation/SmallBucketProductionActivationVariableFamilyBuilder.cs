@@ -5,7 +5,7 @@ using LotSizingDataModel.Solver.Mapping;
 namespace LotSizingDataModel.Solver.Formulation;
 
 /// <summary>
-/// Mathematical-only DLSP full-bucket production activation variables.
+/// Mathematical-only small-bucket production activation variables.
 /// </summary>
 public sealed class SmallBucketProductionActivationVariableFamilyBuilder :
     StandardLotSizingVariableFamilyBuilderBase
@@ -46,7 +46,7 @@ public sealed class SmallBucketProductionActivationVariableFamilyBuilder :
                     context,
                     $"smallBucketProductionActive_r{routing.Id}_t{period}",
                     key,
-                    "Mathematical-only DLSP full-bucket production flag.");
+                    "Mathematical-only small-bucket positive-production flag.");
             }
         }
 
