@@ -19,6 +19,18 @@ public sealed class SchedulingDescriptor
 
     public int SchedulingResourceCount { get; init; }
 
+    public MicroPeriodLengthMode MicroPeriodLengthMode { get; init; }
+
+    public MicroPeriodAssignmentMode MicroPeriodAssignmentMode { get; init; }
+
+    public bool HasExplicitMicroPeriodGrid { get; init; }
+
+    public int TotalMicroPeriodCount { get; init; }
+
+    public int MaximumMicroPeriodCountPerMacroPeriod { get; init; }
+
+    public bool HasVariableMicroPeriodCount { get; init; }
+
     public bool HasMaximumProducedItemCountConstraint { get; init; }
 
     public int MaximumProducedItemCountPerBucket { get; init; }
@@ -42,6 +54,22 @@ public sealed class SchedulingDescriptor
     public bool HasSmallBucketStructure =>
         BucketMode ==
         SchedulingBucketMode.SmallBucket;
+
+    public bool HasVariableLengthMicroPeriods =>
+        MicroPeriodLengthMode ==
+        MicroPeriodLengthMode.Variable;
+
+    public bool HasFixedLengthMicroPeriods =>
+        MicroPeriodLengthMode ==
+        MicroPeriodLengthMode.Fixed;
+
+    public bool HasSingleItemPerMicroPeriod =>
+        MicroPeriodAssignmentMode ==
+        MicroPeriodAssignmentMode.SingleItem;
+
+    public bool HasMultipleItemsPerMicroPeriod =>
+        MicroPeriodAssignmentMode ==
+        MicroPeriodAssignmentMode.MultipleItems;
 
     public bool HasBigBucketStructure =>
         BucketMode ==

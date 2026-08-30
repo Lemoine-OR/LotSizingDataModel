@@ -29,7 +29,7 @@ namespace LotSizingDataModel.Solution;
 [Serializable]
 [XmlRoot("lotSizingSolution")]
 [XmlType(TypeName = "lotSizingSolution")]
-public sealed class LotSizingSolution :
+public sealed partial class LotSizingSolution :
     ModelObject,
     IPlanningHorizonAware
 {
@@ -409,6 +409,7 @@ public sealed class LotSizingSolution :
     [XmlIgnore]
     public int DecisionCount =>
         ProductionDecisions.Count +
+        WorkCenterSchedulingDecisions.Count +
         InventoryDecisions.Count +
         TransportDecisions.Count +
         PurchaseDecisions.Count +
@@ -432,6 +433,11 @@ public sealed class LotSizingSolution :
     [XmlIgnore]
     public bool HasConsistentPlanningHorizon =>
         ProductionDecisions.All(
+            decision =>
+                decision.PlanningHorizon ==
+                    PlanningHorizon) &&
+
+        WorkCenterSchedulingDecisions.All(
             decision =>
                 decision.PlanningHorizon ==
                     PlanningHorizon) &&
@@ -481,6 +487,10 @@ public sealed class LotSizingSolution :
             decision =>
                 decision.IsInternallyValid) &&
 
+        WorkCenterSchedulingDecisions.All(
+            decision =>
+                decision.IsInternallyValid) &&
+
         InventoryDecisions.All(
             decision =>
                 decision.IsInternallyValid) &&
@@ -522,6 +532,9 @@ public sealed class LotSizingSolution :
             .Distinct()
             .Count() ==
         ProductionDecisions.Count &&
+
+        WorkCenterSchedulingDecisions.Select(decision => (decision.WorkCenter.PlantId, decision.WorkCenter.WorkCenterId)).Distinct().Count() ==
+        WorkCenterSchedulingDecisions.Count &&
 
         InventoryDecisions
             .Select(
@@ -991,6 +1004,12 @@ public sealed class LotSizingSolution :
             decision.ResizeTimeSeries(periodCount);
         }
 
+        foreach (WorkCenterSchedulingDecision decision
+                 in WorkCenterSchedulingDecisions)
+        {
+            decision.ResizeTimeSeries(periodCount);
+        }
+
         foreach (InventoryDecision decision
                  in InventoryDecisions)
         {
@@ -1045,6 +1064,9 @@ public sealed class LotSizingSolution :
             ProductionDecisions);
 
         UnsubscribeFromObjects(
+            WorkCenterSchedulingDecisions);
+
+        UnsubscribeFromObjects(
             InventoryDecisions);
 
         UnsubscribeFromObjects(
@@ -1066,6 +1088,7 @@ public sealed class LotSizingSolution :
             TransportResourceCapacityDecisions);
 
         ProductionDecisions.Clear();
+        WorkCenterSchedulingDecisions.Clear();
         InventoryDecisions.Clear();
         TransportDecisions.Clear();
         PurchaseDecisions.Clear();
@@ -1102,6 +1125,9 @@ public sealed class LotSizingSolution :
 
         ReconnectObjects(
             ProductionDecisions);
+
+        ReconnectObjects(
+            WorkCenterSchedulingDecisions);
 
         ReconnectObjects(
             InventoryDecisions);

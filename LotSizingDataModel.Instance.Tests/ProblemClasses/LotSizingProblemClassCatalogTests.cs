@@ -6,7 +6,7 @@ namespace LotSizingDataModel.Instance.Tests.ProblemClasses;
 public sealed class LotSizingProblemClassCatalogTests
 {
     [Fact]
-    public void Catalog_HasNineExecutableNoClassifiableAndOneCatalogOnly()
+    public void Catalog_HasNineExecutableOneClassifiableAndNoCatalogOnly()
     {
         Assert.Equal(
             10,
@@ -16,10 +16,16 @@ public sealed class LotSizingProblemClassCatalogTests
             9,
             LotSizingProblemClassCatalog.ExecutableClasses.Count);
 
-        Assert.Empty(
-            LotSizingProblemClassCatalog.ClassifiableClasses);
+        LotSizingProblemClassDefinition classifiable =
+            Assert.Single(
+                LotSizingProblemClassCatalog.ClassifiableClasses);
 
-        Assert.Single(
+        Assert.Equal(
+            CanonicalLotSizingProblemClassId
+                .GeneralLotSizingAndScheduling,
+            classifiable.Id);
+
+        Assert.DoesNotContain(
             LotSizingProblemClassCatalog.All,
             definition =>
                 definition.SupportLevel ==
@@ -76,8 +82,12 @@ public sealed class LotSizingProblemClassCatalogTests
             });
 
         Assert.Equal(
-            LotSizingProblemClassSupportLevel.CatalogOnly,
+            LotSizingProblemClassSupportLevel.Classifiable,
             LotSizingProblemClassCatalog.Glsp.SupportLevel);
+
+        Assert.Null(
+            LotSizingProblemClassCatalog.Glsp
+                .UniversalCoreSpecification);
     }
 
     [Fact]

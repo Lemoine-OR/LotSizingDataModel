@@ -14,6 +14,9 @@ public sealed class LotSizingProblemClassAnalyzer
     private readonly SmallBucketSchedulingProblemClassAnalyzer
         _smallBucketSchedulingAnalyzer;
 
+    private readonly MacroMicroSchedulingProblemClassAnalyzer
+        _macroMicroSchedulingAnalyzer;
+
     public LotSizingProblemClassAnalyzer()
         : this(
             new UniversalNotationMatcher(),
@@ -35,6 +38,10 @@ public sealed class LotSizingProblemClassAnalyzer
 
         _smallBucketSchedulingAnalyzer =
             new SmallBucketSchedulingProblemClassAnalyzer(
+                _extensionAnalyzer);
+
+        _macroMicroSchedulingAnalyzer =
+            new MacroMicroSchedulingProblemClassAnalyzer(
                 _extensionAnalyzer);
     }
 
@@ -68,6 +75,16 @@ public sealed class LotSizingProblemClassAnalyzer
                     .ProportionalLotSizingAndScheduling)
         {
             return _smallBucketSchedulingAnalyzer.Assess(
+                descriptor,
+                definition);
+        }
+
+        if (
+            definition.Id ==
+            CanonicalLotSizingProblemClassId
+                .GeneralLotSizingAndScheduling)
+        {
+            return _macroMicroSchedulingAnalyzer.Assess(
                 descriptor,
                 definition);
         }

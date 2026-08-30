@@ -836,6 +836,30 @@
       "notation": "Existing BucketItems summary tokens unchanged",
       "checker": "q is reconstructed from positive production quantity",
       "notes": "Applies to DLSP, CSLP and PLSP."
+    },
+    {
+      "id": "glsp-macro-micro-representation",
+      "domain": "scheduling",
+      "scientificStatus": "implemented",
+      "implementationStatus": "implemented",
+      "core": "Macro/micro grid from MicroPeriodCount with length and assignment modes",
+      "instance": "GLSP canonical membership becomes Classifiable",
+      "mathematics": "No executable GLSP formulation in alpha.28",
+      "notation": "MicroGrid, MicroLen:Var/Fix, MicroItem:1/N, MicroN:Var",
+      "checker": "Micro schedule grid and physical references checked structurally",
+      "notes": "Variable micro-period duration is intentionally not persisted."
+    },
+    {
+      "id": "glsp-normalized-solution-schedule",
+      "domain": "solution",
+      "scientificStatus": "implemented",
+      "implementationStatus": "partial",
+      "core": "ProductionMicroPeriodReference defines ordered macro/local slots",
+      "instance": "MicroPeriodCount remains source of valid slots",
+      "mathematics": "Future GLSP formulation will map into this schedule",
+      "notation": "N/A",
+      "checker": "Work-center, grid, item and routing references checked",
+      "notes": "No solver-specific duration/changeover auxiliary persisted."
     }
   ]
 }

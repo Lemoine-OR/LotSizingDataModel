@@ -69,7 +69,14 @@ internal static class UniversalNotationTokenCatalog
                 [UniversalNotationFeature.SmallBucketContinuousProduction] = "SBProd:Cont",
                 [UniversalNotationFeature.AtMostOneProducedItemPerBucket] = "BucketItems:1",
                 [UniversalNotationFeature.AtMostTwoProducedItemsPerBucket] = "BucketItems:2",
-                [UniversalNotationFeature.AtMostOneSetupTransitionPerBucket] = "SetupTrans:1"
+                [UniversalNotationFeature.AtMostOneSetupTransitionPerBucket] = "SetupTrans:1",
+
+                [UniversalNotationFeature.ExplicitMicroPeriodGrid] = "MicroGrid",
+                [UniversalNotationFeature.VariableLengthMicroPeriods] = "MicroLen:Var",
+                [UniversalNotationFeature.FixedLengthMicroPeriods] = "MicroLen:Fix",
+                [UniversalNotationFeature.SingleItemPerMicroPeriod] = "MicroItem:1",
+                [UniversalNotationFeature.MultipleItemsPerMicroPeriod] = "MicroItem:N",
+                [UniversalNotationFeature.VariableMicroPeriodCount] = "MicroN:Var"
             };
 
     private static readonly IReadOnlyDictionary<

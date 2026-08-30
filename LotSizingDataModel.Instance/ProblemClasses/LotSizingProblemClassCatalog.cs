@@ -158,17 +158,15 @@ public static class LotSizingProblemClassCatalog
 
     public static LotSizingProblemClassDefinition
         Glsp { get; } =
-            CatalogOnly(
+            Classifiable(
                 CanonicalLotSizingProblemClassId
                     .GeneralLotSizingAndScheduling,
                 "GLSP",
                 "General lot-sizing and scheduling problem",
-                new[]
-                {
-                    "IntegratedScheduling",
-                    "MicroPeriodSemantics",
-                    "SequenceSemantics"
-                });
+                note:
+                    "Single-resource two-level macro/micro scheduling class " +
+                    "with a predefined micro-period grid, variable micro-period " +
+                    "lengths and one item/setup state per micro-period.");
 
     public static IReadOnlyList<LotSizingProblemClassDefinition>
         All { get; } =
@@ -219,7 +217,8 @@ public static class LotSizingProblemClassCatalog
             {
                 Dlsp,
                 Cslp,
-                Plsp
+                Plsp,
+                Glsp
             };
 
     public static LotSizingProblemClassDefinition? FindById(

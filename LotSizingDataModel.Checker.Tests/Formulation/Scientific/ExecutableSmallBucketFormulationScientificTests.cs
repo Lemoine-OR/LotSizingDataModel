@@ -67,11 +67,18 @@ public sealed class ExecutableSmallBucketFormulationScientificTests
     }
 
     [Fact]
-    public void Glsp_RemainsCatalogOnly()
+    public void Glsp_IsClassifiableButNotExecutable()
     {
         Assert.Equal(
-            LotSizingProblemClassSupportLevel.CatalogOnly,
+            LotSizingProblemClassSupportLevel.Classifiable,
             LotSizingProblemClassCatalog.Glsp.SupportLevel);
+
+        Assert.DoesNotContain(
+            LotSizingProblemClassCatalog.ExecutableClasses,
+            definition =>
+                definition.Id ==
+                    CanonicalLotSizingProblemClassId
+                        .GeneralLotSizingAndScheduling);
     }
 
     private static LotSizingProblemFeatures Features(

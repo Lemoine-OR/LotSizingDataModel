@@ -137,6 +137,18 @@ public sealed class LotSizingProblemDescriptor
                     features.SmallBucketProductionMode,
                 SchedulingResourceCount =
                     features.SchedulingResourceCount,
+                MicroPeriodLengthMode =
+                    features.MicroPeriodLengthMode,
+                MicroPeriodAssignmentMode =
+                    features.MicroPeriodAssignmentMode,
+                HasExplicitMicroPeriodGrid =
+                    features.HasExplicitMicroPeriodGrid,
+                TotalMicroPeriodCount =
+                    features.TotalMicroPeriodCount,
+                MaximumMicroPeriodCountPerMacroPeriod =
+                    features.MaximumMicroPeriodCountPerMacroPeriod,
+                HasVariableMicroPeriodCount =
+                    features.HasVariableMicroPeriodCount,
                 HasMaximumProducedItemCountConstraint =
                     features.HasMaximumProducedItemCountConstraint,
                 MaximumProducedItemCountPerBucket =
@@ -242,6 +254,18 @@ public sealed class LotSizingProblemDescriptor
                 Scheduling.SmallBucketProductionMode,
             SchedulingResourceCount =
                 Scheduling.SchedulingResourceCount,
+            MicroPeriodLengthMode =
+                Scheduling.MicroPeriodLengthMode,
+            MicroPeriodAssignmentMode =
+                Scheduling.MicroPeriodAssignmentMode,
+            HasExplicitMicroPeriodGrid =
+                Scheduling.HasExplicitMicroPeriodGrid,
+            TotalMicroPeriodCount =
+                Scheduling.TotalMicroPeriodCount,
+            MaximumMicroPeriodCountPerMacroPeriod =
+                Scheduling.MaximumMicroPeriodCountPerMacroPeriod,
+            HasVariableMicroPeriodCount =
+                Scheduling.HasVariableMicroPeriodCount,
             HasMaximumProducedItemCountConstraint =
                 Scheduling.HasMaximumProducedItemCountConstraint,
             MaximumProducedItemCountPerBucket =

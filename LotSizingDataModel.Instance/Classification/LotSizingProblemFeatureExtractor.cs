@@ -488,7 +488,37 @@ public static class LotSizingProblemFeatureExtractor
                                 workCenter.SchedulingProfile?
                                     .MaximumSetupTransitionsPerBucket ?? 0)
                         .DefaultIfEmpty(0)
-                        .Max()
+                        .Max(),
+
+                MicroPeriodLengthMode =
+                    supplyChain.WorkCenters
+                        .Where(workCenter => workCenter.SchedulingProfile is not null)
+                        .Select(workCenter => workCenter.SchedulingProfile!.MicroPeriodLengthMode)
+                        .Distinct().Take(2).ToArray() is var microLengthModes &&
+                    microLengthModes.Length == 1
+                        ? microLengthModes[0]
+                        : MicroPeriodLengthMode.Unspecified,
+
+                MicroPeriodAssignmentMode =
+                    supplyChain.WorkCenters
+                        .Where(workCenter => workCenter.SchedulingProfile is not null)
+                        .Select(workCenter => workCenter.SchedulingProfile!.MicroPeriodAssignmentMode)
+                        .Distinct().Take(2).ToArray() is var microAssignmentModes &&
+                    microAssignmentModes.Length == 1
+                        ? microAssignmentModes[0]
+                        : MicroPeriodAssignmentMode.Unspecified,
+
+                HasExplicitMicroPeriodGrid =
+                    supplyChain.WorkCenters.Any(workCenter => workCenter.SchedulingProfile?.HasExplicitMicroPeriodGrid == true),
+
+                TotalMicroPeriodCount =
+                    supplyChain.WorkCenters.Sum(workCenter => workCenter.SchedulingProfile?.TotalMicroPeriodCount ?? 0),
+
+                MaximumMicroPeriodCountPerMacroPeriod =
+                    supplyChain.WorkCenters.Select(workCenter => workCenter.SchedulingProfile?.MaximumMicroPeriodCountPerMacroPeriod ?? 0).DefaultIfEmpty(0).Max(),
+
+                HasVariableMicroPeriodCount =
+                    supplyChain.WorkCenters.Any(workCenter => workCenter.SchedulingProfile?.HasVariableMicroPeriodCount == true)
             };
 
         return features;

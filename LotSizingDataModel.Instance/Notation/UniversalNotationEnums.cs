@@ -92,5 +92,12 @@ public enum UniversalNotationFeature
     SmallBucketContinuousProduction = 91,
     AtMostOneProducedItemPerBucket = 92,
     AtMostTwoProducedItemsPerBucket = 93,
-    AtMostOneSetupTransitionPerBucket = 94
+    AtMostOneSetupTransitionPerBucket = 94,
+
+    ExplicitMicroPeriodGrid = 95,
+    VariableLengthMicroPeriods = 96,
+    FixedLengthMicroPeriods = 97,
+    SingleItemPerMicroPeriod = 98,
+    MultipleItemsPerMicroPeriod = 99,
+    VariableMicroPeriodCount = 100
 }

@@ -1,4 +1,4 @@
-using LotSizingDataModel.Checker.Common;
+﻿using LotSizingDataModel.Checker.Common;
 using LotSizingDataModel.Checker.Configuration;
 using LotSizingDataModel.Checker.Contracts;
 using LotSizingDataModel.Checker.Results;
@@ -67,6 +67,13 @@ public sealed class SolutionStructuralChecker :
                 solution,
                 options,
                 result);
+
+            foreach (
+                SolutionCheckIssue schedulingIssue
+                in new MacroMicroSchedulingStructuralValidator().Validate(instance, solution))
+            {
+                result.AddIssue(schedulingIssue);
+            }
 
             CompareExpectedDecisionStructure(
                 instance,

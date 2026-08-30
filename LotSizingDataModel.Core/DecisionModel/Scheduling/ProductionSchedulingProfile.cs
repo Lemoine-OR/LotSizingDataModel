@@ -17,6 +17,8 @@ public sealed class ProductionSchedulingProfile :
 {
     private SchedulingBucketMode _bucketMode;
     private SmallBucketProductionMode _smallBucketProductionMode;
+    private MicroPeriodLengthMode _microPeriodLengthMode;
+    private MicroPeriodAssignmentMode _microPeriodAssignmentMode;
     private SetupCarryOverPolicy _setupCarryOverPolicy;
     private int _initialSetupItemId;
 
@@ -34,6 +36,20 @@ public sealed class ProductionSchedulingProfile :
         set => SetProperty(
             ref _smallBucketProductionMode,
             value);
+    }
+
+    [XmlAttribute("microPeriodLengthMode")]
+    public MicroPeriodLengthMode MicroPeriodLengthMode
+    {
+        get => _microPeriodLengthMode;
+        set => SetProperty(ref _microPeriodLengthMode, value);
+    }
+
+    [XmlAttribute("microPeriodAssignmentMode")]
+    public MicroPeriodAssignmentMode MicroPeriodAssignmentMode
+    {
+        get => _microPeriodAssignmentMode;
+        set => SetProperty(ref _microPeriodAssignmentMode, value);
     }
 
     [XmlAttribute("setupCarryOverPolicy")]
@@ -117,6 +133,45 @@ public sealed class ProductionSchedulingProfile :
     [XmlIgnore]
     public bool HasMaximumProducedItemCountConstraint =>
         MaximumProducedItemCount is not null;
+
+    [XmlIgnore]
+    public bool HasExplicitMicroPeriodGrid =>
+        BucketMode == SchedulingBucketMode.MacroMicro &&
+        MicroPeriodCount is not null &&
+        MicroPeriodCount.PlanningHorizon > 0;
+
+    [XmlIgnore]
+    public int TotalMicroPeriodCount =>
+        MicroPeriodCount is null
+            ? 0
+            : Enumerable
+                .Range(1, MicroPeriodCount.PlanningHorizon)
+                .Sum(period => MicroPeriodCount.GetCount(period));
+
+    [XmlIgnore]
+    public int MaximumMicroPeriodCountPerMacroPeriod =>
+        GetMaximumValue(
+            MicroPeriodCount,
+            parameter => parameter.GetCount);
+
+    [XmlIgnore]
+    public bool HasVariableMicroPeriodCount =>
+        MicroPeriodCount is not null &&
+        MicroPeriodCount.PlanningHorizon > 1 &&
+        Enumerable
+            .Range(1, MicroPeriodCount.PlanningHorizon)
+            .Select(period => MicroPeriodCount.GetCount(period))
+            .Distinct()
+            .Take(2)
+            .Count() > 1;
+
+    [XmlIgnore]
+    public bool HasVariableLengthMicroPeriods =>
+        MicroPeriodLengthMode == MicroPeriodLengthMode.Variable;
+
+    [XmlIgnore]
+    public bool HasSingleItemPerMicroPeriod =>
+        MicroPeriodAssignmentMode == MicroPeriodAssignmentMode.SingleItem;
 
     [XmlIgnore]
     public int MaximumProducedItemCountPerBucket =>
@@ -203,6 +258,33 @@ public sealed class ProductionSchedulingProfile :
 
         OnPropertyChanged(nameof(PlanningHorizon));
         OnPropertyChanged(nameof(HasConsistentPlanningHorizon));
+    }
+
+    public IEnumerable<ProductionMicroPeriodReference>
+        EnumerateMicroPeriods()
+    {
+        if (MicroPeriodCount is null)
+        {
+            yield break;
+        }
+
+        for (int macroPeriod = 1;
+             macroPeriod <= MicroPeriodCount.PlanningHorizon;
+             macroPeriod++)
+        {
+            int count =
+                MicroPeriodCount.GetCount(macroPeriod);
+
+            for (int microPeriodIndex = 1;
+                 microPeriodIndex <= count;
+                 microPeriodIndex++)
+            {
+                yield return
+                    new ProductionMicroPeriodReference(
+                        macroPeriod,
+                        microPeriodIndex);
+            }
+        }
     }
 
     private static int GetMaximumValue<T>(

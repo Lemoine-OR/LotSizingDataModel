@@ -901,6 +901,60 @@
       "correctiveAction": "Promote PLSP together with small-bucket-plsp formulation, scientific profile, registry entry, MILP-GENERAL applicability and independent checker evidence.",
       "permanentGuard": "Executable promotion requires end-to-end class/formulation/method/checker parity.",
       "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-101",
+      "category": "glsp-micro-period-slot-vs-fixed-duration",
+      "symptom": "GLSP micro-periods are represented as ordinary fixed-duration planning periods.",
+      "rootCause": "Representation/validation propagation was incomplete.",
+      "correctiveAction": "Represent ordered macro/local slots and an explicit length mode; do not persist fixed duration for classical variable-length GLSP.",
+      "permanentGuard": "Represent ordered macro/local slots and an explicit length mode; do not persist fixed duration for classical variable-length GLSP.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-102",
+      "category": "micro-period-count-single-source",
+      "symptom": "A second instance micro-period list duplicates MicroPeriodCount and can drift.",
+      "rootCause": "Representation/validation propagation was incomplete.",
+      "correctiveAction": "Keep MicroPeriodCount[t] as the sole instance source; derive references through EnumerateMicroPeriods().",
+      "permanentGuard": "Keep MicroPeriodCount[t] as the sole instance source; derive references through EnumerateMicroPeriods().",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-103",
+      "category": "glsp-classifiable-before-executable",
+      "symptom": "GLSP is promoted directly to Executable when representation becomes available.",
+      "rootCause": "Representation/validation propagation was incomplete.",
+      "correctiveAction": "Promote only to Classifiable until formulation/mapping/checker solve evidence exists.",
+      "permanentGuard": "Promote only to Classifiable until formulation/mapping/checker solve evidence exists.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-104",
+      "category": "glsp-solution-schedule-vs-formulation-auxiliary",
+      "symptom": "Solver-specific duration/changeover auxiliaries are persisted prematurely.",
+      "rootCause": "Representation/validation propagation was incomplete.",
+      "correctiveAction": "Persist only normalized slot/setup/routing/quantity facts in alpha.28.",
+      "permanentGuard": "Persist only normalized slot/setup/routing/quantity facts in alpha.28.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-105",
+      "category": "macro-micro-solution-grid-structural-check",
+      "symptom": "Serialized micro schedules can reference slots or physical objects outside the instance.",
+      "rootCause": "Representation/validation propagation was incomplete.",
+      "correctiveAction": "Validate work center, grid, item, routing and routing/work-center consistency structurally.",
+      "permanentGuard": "Validate work center, grid, item, routing and routing/work-center consistency structurally.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-106",
+      "category": "checker-symbol-namespace-contract",
+      "symptom": "A new Checker component references SolutionCheckSeverity and SolutionCheckIssueKind while importing only Checker.Results, causing the Checker project to fail compilation.",
+      "rootCause": "Checker result DTOs and Checker common enums live in distinct namespaces, but fabrication inferred a common namespace from their usage together.",
+      "correctiveAction": "Resolve Checker symbols against source declarations. SolutionCheckIssue is in LotSizingDataModel.Checker.Results; SolutionCheckSeverity and SolutionCheckIssueKind are in LotSizingDataModel.Checker.Common.",
+      "permanentGuard": "Every new or modified Checker component using SolutionCheckIssue, SolutionCheckSeverity or SolutionCheckIssueKind must import the source-declared namespaces or use fully qualified names before candidate delivery.",
+      "status": "active"
     }
   ]
 }

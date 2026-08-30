@@ -317,6 +317,36 @@ public sealed class UniversalNotationGenerator
             yield return UniversalNotationFeature.MacroMicroScheduling;
         }
 
+        if (descriptor.Scheduling.HasExplicitMicroPeriodGrid)
+        {
+            yield return UniversalNotationFeature.ExplicitMicroPeriodGrid;
+        }
+
+        if (descriptor.Scheduling.HasVariableLengthMicroPeriods)
+        {
+            yield return UniversalNotationFeature.VariableLengthMicroPeriods;
+        }
+
+        if (descriptor.Scheduling.HasFixedLengthMicroPeriods)
+        {
+            yield return UniversalNotationFeature.FixedLengthMicroPeriods;
+        }
+
+        if (descriptor.Scheduling.HasSingleItemPerMicroPeriod)
+        {
+            yield return UniversalNotationFeature.SingleItemPerMicroPeriod;
+        }
+
+        if (descriptor.Scheduling.HasMultipleItemsPerMicroPeriod)
+        {
+            yield return UniversalNotationFeature.MultipleItemsPerMicroPeriod;
+        }
+
+        if (descriptor.Scheduling.HasVariableMicroPeriodCount)
+        {
+            yield return UniversalNotationFeature.VariableMicroPeriodCount;
+        }
+
         if (descriptor.Scheduling.HasInitialSetupState)
         {
             yield return UniversalNotationFeature.InitialSetupState;

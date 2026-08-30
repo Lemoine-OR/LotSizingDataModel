@@ -95,6 +95,12 @@ public sealed class LotSizingProblemFeatures : ModelObject
     private bool _hasMaximumProducedItemCountConstraint;
     private int _maximumProducedItemCountPerBucket;
     private int _maximumSetupTransitionsPerBucket;
+    private MicroPeriodLengthMode _microPeriodLengthMode;
+    private MicroPeriodAssignmentMode _microPeriodAssignmentMode;
+    private bool _hasExplicitMicroPeriodGrid;
+    private int _totalMicroPeriodCount;
+    private int _maximumMicroPeriodCountPerMacroPeriod;
+    private bool _hasVariableMicroPeriodCount;
 
     /// <summary>
     /// Initializes an empty lot-sizing problem-feature profile.
@@ -1058,6 +1064,48 @@ public sealed class LotSizingProblemFeatures : ModelObject
             ref _maximumSetupTransitionsPerBucket,
             value,
             nameof(MaximumSetupTransitionsPerBucket));
+    }
+
+    [XmlAttribute("microPeriodLengthMode")]
+    public MicroPeriodLengthMode MicroPeriodLengthMode
+    {
+        get => _microPeriodLengthMode;
+        set => SetProperty(ref _microPeriodLengthMode, value);
+    }
+
+    [XmlAttribute("microPeriodAssignmentMode")]
+    public MicroPeriodAssignmentMode MicroPeriodAssignmentMode
+    {
+        get => _microPeriodAssignmentMode;
+        set => SetProperty(ref _microPeriodAssignmentMode, value);
+    }
+
+    [XmlAttribute("hasExplicitMicroPeriodGrid")]
+    public bool HasExplicitMicroPeriodGrid
+    {
+        get => _hasExplicitMicroPeriodGrid;
+        set => SetProperty(ref _hasExplicitMicroPeriodGrid, value);
+    }
+
+    [XmlAttribute("totalMicroPeriodCount")]
+    public int TotalMicroPeriodCount
+    {
+        get => _totalMicroPeriodCount;
+        set => SetNonNegativeCount(ref _totalMicroPeriodCount, value, nameof(TotalMicroPeriodCount));
+    }
+
+    [XmlAttribute("maximumMicroPeriodCountPerMacroPeriod")]
+    public int MaximumMicroPeriodCountPerMacroPeriod
+    {
+        get => _maximumMicroPeriodCountPerMacroPeriod;
+        set => SetNonNegativeCount(ref _maximumMicroPeriodCountPerMacroPeriod, value, nameof(MaximumMicroPeriodCountPerMacroPeriod));
+    }
+
+    [XmlAttribute("hasVariableMicroPeriodCount")]
+    public bool HasVariableMicroPeriodCount
+    {
+        get => _hasVariableMicroPeriodCount;
+        set => SetProperty(ref _hasVariableMicroPeriodCount, value);
     }
 
     private void NotifyDerivedProperties()
