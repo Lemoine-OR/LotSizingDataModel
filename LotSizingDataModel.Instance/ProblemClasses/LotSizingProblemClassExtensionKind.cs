@@ -45,5 +45,8 @@ public enum LotSizingProblemClassExtensionKind
     SetupCarryOver,
     SequenceDependentChangeoverTimes,
     SequenceDependentChangeoverCosts,
-    MaximumSetupCount
+    MaximumSetupCount,
+    SetupCarryOverForbidden,
+    MaximumProducedItemCount,
+    GroupingConstraint
 }

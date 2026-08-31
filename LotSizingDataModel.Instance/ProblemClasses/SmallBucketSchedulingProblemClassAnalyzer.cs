@@ -213,7 +213,9 @@ public sealed class SmallBucketSchedulingProblemClassAnalyzer
                     LotSizingProblemClassExtensionKind
                         .IntegratedScheduling,
                     LotSizingProblemClassExtensionKind
-                        .SmallBucketScheduling
+                        .SmallBucketScheduling,
+                    LotSizingProblemClassExtensionKind
+                        .MaximumProducedItemCount
                 });
     }
 
@@ -240,7 +242,9 @@ public sealed class SmallBucketSchedulingProblemClassAnalyzer
                     LotSizingProblemClassExtensionKind
                         .IntegratedScheduling,
                     LotSizingProblemClassExtensionKind
-                        .SmallBucketScheduling
+                        .SmallBucketScheduling,
+                    LotSizingProblemClassExtensionKind
+                        .MaximumProducedItemCount
                 });
     }
 
@@ -290,7 +294,9 @@ public sealed class SmallBucketSchedulingProblemClassAnalyzer
                     LotSizingProblemClassExtensionKind
                         .SmallBucketScheduling,
                     LotSizingProblemClassExtensionKind
-                        .MaximumSetupCount
+                        .MaximumSetupCount,
+                    LotSizingProblemClassExtensionKind
+                        .MaximumProducedItemCount
                 });
     }
 

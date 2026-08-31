@@ -1027,6 +1027,96 @@
       "correctiveAction": "Resolve Core fixture types against their source namespaces; Item requires LotSizingDataModel.Core.LogicalModel.",
       "permanentGuard": "Every new/modified C# test containing 'new Item(' must import LotSizingDataModel.Core.LogicalModel or use the fully qualified type.",
       "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-115",
+      "category": "setup-start-domain-context",
+      "symptom": "Initial/reset semantics cannot be independently reconstructed when setup-start domain keys contain only routing and period.",
+      "rootCause": "Cross-layer scheduling propagation was incomplete or conflated state with occurrence.",
+      "correctiveAction": "Encode fixed predecessor and reset-boundary semantics in mathematical domain keys, never as duplicate Solution data.",
+      "permanentGuard": "Encode fixed predecessor and reset-boundary semantics in mathematical domain keys, never as duplicate Solution data.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-116",
+      "category": "scheduling-setup-time-on-occurrence",
+      "symptom": "SetupTime multiplied by persistent scheduling setup state is charged repeatedly.",
+      "rootCause": "Cross-layer scheduling propagation was incomplete or conflated state with occurrence.",
+      "correctiveAction": "Scheduling capacity consumes SetupTime on actual setup-start occurrences only.",
+      "permanentGuard": "Scheduling capacity consumes SetupTime on actual setup-start occurrences only.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-117",
+      "category": "grouping-on-setup-occurrence",
+      "symptom": "GroupingConstraint is applied to persistent setup state.",
+      "rootCause": "Cross-layer scheduling propagation was incomplete or conflated state with occurrence.",
+      "correctiveAction": "Apply the permanent spacing rule exclusively to actual setup-start occurrences.",
+      "permanentGuard": "Apply the permanent spacing rule exclusively to actual setup-start occurrences.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-118",
+      "category": "dlsp-capacity-extension-non-speculation",
+      "symptom": "SetupTime/acquired capacity is inserted into DLSP all-or-nothing equality without a proven exact revision.",
+      "rootCause": "Cross-layer scheduling propagation was incomplete or conflated state with occurrence.",
+      "correctiveAction": "Keep those DLSP interactions unsupported until an exact formulation exists.",
+      "permanentGuard": "Keep those DLSP interactions unsupported until an exact formulation exists.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-119",
+      "category": "plsp-forbidden-carryover-non-speculation",
+      "symptom": "Forbidden carry-over is approximated by resetting PLSP outgoing state despite incoming-state production.",
+      "rootCause": "Cross-layer scheduling propagation was incomplete or conflated state with occurrence.",
+      "correctiveAction": "Keep PLSP forbidden carry-over unsupported until explicit incoming-state semantics are modeled.",
+      "permanentGuard": "Keep PLSP forbidden carry-over unsupported until explicit incoming-state semantics are modeled.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-120",
+      "category": "glsp-initial-transition",
+      "symptom": "GLSP initial setup avoids first setup cost but initial directional changeover time/cost is omitted.",
+      "rootCause": "Cross-layer scheduling propagation was incomplete or conflated state with occurrence.",
+      "correctiveAction": "Create exact first-micro changeover variables from the fixed initial item.",
+      "permanentGuard": "Create exact first-micro changeover variables from the fixed initial item.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-121",
+      "category": "scheduling-additional-capacity-single-business-decision",
+      "symptom": "Scheduling invents a second additional-capacity decision.",
+      "rootCause": "Cross-layer scheduling propagation was incomplete or conflated state with occurrence.",
+      "correctiveAction": "Reuse WorkCenterAdditionalCapacity variable/cost/Solution/checker infrastructure and only specialize scheduling capacity equations.",
+      "permanentGuard": "Reuse WorkCenterAdditionalCapacity variable/cost/Solution/checker infrastructure and only specialize scheduling capacity equations.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-122",
+      "category": "forbidden-carryover-lossless-classification",
+      "symptom": "Forbidden carry-over collapses into Unspecified.",
+      "rootCause": "Cross-layer scheduling propagation was incomplete or conflated state with occurrence.",
+      "correctiveAction": "Propagate SetupCarryOverPolicy itself and expose SCO:0 plus a dedicated extension.",
+      "permanentGuard": "Propagate SetupCarryOverPolicy itself and expose SCO:0 plus a dedicated extension.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-123",
+      "category": "maximum-produced-item-count-core-vs-extension",
+      "symptom": "MaximumProducedItemCount is either always treated as an extension or always hidden as core.",
+      "rootCause": "Cross-layer scheduling propagation was incomplete or conflated state with occurrence.",
+      "correctiveAction": "Treat it as canonical core for DLSP/CSLP/PLSP and as an optional extension for GLSP.",
+      "permanentGuard": "Treat it as canonical core for DLSP/CSLP/PLSP and as an optional extension for GLSP.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-124",
+      "category": "grouping-taxonomy-parity",
+      "symptom": "GroupingConstraint is executable but absent from features/classification/notation.",
+      "rootCause": "Cross-layer scheduling propagation was incomplete or conflated state with occurrence.",
+      "correctiveAction": "Expose HasGroupingConstraints, GroupingConstraint extension and Group notation token while preserving its existing math semantics.",
+      "permanentGuard": "Expose HasGroupingConstraints, GroupingConstraint extension and Group notation token while preserving its existing math semantics.",
+      "status": "active"
     }
   ]
 }

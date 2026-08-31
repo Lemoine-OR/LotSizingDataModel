@@ -41,6 +41,11 @@ public sealed class SchedulingDescriptor
 
     public bool HasSetupCarryOver { get; init; }
 
+    public SetupCarryOverPolicy SetupCarryOverPolicy { get; init; }
+
+    public bool HasSetupCarryOverForbidden =>
+        SetupCarryOverPolicy == SetupCarryOverPolicy.Forbidden;
+
     public bool HasSequenceDependentChangeoverTimes { get; init; }
 
     public bool HasSequenceDependentChangeoverCosts { get; init; }

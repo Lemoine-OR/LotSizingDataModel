@@ -2,50 +2,15 @@ using LotSizingDataModel.Core.DecisionModel.Scheduling;
 using LotSizingDataModel.Core.Relationships;
 using LotSizingDataModel.Instance;
 using LotSizingDataModel.Solver.Building;
-
+using LotSizingDataModel.Solver.Modeling;
 namespace LotSizingDataModel.Solver.Formulation;
-
-public sealed class GlspChangeoverCostObjectiveTermBuilder :
-    StandardLotSizingObjectiveTermBuilderBase
+public sealed class GlspChangeoverCostObjectiveTermBuilder : StandardLotSizingObjectiveTermBuilderBase
 {
-    public override string TermFamilyId => "glspChangeoverCost";
-
-    protected override ValueTask BuildTermsAsync(
-        LotSizingInstance instance,
-        MathematicalModelBuildContext context,
-        LinearExpressionBuilder expressionBuilder,
-        StandardLotSizingFormulationOptions options,
-        CancellationToken cancellationToken)
+    public override string TermFamilyId=>"glspChangeoverCost";
+    protected override ValueTask BuildTermsAsync(LotSizingInstance instance,MathematicalModelBuildContext context,LinearExpressionBuilder expressionBuilder,StandardLotSizingFormulationOptions options,CancellationToken cancellationToken)
     {
-        (int plantId, var workCenter, ProductionSchedulingProfile profile) =
-            GlspSchedulingData.GetSchedulingWorkCenter(instance);
-        IReadOnlyList<ProductionRouting> routings =
-            GlspSchedulingData.GetRoutings(instance, plantId, workCenter.Id);
-        var microPeriods = profile.EnumerateMicroPeriods().ToArray();
-
-        for (int index = 1; index < microPeriods.Length; index++)
-        {
-            var current = microPeriods[index];
-            foreach (ProductionRouting from in routings)
-            {
-                foreach (ProductionRouting to in routings)
-                {
-                    if (from.ItemId == to.ItemId) continue;
-                    ProductionChangeover? changeover =
-                        GlspSchedulingData.FindChangeover(profile, from.ItemId, to.ItemId);
-                    double cost = changeover?.ChangeoverCost?[current.MacroPeriod] ?? 0.0;
-                    if (cost == 0.0) continue;
-
-                    AddCostTerm(
-                        context,
-                        expressionBuilder,
-                        GlspFormulationVariableKeyFactory.CreateChangeoverKey(
-                            plantId, workCenter.Id, from.ItemId, to.ItemId, current),
-                        cost);
-                }
-            }
-        }
-
+        var (plantId,wc,profile)=GlspSchedulingData.GetSchedulingWorkCenter(instance);var routings=GlspSchedulingData.GetRoutings(instance,plantId,wc.Id);
+        foreach(var m in profile.EnumerateMicroPeriods())foreach(var from in routings)foreach(var to in routings){if(from.ItemId==to.ItemId)continue;string key=GlspFormulationVariableKeyFactory.CreateChangeoverKey(plantId,wc.Id,from.ItemId,to.ItemId,m);if(!context.VariableRegistry.TryGet(key,out MathematicalVariable? variable)||variable is null)continue;double cost=GlspSchedulingData.FindChangeover(profile,from.ItemId,to.ItemId)?.ChangeoverCost?[m.MacroPeriod]??0.0;if(cost!=0)AddCostTerm(context,expressionBuilder,key,cost);}
         return ValueTask.CompletedTask;
     }
 }

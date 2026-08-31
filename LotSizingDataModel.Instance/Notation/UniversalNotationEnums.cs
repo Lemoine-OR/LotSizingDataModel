@@ -99,5 +99,7 @@ public enum UniversalNotationFeature
     FixedLengthMicroPeriods = 97,
     SingleItemPerMicroPeriod = 98,
     MultipleItemsPerMicroPeriod = 99,
-    VariableMicroPeriodCount = 100
+    VariableMicroPeriodCount = 100,
+    SetupCarryOverForbidden = 101,
+    GroupingConstraint = 102
 }

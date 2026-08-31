@@ -1,3 +1,4 @@
+using LotSizingDataModel.Core.DecisionModel.Scheduling;
 using LotSizingDataModel.Instance.Descriptors;
 
 namespace LotSizingDataModel.Instance.ProblemClasses;
@@ -69,6 +70,11 @@ public sealed class LotSizingProblemClassExtensionAnalyzer
         Add(
             descriptor.Production.HasLotSizeMultiples,
             LotSizingProblemClassExtensionKind.LotSizeMultiple,
+            extensions);
+
+        Add(
+            descriptor.Production.HasGroupingConstraints,
+            LotSizingProblemClassExtensionKind.GroupingConstraint,
             extensions);
 
         Add(
@@ -169,6 +175,16 @@ public sealed class LotSizingProblemClassExtensionAnalyzer
         Add(
             descriptor.Scheduling.HasSetupCarryOver,
             LotSizingProblemClassExtensionKind.SetupCarryOver,
+            extensions);
+
+        Add(
+            descriptor.Scheduling.SetupCarryOverPolicy == SetupCarryOverPolicy.Forbidden,
+            LotSizingProblemClassExtensionKind.SetupCarryOverForbidden,
+            extensions);
+
+        Add(
+            descriptor.Scheduling.HasMaximumProducedItemCountConstraint,
+            LotSizingProblemClassExtensionKind.MaximumProducedItemCount,
             extensions);
 
         Add(

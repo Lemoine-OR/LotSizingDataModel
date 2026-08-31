@@ -884,6 +884,42 @@
       "notation": "SDCT / SDCC",
       "checker": "z derived from consecutive normalized setup states",
       "notes": "No transition before the first modeled micro-period in alpha.29."
+    },
+    {
+      "id": "advanced-scheduling-extensions-alpha30",
+      "domain": "scheduling",
+      "scientificStatus": "implemented",
+      "implementationStatus": "implemented",
+      "core": "Initial setup, carry-over policy, SetupTime, FixedSetupCost, setup/produced-item counts, GroupingConstraint and AdditionalCapacity",
+      "instance": "Forbidden carry-over and grouping propagated losslessly",
+      "mathematics": "Setup-start occurrence layer for advanced small-bucket and GLSP",
+      "notation": "SCO / SCO:0 / Group",
+      "checker": "Setup starts and macro activation reconstructed independently",
+      "notes": "DLSP SetupTime/additional capacity and PLSP forbidden carry-over remain explicitly unsupported."
+    },
+    {
+      "id": "scheduling-grouping-constraint-execution",
+      "domain": "scheduling",
+      "scientificStatus": "implemented",
+      "implementationStatus": "implemented",
+      "core": "Existing GroupingConstraint",
+      "instance": "HasGroupingConstraints feature and extension taxonomy",
+      "mathematics": "Minimum spacing on setup-start occurrences",
+      "notation": "Group",
+      "checker": "Generated-model feasibility checks same inequalities",
+      "notes": "GLSP spacing unit is macro planning period."
+    },
+    {
+      "id": "scheduling-additional-production-capacity",
+      "domain": "capacity",
+      "scientificStatus": "implemented",
+      "implementationStatus": "partial",
+      "core": "Existing WorkCenter AdditionalCapacity/Cost",
+      "instance": "Existing feature retained",
+      "mathematics": "CSLP/PLSP/GLSP scheduling capacity subtracts standard additional-capacity variable",
+      "notation": "Existing capacity semantics",
+      "checker": "Existing WorkCenterCapacityDecision projection",
+      "notes": "DLSP remains unsupported pending exact formulation."
     }
   ]
 }

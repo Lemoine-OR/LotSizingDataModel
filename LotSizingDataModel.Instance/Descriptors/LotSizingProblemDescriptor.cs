@@ -82,7 +82,8 @@ public sealed class LotSizingProblemDescriptor
                 HasLeadTimes = features.HasProductionLeadTimes,
                 HasMinimumLotSizes = features.HasMinimumLotSizes,
                 HasMaximumLotSizes = features.HasMaximumLotSizes,
-                HasLotSizeMultiples = features.HasLotSizeMultiples
+                HasLotSizeMultiples = features.HasLotSizeMultiples,
+                HasGroupingConstraints = features.HasGroupingConstraints
             },
             Capacity = new CapacityDescriptor
             {
@@ -157,6 +158,7 @@ public sealed class LotSizingProblemDescriptor
                     features.MaximumSetupTransitionsPerBucket,
                 HasInitialSetupState = features.HasInitialSetupState,
                 HasSetupCarryOver = features.HasSetupCarryOver,
+                SetupCarryOverPolicy = features.SetupCarryOverPolicy,
                 HasSequenceDependentChangeoverTimes =
                     features.HasSequenceDependentChangeoverTimes,
                 HasSequenceDependentChangeoverCosts =
@@ -225,6 +227,7 @@ public sealed class LotSizingProblemDescriptor
             HasMinimumLotSizes = Production.HasMinimumLotSizes,
             HasMaximumLotSizes = Production.HasMaximumLotSizes,
             HasLotSizeMultiples = Production.HasLotSizeMultiples,
+            HasGroupingConstraints = Production.HasGroupingConstraints,
 
             HasAdditionalProductionCapacity = Capacity.HasAdditionalProductionCapacity,
             HasAdditionalWarehouseCapacity = Capacity.HasAdditionalWarehouseCapacity,
@@ -274,6 +277,7 @@ public sealed class LotSizingProblemDescriptor
                 Scheduling.MaximumSetupTransitionsPerBucket,
             HasInitialSetupState = Scheduling.HasInitialSetupState,
             HasSetupCarryOver = Scheduling.HasSetupCarryOver,
+            SetupCarryOverPolicy = Scheduling.SetupCarryOverPolicy,
             HasSequenceDependentChangeoverTimes =
                 Scheduling.HasSequenceDependentChangeoverTimes,
             HasSequenceDependentChangeoverCosts =

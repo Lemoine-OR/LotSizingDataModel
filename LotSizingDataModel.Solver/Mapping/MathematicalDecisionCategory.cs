@@ -153,4 +153,10 @@ public static class MathematicalDecisionCategory
 
     public const string AuxiliaryMicroPeriodChangeover =
         "auxiliaryMicroPeriodChangeover";
+
+    public const string AuxiliaryMicroPeriodSetupStart =
+        "auxiliaryMicroPeriodSetupStart";
+
+    public const string AuxiliaryMacroProductionActivation =
+        "auxiliaryMacroProductionActivation";
 }

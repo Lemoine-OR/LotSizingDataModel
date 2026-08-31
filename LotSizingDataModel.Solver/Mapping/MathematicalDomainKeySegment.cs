@@ -129,6 +129,9 @@ public static class MathematicalDomainKeySegment
     public const string ToItem =
         "toItem";
 
+    public const string SetupReset =
+        "setupReset";
+
     /// <summary>
     /// Operation identifier segment.
     /// </summary>

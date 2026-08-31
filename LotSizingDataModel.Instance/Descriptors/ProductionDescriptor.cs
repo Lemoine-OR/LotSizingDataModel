@@ -8,6 +8,7 @@ public sealed class ProductionDescriptor
     public bool HasMinimumLotSizes { get; init; }
     public bool HasMaximumLotSizes { get; init; }
     public bool HasLotSizeMultiples { get; init; }
+    public bool HasGroupingConstraints { get; init; }
 
     public bool HasLotSizeRestrictions =>
         HasMinimumLotSizes || HasMaximumLotSizes || HasLotSizeMultiples;

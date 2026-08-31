@@ -2,73 +2,27 @@ using LotSizingDataModel.Core.DecisionModel.Scheduling;
 using LotSizingDataModel.Core.Relationships;
 using LotSizingDataModel.Instance;
 using LotSizingDataModel.Solver.Building;
+using LotSizingDataModel.Solver.Mapping;
 using LotSizingDataModel.Solver.Modeling;
-
 namespace LotSizingDataModel.Solver.Formulation;
-
-public sealed class GlspMacroCapacityConstraintFamilyBuilder :
-    StandardLotSizingConstraintFamilyBuilderBase
+public sealed class GlspMacroCapacityConstraintFamilyBuilder : StandardLotSizingConstraintFamilyBuilderBase
 {
-    public override string ConstraintFamilyId => "glspMacroCapacity";
-
-    protected override ValueTask BuildConstraintsAsync(
-        LotSizingInstance instance,
-        MathematicalModelBuildContext context,
-        StandardLotSizingFormulationOptions options,
-        CancellationToken cancellationToken)
+    public override string ConstraintFamilyId=>"glspMacroCapacity";
+    protected override ValueTask BuildConstraintsAsync(LotSizingInstance instance,MathematicalModelBuildContext context,StandardLotSizingFormulationOptions options,CancellationToken cancellationToken)
     {
-        (int plantId, var workCenter, ProductionSchedulingProfile profile) =
-            GlspSchedulingData.GetSchedulingWorkCenter(instance);
-        IReadOnlyList<ProductionRouting> routings =
-            GlspSchedulingData.GetRoutings(instance, plantId, workCenter.Id);
-        var allMicroPeriods = profile.EnumerateMicroPeriods().ToArray();
-
-        for (int period = 1; period <= instance.PlanningHorizon; period++)
+        var (plantId,wc,profile)=GlspSchedulingData.GetSchedulingWorkCenter(instance);IReadOnlyList<ProductionRouting> routings=GlspSchedulingData.GetRoutings(instance,plantId,wc.Id);var ordered=profile.EnumerateMicroPeriods().ToArray();
+        for(int t=1;t<=instance.PlanningHorizon;t++)
         {
-            var expression = new LinearExpressionBuilder();
-
-            foreach (var microPeriod in allMicroPeriods.Where(micro => micro.MacroPeriod == period))
+            var e=new LinearExpressionBuilder();
+            for(int i=0;i<ordered.Length;i++)
             {
-                foreach (ProductionRouting routing in routings)
-                {
-                    ProductionCharacteristic characteristic =
-                        GlspSchedulingData.GetCharacteristic(instance, routing, plantId, workCenter.Id);
-                    expression.Add(GetVariable(context,
-                        GlspFormulationVariableKeyFactory.CreateMicroProductionKey(
-                            plantId, workCenter.Id, routing.Id, routing.ItemId, microPeriod)),
-                        characteristic.UnitCapacityConsumption![period]);
-                }
-
-                int globalIndex = Array.FindIndex(allMicroPeriods,
-                    candidate => candidate.RefersToSameMicroPeriod(microPeriod));
-                if (globalIndex <= 0) continue;
-
-                foreach (ProductionRouting from in routings)
-                {
-                    foreach (ProductionRouting to in routings)
-                    {
-                        if (from.ItemId == to.ItemId) continue;
-                        ProductionChangeover? changeover =
-                            GlspSchedulingData.FindChangeover(profile, from.ItemId, to.ItemId);
-                        double time = changeover?.ChangeoverTime?[period] ?? 0.0;
-                        if (time <= 0.0) continue;
-
-                        expression.Add(GetVariable(context,
-                            GlspFormulationVariableKeyFactory.CreateChangeoverKey(
-                                plantId, workCenter.Id, from.ItemId, to.ItemId, microPeriod)), time);
-                    }
-                }
+                var m=ordered[i];if(m.MacroPeriod!=t)continue;int fixedFrom=GlspSequenceSemantics.GetFixedPredecessorItemId(profile,i);bool reset=i>0&&GlspSequenceSemantics.IsResetBoundary(profile,ordered[i-1],m);
+                foreach(var r in routings){var c=GlspSchedulingData.GetCharacteristic(instance,r,plantId,wc.Id);e.Add(GetVariable(context,GlspFormulationVariableKeyFactory.CreateMicroProductionKey(plantId,wc.Id,r.Id,r.ItemId,m)),c.UnitCapacityConsumption![t]);double st=c.SetupTime?[t]??0.0;if(st>0)e.Add(GetVariable(context,GlspFormulationVariableKeyFactory.CreateMicroSetupStartKey(plantId,wc.Id,r.Id,r.ItemId,m,fixedFrom,reset)),st);}
+                foreach(var from in routings)foreach(var to in routings){if(from.ItemId==to.ItemId)continue;string key=GlspFormulationVariableKeyFactory.CreateChangeoverKey(plantId,wc.Id,from.ItemId,to.ItemId,m);if(!context.VariableRegistry.TryGet(key,out MathematicalVariable? z)||z is null)continue;double time=GlspSchedulingData.FindChangeover(profile,from.ItemId,to.ItemId)?.ChangeoverTime?[t]??0.0;if(time>0)e.Add(z,time);}
             }
-
-            AddConstraint(
-                context,
-                $"glspMacroCapacity_p{plantId}_w{workCenter.Id}_t{period}",
-                expression.Build(),
-                MathematicalConstraintSense.LessThanOrEqual,
-                workCenter.CapacityConstraint![period],
-                description: "GLSP macro-period capacity includes micro production and sequence-dependent changeover time.");
+            string additionalKey=new MathematicalDomainKeyBuilder(MathematicalDecisionCategory.WorkCenterAdditionalCapacity).Add(MathematicalDomainKeySegment.Plant,plantId).Add(MathematicalDomainKeySegment.WorkCenter,wc.Id).Add(MathematicalDomainKeySegment.Period,t).Build();if(context.VariableRegistry.TryGet(additionalKey,out MathematicalVariable? additional)&&additional is not null)e.Subtract(additional);
+            AddConstraint(context,$"glspMacroCapacity_p{plantId}_w{wc.Id}_t{t}",e.Build(),MathematicalConstraintSense.LessThanOrEqual,wc.CapacityConstraint![t]);
         }
-
         return ValueTask.CompletedTask;
     }
 }

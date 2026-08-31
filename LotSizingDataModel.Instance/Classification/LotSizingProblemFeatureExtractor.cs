@@ -293,6 +293,10 @@ public static class LotSizingProblemFeatureExtractor
                                 routing.LotSizeMultiple
                                     is not null),
 
+                HasGroupingConstraints =
+                    supplyChain.ProductionRoutings.Any(
+                        routing => routing.GroupingConstraint is not null),
+
                 HasAdditionalProductionCapacity =
                     workCenters.Any(
                         workCenter =>
@@ -426,6 +430,17 @@ public static class LotSizingProblemFeatureExtractor
                         workCenter =>
                             workCenter.SchedulingProfile?
                                 .HasSetupCarryOver == true),
+
+                SetupCarryOverPolicy =
+                    supplyChain.WorkCenters
+                        .Where(workCenter => workCenter.SchedulingProfile is not null)
+                        .Select(workCenter => workCenter.SchedulingProfile!.SetupCarryOverPolicy)
+                        .Distinct()
+                        .Take(2)
+                        .ToArray() is var carryOverPolicies &&
+                    carryOverPolicies.Length == 1
+                        ? carryOverPolicies[0]
+                        : SetupCarryOverPolicy.Unspecified,
 
                 HasSequenceDependentChangeoverTimes =
                     supplyChain.WorkCenters.Any(

@@ -59,6 +59,7 @@ public sealed class LotSizingProblemFeatures : ModelObject
     private bool _hasMinimumLotSizes;
     private bool _hasMaximumLotSizes;
     private bool _hasLotSizeMultiples;
+    private bool _hasGroupingConstraints;
 
     private bool _hasAdditionalProductionCapacity;
     private bool _hasAdditionalWarehouseCapacity;
@@ -87,6 +88,7 @@ public sealed class LotSizingProblemFeatures : ModelObject
     private SchedulingBucketMode _schedulingBucketMode;
     private bool _hasInitialSetupState;
     private bool _hasSetupCarryOver;
+    private SetupCarryOverPolicy _setupCarryOverPolicy;
     private bool _hasSequenceDependentChangeoverTimes;
     private bool _hasSequenceDependentChangeoverCosts;
     private bool _hasMaximumSetupCountConstraints;
@@ -1106,6 +1108,20 @@ public sealed class LotSizingProblemFeatures : ModelObject
     {
         get => _hasVariableMicroPeriodCount;
         set => SetProperty(ref _hasVariableMicroPeriodCount, value);
+    }
+
+    [XmlAttribute("hasGroupingConstraints")]
+    public bool HasGroupingConstraints
+    {
+        get => _hasGroupingConstraints;
+        set => SetProperty(ref _hasGroupingConstraints, value);
+    }
+
+    [XmlAttribute("setupCarryOverPolicy")]
+    public SetupCarryOverPolicy SetupCarryOverPolicy
+    {
+        get => _setupCarryOverPolicy;
+        set => SetProperty(ref _setupCarryOverPolicy, value);
     }
 
     private void NotifyDerivedProperties()

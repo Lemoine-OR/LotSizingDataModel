@@ -357,6 +357,16 @@ public sealed class UniversalNotationGenerator
             yield return UniversalNotationFeature.SetupCarryOver;
         }
 
+        if (descriptor.Scheduling.HasSetupCarryOverForbidden)
+        {
+            yield return UniversalNotationFeature.SetupCarryOverForbidden;
+        }
+
+        if (descriptor.Production.HasGroupingConstraints)
+        {
+            yield return UniversalNotationFeature.GroupingConstraint;
+        }
+
         if (descriptor.Scheduling.HasSequenceDependentChangeoverTimes)
         {
             yield return

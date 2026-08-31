@@ -1,17 +1,13 @@
+using LotSizingDataModel.Core.DecisionModel.Scheduling;
 using LotSizingDataModel.Instance;
 using LotSizingDataModel.Solver.Building;
-using LotSizingDataModel.Solver.Mapping;
 
 namespace LotSizingDataModel.Solver.Formulation;
 
-/// <summary>
-/// Mathematical-only variables identifying the start of a setup state.
-/// </summary>
 public sealed class SmallBucketSetupStartVariableFamilyBuilder :
     StandardLotSizingVariableFamilyBuilderBase
 {
-    public override string FamilyId =>
-        "smallBucketSetupStart";
+    public override string FamilyId => "smallBucketSetupStart";
 
     protected override ValueTask BuildFamilyAsync(
         LotSizingInstance instance,
@@ -19,34 +15,22 @@ public sealed class SmallBucketSetupStartVariableFamilyBuilder :
         StandardLotSizingFormulationOptions options,
         CancellationToken cancellationToken)
     {
-        foreach (
-            var routing
-            in instance.SupplyChain.ProductionRoutings)
+        ProductionSchedulingProfile profile =
+            instance.SupplyChain.WorkCenters
+                .Single(workCenter => workCenter.SchedulingProfile is not null)
+                .SchedulingProfile!;
+
+        foreach (var routing in instance.SupplyChain.ProductionRoutings)
         {
-            for (
-                int period = 1;
-                period <= instance.PlanningHorizon;
-                period++)
+            for (int period = 1; period <= instance.PlanningHorizon; period++)
             {
                 cancellationToken.ThrowIfCancellationRequested();
-
-                string key =
-                    new MathematicalDomainKeyBuilder(
-                        MathematicalDecisionCategory
-                            .AuxiliarySchedulingSetupStart)
-                        .Add(
-                            MathematicalDomainKeySegment.Routing,
-                            routing.Id)
-                        .Add(
-                            MathematicalDomainKeySegment.Period,
-                            period)
-                        .Build();
-
                 AddBinaryVariable(
                     context,
                     $"smallBucketSetupStart_r{routing.Id}_t{period}",
-                    key,
-                    "Mathematical-only setup-state start flag.");
+                    SmallBucketSchedulingDomainKeyFactory.CreateSetupStartKey(
+                        profile, routing, period),
+                    "Mathematical-only small-bucket setup-start occurrence.");
             }
         }
 

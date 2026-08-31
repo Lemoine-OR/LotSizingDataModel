@@ -139,7 +139,7 @@ public sealed class MathematicalSolutionValueProjector :
                         production =>
                             IsSchedulingSetupStart(
                                 production,
-                                GetPeriod(key))
+                                key)
                                 ? 1.0
                                 : 0.0),
 
@@ -151,6 +151,12 @@ public sealed class MathematicalSolutionValueProjector :
 
             MathematicalDecisionCategory.AuxiliaryMicroPeriodChangeover =>
                 ResolveMicroChangeover(solution, key),
+
+            MathematicalDecisionCategory.AuxiliaryMicroPeriodSetupStart =>
+                ResolveMicroSetupStart(solution, key),
+
+            MathematicalDecisionCategory.AuxiliaryMacroProductionActivation =>
+                ResolveProduction(solution, key, production => Math.Abs(production.GetQuantity(GetPeriod(key))) > 1e-9 ? 1.0 : 0.0),
 
             MathematicalDecisionCategory.Inventory =>
                 ResolveInventory(
@@ -339,8 +345,29 @@ public sealed class MathematicalSolutionValueProjector :
         WorkCenterSchedulingDecision schedule = solution.WorkCenterSchedulingDecisions.SingleOrDefault(candidate => candidate.WorkCenter.PlantId == plantId && candidate.WorkCenter.WorkCenterId == workCenterId) ?? throw new InvalidOperationException("No candidate macro/micro schedule matches the mathematical domain key.");
         ProductionMicroPeriodDecision[] ordered = schedule.MicroPeriods.OrderBy(candidate => candidate.MicroPeriod.MacroPeriod).ThenBy(candidate => candidate.MicroPeriod.MicroPeriodIndex).ToArray();
         int currentIndex = Array.FindIndex(ordered, candidate => candidate.MicroPeriod.MacroPeriod == period && candidate.MicroPeriod.MicroPeriodIndex == micro);
-        if (currentIndex <= 0) { return 0.0; }
+        if (currentIndex < 0) { throw new InvalidOperationException("No candidate micro-period decision matches the changeover domain key."); }
+        if (currentIndex == 0) { return ordered[0].SetupItemId == toItemId ? 1.0 : 0.0; }
         return ordered[currentIndex - 1].SetupItemId == fromItemId && ordered[currentIndex].SetupItemId == toItemId ? 1.0 : 0.0;
+    }
+
+    private static double ResolveMicroSetupStart(
+        LotSizingSolution solution,
+        MathematicalDomainKey key)
+    {
+        int itemId = key.GetRequiredInt32(MathematicalDomainKeySegment.Item);
+        int plantId = key.GetRequiredInt32(MathematicalDomainKeySegment.Plant);
+        int workCenterId = key.GetRequiredInt32(MathematicalDomainKeySegment.WorkCenter);
+        int period = key.GetRequiredInt32(MathematicalDomainKeySegment.Period);
+        int micro = key.GetRequiredInt32(MathematicalDomainKeySegment.MicroPeriod);
+        WorkCenterSchedulingDecision schedule = solution.WorkCenterSchedulingDecisions.SingleOrDefault(candidate => candidate.WorkCenter.PlantId == plantId && candidate.WorkCenter.WorkCenterId == workCenterId) ?? throw new InvalidOperationException("No candidate macro/micro schedule matches the mathematical domain key.");
+        ProductionMicroPeriodDecision[] ordered = schedule.MicroPeriods.OrderBy(candidate => candidate.MicroPeriod.MacroPeriod).ThenBy(candidate => candidate.MicroPeriod.MicroPeriodIndex).ToArray();
+        int currentIndex = Array.FindIndex(ordered, candidate => candidate.MicroPeriod.MacroPeriod == period && candidate.MicroPeriod.MicroPeriodIndex == micro);
+        if (currentIndex < 0) { throw new InvalidOperationException("No candidate micro-period decision matches the setup-start domain key."); }
+        if (ordered[currentIndex].SetupItemId != itemId) { return 0.0; }
+        if (key.TryGetInt32(MathematicalDomainKeySegment.SetupReset, out int reset) && reset != 0) { return 1.0; }
+        if (key.TryGetInt32(MathematicalDomainKeySegment.FromItem, out int fromItem)) { return itemId == fromItem ? 0.0 : 1.0; }
+        if (currentIndex == 0) { return 1.0; }
+        return ordered[currentIndex - 1].SetupItemId == itemId ? 0.0 : 1.0;
     }
 
     private static ProductionMicroPeriodDecision ResolveMicroDecision(
@@ -357,16 +384,13 @@ public sealed class MathematicalSolutionValueProjector :
 
     private static bool IsSchedulingSetupStart(
         ProductionDecision production,
-        int period)
+        MathematicalDomainKey key)
     {
-        if (!production.IsSetupActivated(period))
-        {
-            return false;
-        }
-
-        return
-            period == 1 ||
-            !production.IsSetupActivated(period - 1);
+        int period = GetPeriod(key);
+        if (!production.IsSetupActivated(period)) { return false; }
+        if (key.TryGetInt32(MathematicalDomainKeySegment.SetupReset, out int reset) && reset != 0) { return true; }
+        if (period == 1 && key.TryGetInt32(MathematicalDomainKeySegment.FromItem, out int fromItem) && key.TryGetInt32(MathematicalDomainKeySegment.Item, out int itemId)) { return itemId != fromItem; }
+        return period == 1 || !production.IsSetupActivated(period - 1);
     }
 
     private static double ResolveProduction(

@@ -12,25 +12,18 @@ public static class MathematicalFormulationScientificCatalog
         SmallBucketKnownUnsupportedExtensions =
             new[]
             {
-                LotSizingProblemClassExtensionKind.SetupTimes,
                 LotSizingProblemClassExtensionKind.StartUpCosts,
                 LotSizingProblemClassExtensionKind.StartUpTimes,
                 LotSizingProblemClassExtensionKind.ProductionLeadTimes,
                 LotSizingProblemClassExtensionKind.MinimumLotSize,
                 LotSizingProblemClassExtensionKind.MaximumLotSize,
                 LotSizingProblemClassExtensionKind.LotSizeMultiple,
-                LotSizingProblemClassExtensionKind
-                    .AdditionalProductionCapacity,
                 LotSizingProblemClassExtensionKind.MultiSite,
                 LotSizingProblemClassExtensionKind.MultipleObjectives,
                 LotSizingProblemClassExtensionKind.BigBucketScheduling,
                 LotSizingProblemClassExtensionKind.MacroMicroScheduling,
-                LotSizingProblemClassExtensionKind.InitialSetupState,
-                LotSizingProblemClassExtensionKind
-                    .SequenceDependentChangeoverTimes,
-                LotSizingProblemClassExtensionKind
-                    .SequenceDependentChangeoverCosts,
-                LotSizingProblemClassExtensionKind.MaximumSetupCount
+                LotSizingProblemClassExtensionKind.SequenceDependentChangeoverTimes,
+                LotSizingProblemClassExtensionKind.SequenceDependentChangeoverCosts
             };
 
 
@@ -82,7 +75,8 @@ public static class MathematicalFormulationScientificCatalog
                     LotSizingProblemClassExtensionKind.Distribution,
                     LotSizingProblemClassExtensionKind.WarehouseCapacity,
                     LotSizingProblemClassExtensionKind.MultiSite,
-                    LotSizingProblemClassExtensionKind.FinancialConstraints
+                    LotSizingProblemClassExtensionKind.FinancialConstraints,
+                    LotSizingProblemClassExtensionKind.GroupingConstraint
                 },
             knownUnsupportedExtensions:
                 new[]
@@ -160,10 +154,20 @@ public static class MathematicalFormulationScientificCatalog
                         LotSizingProblemClassExtensionKind.Distribution,
                         LotSizingProblemClassExtensionKind.WarehouseCapacity,
                         LotSizingProblemClassExtensionKind.FinancialConstraints,
-                        LotSizingProblemClassExtensionKind.SetupCarryOver
-                    },
+                        LotSizingProblemClassExtensionKind.SetupCarryOver,
+                    LotSizingProblemClassExtensionKind.InitialSetupState,
+                    LotSizingProblemClassExtensionKind.MaximumSetupCount,
+                    LotSizingProblemClassExtensionKind.GroupingConstraint,
+                    LotSizingProblemClassExtensionKind.SetupCarryOverForbidden
+                },
                 knownUnsupportedExtensions:
-                    SmallBucketKnownUnsupportedExtensions,
+                    SmallBucketKnownUnsupportedExtensions
+                        .Concat(new[]
+                        {
+                            LotSizingProblemClassExtensionKind.SetupTimes,
+                            LotSizingProblemClassExtensionKind.AdditionalProductionCapacity
+                        })
+                        .ToArray(),
                 supportedObjectiveKinds:
                     new[]
                     {
@@ -177,6 +181,9 @@ public static class MathematicalFormulationScientificCatalog
                         "SmallBucketSetupStartVariableFamilyBuilder",
                         "SmallBucketSingleSetupStateConstraintFamilyBuilder",
                         "SmallBucketSetupStartDefinitionConstraintFamilyBuilder",
+                        "SmallBucketSchedulingCapacityConstraintFamilyBuilder",
+                        "SmallBucketSetupCountConstraintFamilyBuilder",
+                        "SmallBucketGroupingConstraintFamilyBuilder",
                         "SmallBucketProductionStateConstraintFamilyBuilder",
                         "SmallBucketProducedItemCountConstraintFamilyBuilder",
                         "SmallBucketSetupStartCostObjectiveTermBuilder"
@@ -214,8 +221,14 @@ public static class MathematicalFormulationScientificCatalog
                         LotSizingProblemClassExtensionKind.Distribution,
                         LotSizingProblemClassExtensionKind.WarehouseCapacity,
                         LotSizingProblemClassExtensionKind.FinancialConstraints,
-                        LotSizingProblemClassExtensionKind.SetupCarryOver
-                    },
+                        LotSizingProblemClassExtensionKind.SetupCarryOver,
+                    LotSizingProblemClassExtensionKind.SetupTimes,
+                    LotSizingProblemClassExtensionKind.AdditionalProductionCapacity,
+                    LotSizingProblemClassExtensionKind.InitialSetupState,
+                    LotSizingProblemClassExtensionKind.MaximumSetupCount,
+                    LotSizingProblemClassExtensionKind.GroupingConstraint,
+                    LotSizingProblemClassExtensionKind.SetupCarryOverForbidden
+                },
                 knownUnsupportedExtensions:
                     SmallBucketKnownUnsupportedExtensions,
                 supportedObjectiveKinds:
@@ -230,6 +243,9 @@ public static class MathematicalFormulationScientificCatalog
                         "SmallBucketSetupStartVariableFamilyBuilder",
                         "SmallBucketSingleSetupStateConstraintFamilyBuilder",
                         "SmallBucketSetupStartDefinitionConstraintFamilyBuilder",
+                        "SmallBucketSchedulingCapacityConstraintFamilyBuilder",
+                        "SmallBucketSetupCountConstraintFamilyBuilder",
+                        "SmallBucketGroupingConstraintFamilyBuilder",
                         "SmallBucketProductionStateConstraintFamilyBuilder",
                         "SmallBucketProducedItemCountConstraintFamilyBuilder",
                         "SmallBucketSetupStartCostObjectiveTermBuilder"
@@ -267,10 +283,19 @@ public static class MathematicalFormulationScientificCatalog
                         LotSizingProblemClassExtensionKind.Distribution,
                         LotSizingProblemClassExtensionKind.WarehouseCapacity,
                         LotSizingProblemClassExtensionKind.FinancialConstraints,
-                        LotSizingProblemClassExtensionKind.SetupCarryOver
-                    },
+                        LotSizingProblemClassExtensionKind.SetupCarryOver,
+                    LotSizingProblemClassExtensionKind.SetupTimes,
+                    LotSizingProblemClassExtensionKind.AdditionalProductionCapacity,
+                    LotSizingProblemClassExtensionKind.InitialSetupState,
+                    LotSizingProblemClassExtensionKind.GroupingConstraint
+                },
                 knownUnsupportedExtensions:
-                    SmallBucketKnownUnsupportedExtensions,
+                    SmallBucketKnownUnsupportedExtensions
+                        .Concat(new[]
+                        {
+                            LotSizingProblemClassExtensionKind.SetupCarryOverForbidden
+                        })
+                        .ToArray(),
                 supportedObjectiveKinds:
                     new[]
                     {
@@ -284,6 +309,9 @@ public static class MathematicalFormulationScientificCatalog
                         "SmallBucketSetupStartVariableFamilyBuilder",
                         "PlspSingleSetupStateConstraintFamilyBuilder",
                         "SmallBucketSetupStartDefinitionConstraintFamilyBuilder",
+                        "SmallBucketSchedulingCapacityConstraintFamilyBuilder",
+                        "SmallBucketSetupCountConstraintFamilyBuilder",
+                        "SmallBucketGroupingConstraintFamilyBuilder",
                         "SmallBucketProductionStateConstraintFamilyBuilder",
                         "SmallBucketProducedItemCountConstraintFamilyBuilder",
                         "PlspSetupTransitionLimitConstraintFamilyBuilder",
@@ -322,25 +350,31 @@ public static class MathematicalFormulationScientificCatalog
                         LotSizingProblemClassExtensionKind.ProductionLeadTimes,
                         LotSizingProblemClassExtensionKind.SetupCarryOver,
                         LotSizingProblemClassExtensionKind.SequenceDependentChangeoverTimes,
-                        LotSizingProblemClassExtensionKind.SequenceDependentChangeoverCosts
-                    },
+                        LotSizingProblemClassExtensionKind.SequenceDependentChangeoverCosts,
+                    LotSizingProblemClassExtensionKind.SetupTimes,
+                    LotSizingProblemClassExtensionKind.AdditionalProductionCapacity,
+                    LotSizingProblemClassExtensionKind.InitialSetupState,
+                    LotSizingProblemClassExtensionKind.MaximumSetupCount,
+                    LotSizingProblemClassExtensionKind.MaximumProducedItemCount,
+                    LotSizingProblemClassExtensionKind.GroupingConstraint,
+                    LotSizingProblemClassExtensionKind.SetupCarryOverForbidden
+                },
                 knownUnsupportedExtensions:
                     new[]
                     {
-                        LotSizingProblemClassExtensionKind.SetupTimes,
+
                         LotSizingProblemClassExtensionKind.StartUpCosts,
                         LotSizingProblemClassExtensionKind.StartUpTimes,
                         LotSizingProblemClassExtensionKind.MinimumLotSize,
                         LotSizingProblemClassExtensionKind.MaximumLotSize,
                         LotSizingProblemClassExtensionKind.LotSizeMultiple,
-                        LotSizingProblemClassExtensionKind.AdditionalProductionCapacity,
+
                         LotSizingProblemClassExtensionKind.MultiSite,
                         LotSizingProblemClassExtensionKind.MultipleObjectives,
                         LotSizingProblemClassExtensionKind.FinancialConstraints,
                         LotSizingProblemClassExtensionKind.BigBucketScheduling,
                         LotSizingProblemClassExtensionKind.SmallBucketScheduling,
-                        LotSizingProblemClassExtensionKind.InitialSetupState,
-                        LotSizingProblemClassExtensionKind.MaximumSetupCount
+
                     },
                 supportedObjectiveKinds:
                     new[]
@@ -357,6 +391,12 @@ public static class MathematicalFormulationScientificCatalog
                         "GlspSingleSetupStateConstraintFamilyBuilder",
                         "GlspMicroProductionLinkConstraintFamilyBuilder",
                         "GlspChangeoverDefinitionConstraintFamilyBuilder",
+                        "GlspSetupStartVariableFamilyBuilder",
+                        "GlspSetupStartDefinitionConstraintFamilyBuilder",
+                        "GlspSetupStartCostObjectiveTermBuilder",
+                        "GlspSetupCountConstraintFamilyBuilder",
+                        "GlspGroupingConstraintFamilyBuilder",
+                        "GlspProducedItemCountConstraintFamilyBuilder",
                         "GlspMacroCapacityConstraintFamilyBuilder",
                         "GlspChangeoverCostObjectiveTermBuilder",
                         "GlspMicroPeriodSetupStateDecisionMapper",
