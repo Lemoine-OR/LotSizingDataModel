@@ -40,4 +40,11 @@
     <ProjectReference Include="..\LotSizingDataModel.Solver.Xpress\LotSizingDataModel.Solver.Xpress.csproj" />
     <ProjectReference Include="..\LotSizingDataModel.Solver.CoinOrCbc\LotSizingDataModel.Solver.CoinOrCbc.csproj" />
   </ItemGroup>
+  <ItemGroup Label="Alpha37MetaheuristicsPlatformBridge">
+    <Reference Include="MetaheuristicsPlatform">
+      <HintPath>..\external\metaheuristics\MetaheuristicsPlatform.dll</HintPath>
+      <Private>true</Private>
+    </Reference>
+  </ItemGroup>
+
 </Project>

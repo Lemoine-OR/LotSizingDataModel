@@ -37,4 +37,11 @@
     <PackageReference Include="ULSAlgorithms" Version="1.1.0" />
   </ItemGroup>
 
+  <ItemGroup Label="Alpha37MetaheuristicsPlatformBridge">
+    <Reference Include="MetaheuristicsPlatform">
+      <HintPath>..\external\metaheuristics\MetaheuristicsPlatform.dll</HintPath>
+      <Private>true</Private>
+    </Reference>
+  </ItemGroup>
+
 </Project>

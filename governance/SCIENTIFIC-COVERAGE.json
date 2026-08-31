@@ -994,6 +994,19 @@
       "subgradient": "generic projected update lambda_next=projection(lambda+step*residual); caller supplies step policy",
       "bounds": "dual lower bound and primal upper bound tracked separately with weak-duality consistency check",
       "knownGaps": "maximization LR not enabled; problem-specific decomposition, subproblem orchestration and stopping rules intentionally deferred to downstream algorithm projects"
+    },
+    {
+      "id": "metaheuristics-matheuristics-alpha37",
+      "domain": "methods",
+      "scientificStatus": "implemented-bridge-foundation",
+      "implementationStatus": "implemented",
+      "externalDependency": "MetaheuristicsPlatform 1.0.1 @ 0ab7521dc1f42f50209c8badea811502977b8409; binaries ZIP sha256 ce7d39c184e17965e64b2739516b62bd186ff4bf12bdedf570f1293e241f2404",
+      "metaheuristic": "Deb feasibility-rules GA through IContinuousConstrainedOptimizationProblem with deterministic mixed-variable decoding",
+      "matheuristic": "Local Branching through IExactRepairMatheuristicDomain and source-preserving exact-repair submodels",
+      "solutionSemantics": "feasible stochastic incumbent only; no optimality, best-bound or gap claim",
+      "applicability": "continuous, integer and binary mathematical variables with finite native or explicit search bounds; semi-domains deferred",
+      "exactRepairScope": "OriginalObjective mode with fixings, bounds, allowed-active binaries, Hamming radius and objective cutoff",
+      "knownGaps": "semi-continuous and semi-integer latent encoding and distance/proximity exact-repair objective modes remain open"
     }
   ]
 }

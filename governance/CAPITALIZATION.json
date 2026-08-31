@@ -1612,6 +1612,87 @@
       "correctiveAction": "Assert HasValue first, then compare the non-nullable .Value with the precision overload.",
       "permanentGuard": "Generated numeric xUnit precision assertions must never target nullable numeric expressions directly.",
       "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-180",
+      "category": "metaheuristics-external-release-pin",
+      "symptom": "A generic metaheuristic bridge is compiled against an unverified external binary.",
+      "rootCause": "External platform identity was treated as a project name rather than an immutable release artifact.",
+      "correctiveAction": "Pin MetaheuristicsPlatform 1.0.1, source commit 0ab7521dc1f42f50209c8badea811502977b8409 and binaries ZIP SHA-256 ce7d39c184e17965e64b2739516b62bd186ff4bf12bdedf570f1293e241f2404.",
+      "permanentGuard": "External optimization platforms require exact version, source commit and release-artifact hash before candidate creation.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-181",
+      "category": "mixed-variable-latent-decoding",
+      "symptom": "A continuous metaheuristic search point is evaluated directly as a mixed-integer LotSizingDataModel candidate.",
+      "rootCause": "Search representation and mathematical-variable domain were conflated.",
+      "correctiveAction": "Decode continuous variables directly, round integers deterministically, threshold binaries, and evaluate only the decoded candidate.",
+      "permanentGuard": "Raw latent vectors never bypass the explicit mathematical-domain decoder.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-182",
+      "category": "metaheuristic-finite-search-bounds",
+      "symptom": "An unbounded mathematical variable is silently assigned an arbitrary metaheuristic search interval.",
+      "rootCause": "Bounded search-space requirements were hidden by an implementation fallback.",
+      "correctiveAction": "Require native finite bounds or explicit caller-provided finite overrides inside the mathematical domain.",
+      "permanentGuard": "No arbitrary finite bounds are invented for unbounded mathematical variables.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-183",
+      "category": "constraint-residual-convention-bridge",
+      "symptom": "Metaheuristic inequality violation signs depend on the original less-than or greater-than sense and become inconsistent.",
+      "rootCause": "The external constrained-optimization convention was not normalized.",
+      "correctiveAction": "Map less-than-or-equal to lhs-rhs, greater-than-or-equal to rhs-lhs and equality to lhs-rhs so every feasible inequality is non-positive.",
+      "permanentGuard": "External constrained-problem adapters expose one canonical non-positive inequality convention.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-184",
+      "category": "stochastic-incumbent-no-optimality",
+      "symptom": "A feasible metaheuristic incumbent is mapped into a solver result carrying optimality, bound or gap claims.",
+      "rootCause": "Generic solution projection reused exact-solver semantics.",
+      "correctiveAction": "Project metaheuristic incumbents as Feasible, IsOptimal=false, with null best bound and null optimality gaps.",
+      "permanentGuard": "Stochastic feasible incumbents never manufacture an optimality proof.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-185",
+      "category": "matheuristic-source-preserving-subproblem",
+      "symptom": "Exact-repair requests mutate the incumbent source mathematical model.",
+      "rootCause": "Fixings, bounds and Local Branching constraints were applied in place.",
+      "correctiveAction": "Clone the source model before every exact-repair or relaxation transformation.",
+      "permanentGuard": "Matheuristic subproblem construction is source-preserving.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-186",
+      "category": "local-branching-hamming-linearization",
+      "symptom": "A Local Branching radius is encoded without preserving exact binary Hamming distance.",
+      "rootCause": "Reference-zero and reference-one binary terms were treated identically.",
+      "correctiveAction": "Use +x for reference zero and -x with a right-hand-side shift for reference one.",
+      "permanentGuard": "Binary Local Branching uses the exact linear Hamming-distance identity.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-187",
+      "category": "exact-repair-result-validation",
+      "symptom": "A caller-supplied exact or relaxation delegate returns values that are accepted without checking the generated subproblem.",
+      "rootCause": "Solver-delegate success was trusted as feasibility evidence.",
+      "correctiveAction": "Require complete variable values and independently validate generated-subproblem constraints before producing a MatheuristicPoint.",
+      "permanentGuard": "Exact-repair delegates are untrusted until their returned candidate is independently checked.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-188",
+      "category": "targeted-alpha37-bridge-smoke",
+      "symptom": "External API, mixed-domain decoding or exact-repair integration defects reach the full validation campaign.",
+      "rootCause": "No focused end-to-end bridge smoke ran first.",
+      "correctiveAction": "Execute MetaheuristicsMatheuristicsBridgeTests immediately after candidate commit.",
+      "permanentGuard": "External metaheuristic and matheuristic bridge milestones run focused integration tests before Build-Validated.",
+      "status": "active"
     }
   ]
 }
