@@ -969,6 +969,18 @@
       "applicability": "canonical deterministic single-item uncapacitated ULS only; strict model-shape rejection otherwise",
       "solution": "external exact result independently validated, projected to MathematicalModelSolveResult, then mapped by existing IMathematicalSolutionMappingService",
       "knownGaps": "other exact ULSAlgorithms methods remain open; heuristics deferred to alpha.35; no silent fallback"
+    },
+    {
+      "id": "ulsalgorithms-heuristics-alpha35",
+      "domain": "methods",
+      "scientificStatus": "implemented-feasible-no-optimality-claim",
+      "implementationStatus": "implemented",
+      "methods": "all 19 public ULSAlgorithms v1.1.0 heuristics with pinned catalog parity",
+      "externalDependency": "inherits validated alpha.34 ULSAlgorithms 1.1.0 vendored package and SHA-256",
+      "applicability": "inherits strict canonical deterministic single-item uncapacitated ULS model shape from alpha.34; individual external heuristic restrictions remain authoritative",
+      "solution": "Feasible only; UlsSolutionValidator required; normalized projection sets IsOptimal=false and no best bound/gap",
+      "validation": "catalog-wide stationary positive-demand smoke plus Wagner-Whitin exact lower-bound comparison",
+      "knownGaps": "heuristic parameterization beyond default public factories remains open; broader problem classes remain open"
     }
   ]
 }

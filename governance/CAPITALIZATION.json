@@ -1468,6 +1468,69 @@
       "correctiveAction": "Force-add the exact verified ULSAlgorithms.1.1.0.nupkg and assert that git ls-files --stage contains it before committing.",
       "permanentGuard": "Every intentionally vendored artifact ignored by a generic pattern must be explicitly force-added and staged-verified.",
       "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-164",
+      "category": "heuristic-catalog-parity",
+      "symptom": "Only a convenient subset of a pinned external heuristic catalog is adapted while the milestone is presented as ULS heuristic support.",
+      "rootCause": "Heuristic support was enumerated informally instead of checked against the immutable external runtime catalog.",
+      "correctiveAction": "Pin all 19 public ULSAlgorithms v1.1.0 heuristic IDs and require exact runtime catalog parity before execution.",
+      "permanentGuard": "A catalog-wide heuristic milestone must prove complete pinned ID parity; silent omissions and silent additions are forbidden.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-165",
+      "category": "heuristic-optimality-separation",
+      "symptom": "A feasible heuristic result is projected through the same optimality semantics as an exact method.",
+      "rootCause": "Common IUlsSolver mechanics obscured the scientific distinction between feasible construction and optimality proof.",
+      "correctiveAction": "Require UlsSolveStatus.Feasible and project HasFeasibleSolution=true, IsOptimal=false, with no fabricated bound or gap.",
+      "permanentGuard": "Heuristic adapters never assert optimality, best bounds or optimality gaps.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-166",
+      "category": "heuristic-independent-feasibility-validation",
+      "symptom": "A heuristic-returned plan is normalized without an independent feasibility check.",
+      "rootCause": "Heuristic completion was treated as feasibility evidence.",
+      "correctiveAction": "Run UlsSolutionValidator.Validate and require complete horizon vectors and objective parity before projection.",
+      "permanentGuard": "Every external heuristic result is untrusted until independently validated.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-167",
+      "category": "heuristic-vs-exact-lower-bound-smoke",
+      "symptom": "A heuristic integration reports an objective lower than a proven exact optimum because of cost or projection inconsistency.",
+      "rootCause": "No cross-method scientific sanity check linked heuristic costs to the exact baseline.",
+      "correctiveAction": "On a common compatible smoke instance, compare every pinned heuristic objective against Wagner-Whitin exact and reject any value below the optimum beyond tolerance.",
+      "permanentGuard": "Catalog-wide heuristic smoke includes an exact-optimum lower-bound sanity check.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-168",
+      "category": "canonical-uls-applicability-reuse",
+      "symptom": "Heuristic adapters accept richer LotSizingDataModel instances than the exact bridge without a new scientific applicability proof.",
+      "rootCause": "Algorithm family expansion was confused with problem-class expansion.",
+      "correctiveAction": "Reuse the strict alpha.34 canonical SI-ULS extractor for alpha.35.",
+      "permanentGuard": "Adding methods does not broaden the accepted problem class unless a dedicated applicability milestone proves it.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-169",
+      "category": "vendored-dependency-continuity",
+      "symptom": "A later adapter milestone silently reacquires or replaces the external library already frozen by a validated baseline.",
+      "rootCause": "Dependency acquisition was repeated instead of treated as baseline evidence.",
+      "correctiveAction": "Alpha.35 verifies the already tracked ULSAlgorithms v1.1.0 package, hash, PackageReference and root NuGet.Config without replacing them.",
+      "permanentGuard": "Validated vendored dependencies are inherited and verified; they are not reacquired unless the milestone explicitly upgrades them.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-170",
+      "category": "targeted-alpha35-runtime-smoke",
+      "symptom": "One of many public heuristics fails catalog creation, applicability or feasibility only during the full validation campaign.",
+      "rootCause": "No focused catalog-wide heuristic gate ran before broad validation.",
+      "correctiveAction": "Run UlsAlgorithmsHeuristicAdapterTests immediately after candidate commit and before the warnings-as-errors closure.",
+      "permanentGuard": "Catalog-wide adapter milestones execute every pinned strategy in a focused runtime smoke before Build-Validated.",
+      "status": "active"
     }
   ]
 }
