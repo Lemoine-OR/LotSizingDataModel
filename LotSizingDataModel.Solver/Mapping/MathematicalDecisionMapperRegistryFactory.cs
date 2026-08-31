@@ -26,6 +26,7 @@ public static class MathematicalDecisionMapperRegistryFactory
         registry.Register(new SetupDecisionMapper());
         registry.Register(new InventoryDecisionMapper());
         registry.Register(new InitialInventoryDecisionMapper());
+        registry.Register(new CashBalanceDecisionMapper());
         registry.Register(new InventorySetupDecisionMapper());
         registry.Register(
             new InventorySafetyStockViolationDecisionMapper());

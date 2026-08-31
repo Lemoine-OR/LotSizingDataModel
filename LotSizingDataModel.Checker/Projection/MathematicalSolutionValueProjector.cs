@@ -164,6 +164,9 @@ public sealed class MathematicalSolutionValueProjector :
             MathematicalDecisionCategory.InitialInventory =>
                 ResolveInitialInventory(solution, key),
 
+            MathematicalDecisionCategory.CashBalance =>
+                ResolveCashBalance(solution, key),
+
             MathematicalDecisionCategory.Inventory =>
                 ResolveInventory(
                     solution,
@@ -356,6 +359,20 @@ public sealed class MathematicalSolutionValueProjector :
         return ordered[currentIndex - 1].SetupItemId == fromItemId && ordered[currentIndex].SetupItemId == toItemId ? 1.0 : 0.0;
     }
 
+    private static double ResolveCashBalance(
+        LotSizingSolution solution,
+        MathematicalDomainKey key)
+    {
+        int period =
+            key.GetRequiredInt32(
+                MathematicalDomainKeySegment.Period);
+
+        return solution.TryGetCashBalance(
+                period,
+                out double balance)
+            ? balance
+            : 0.0;
+    }
     private static double ResolveInitialInventory(
         LotSizingSolution solution,
         MathematicalDomainKey key)

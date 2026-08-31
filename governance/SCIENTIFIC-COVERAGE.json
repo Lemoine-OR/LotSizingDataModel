@@ -945,6 +945,19 @@
       "checker": "Independent mathematical projection for period-zero inventory plus historical semantic consistency analyzer",
       "knownGaps": "SalesOption execution remains open; IM/VM generic meaning remains intentionally unresolved; inverse historical detection stays conservative",
       "notes": "Historical labels are projections of generic semantics and never evidence by themselves."
+    },
+    {
+      "id": "multiobjective-financial-alpha33",
+      "domain": "objectives-finance",
+      "scientificStatus": "implemented-with-explicit-gaps",
+      "implementationStatus": "implemented",
+      "core": "ObjectivePolicy.ExecutionCriteria + CashFlowPolicy",
+      "mathematics": "WeightedSum scalarization, exact lexicographic stages, cash-balance equations, terminal-cash financial criterion, complete positive-cost OPEX envelope",
+      "solver": "MultiObjectiveLotSizingSolverService executes through the existing solver-adapter registry",
+      "solution": "normalized cash-balance trace",
+      "checker": "independent cash-balance mathematical projection",
+      "knownGaps": "Sustainability and ServiceLevel criteria remain unsupported; SalesOption execution remains open; legacy scalar LotSizingSolverService is unchanged",
+      "notes": "Lexicographic stages require proven optimality. Cash flow is distinct from periodic OPEX."
     }
   ]
 }

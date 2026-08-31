@@ -12,7 +12,7 @@ namespace LotSizingDataModel.Core.DecisionModel.Objectives;
 /// </summary>
 [Serializable]
 [XmlType(TypeName = "optimizationObjectivePolicy")]
-public sealed class OptimizationObjectivePolicy :
+public sealed partial class OptimizationObjectivePolicy :
     ModelObject
 {
     private ObjectiveAggregationMode _aggregationMode =

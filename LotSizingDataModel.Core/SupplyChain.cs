@@ -24,7 +24,7 @@ namespace LotSizingDataModel.Core;
 [Serializable]
 [XmlRoot("supplyChain")]
 [XmlType(TypeName = "supplyChain")]
-public sealed class SupplyChain :
+public sealed partial class SupplyChain :
     ModelObject,
     IPlanningHorizonAware
 {
@@ -713,6 +713,10 @@ public sealed class SupplyChain :
         foreach (SalesOption salesOption in SalesOptions)
         {
             yield return salesOption;
+        }
+        if (CashFlowPolicy is not null)
+        {
+            yield return CashFlowPolicy;
         }
 
         foreach (DistributionCenterSourcing sourcing

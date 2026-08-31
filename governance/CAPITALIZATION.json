@@ -1234,6 +1234,168 @@
       "correctiveAction": "Audit generated C# payloads for known cross-namespace symbols before worktree creation and require the corresponding explicit using directive.",
       "permanentGuard": "Generated code using CapacityConstraint must import LotSizingDataModel.Core.DecisionModel.Constraints unless declared in that namespace; the closure table is extensible for future cross-namespace symbols.",
       "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-138",
+      "category": "multiobjective-explicit-criterion-provenance",
+      "symptom": "WeightedSum or Lexicographic execution silently invents weights, priorities or criteria from collection order.",
+      "rootCause": "Objective aggregation mode existed before executable criterion data.",
+      "correctiveAction": "Require explicit ObjectiveCriterionExecutionSpecification entries for every multiobjective execution.",
+      "permanentGuard": "Weights, priorities and tolerances are explicit data and are never inferred.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-139",
+      "category": "lexicographic-optimality-preservation",
+      "symptom": "A lexicographic stage is frozen from a merely feasible or gap-limited incumbent.",
+      "rootCause": "Sequential solving was confused with exact lexicographic optimization.",
+      "correctiveAction": "Require proven optimality before adding the preservation constraint for a completed stage.",
+      "permanentGuard": "Exact lexicographic execution cannot advance from a non-optimal stage result.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-140",
+      "category": "cash-flow-vs-opex-separation",
+      "symptom": "Cash solvency is modeled as another periodic OPEX budget or OPEX is treated as a cash balance.",
+      "rootCause": "Budget and treasury constraints both use monetary values but have different state/timing semantics.",
+      "correctiveAction": "Keep CashFlowPolicy, cash-balance state equations and OPEX envelopes mathematically distinct.",
+      "permanentGuard": "OPEX limits expenditure; cash flow carries a balance state with receipts, disbursements, delays and solvency.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-141",
+      "category": "financial-term-timing",
+      "symptom": "A monetary objective term is placed into cash flow without an unambiguous event period.",
+      "rootCause": "Financial timing was derived from family names rather than canonical domain-key periods.",
+      "correctiveAction": "Use canonical period segments plus explicit receipt/disbursement delays; reject ambiguous unperiodized monetary terms.",
+      "permanentGuard": "Cash-flow timing requires explicit period evidence; no filename/category heuristic may invent timing.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-142",
+      "category": "scheduling-opex-coverage",
+      "symptom": "New setup, start-up or changeover costs enter the objective but are omitted from periodic OPEX constraints.",
+      "rootCause": "Budget coverage used a hard-coded list of historical cost families.",
+      "correctiveAction": "Build an additional complete positive economic-cost envelope directly from the periodized economic objective.",
+      "permanentGuard": "Every positive economic objective term carrying a planning period is part of the alpha.33 OPEX envelope.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-143",
+      "category": "semantic-type-declaration-transform",
+      "symptom": "A transactional transform fails because it searches for one exact modifier string such as 'public sealed class T' while the target type is already partial or uses a different valid modifier order.",
+      "rootCause": "The transform encoded source formatting/modifiers instead of the semantic C# type declaration contract.",
+      "correctiveAction": "Locate exactly one class/record declaration by type name with a declaration regex, accept an already-partial type, and insert partial only when required.",
+      "permanentGuard": "Type-declaration transforms must be idempotent and modifier-order independent; literal full declaration strings are forbidden as anchors for partialization.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-144",
+      "category": "partial-type-companion-declarations",
+      "symptom": "A semantic partialization transform rejects a valid type because the payload already contains one or more companion partial declarations.",
+      "rootCause": "The transform required exactly one declaration of the type instead of distinguishing the single primary non-partial declaration from legal partial companions.",
+      "correctiveAction": "Collect all declarations, accept any number of already-partial companions, convert exactly one non-partial declaration when present, and fail only when more than one non-partial declaration exists.",
+      "permanentGuard": "Partial-type transforms operate on declaration sets: zero non-partial declarations means already valid; one means convert it; more than one is an actual ambiguity.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-145",
+      "category": "canonical-model-type-identity",
+      "symptom": "Generated code extends or consumes a plausible shortened type name while the real baseline property uses a different canonical type.",
+      "rootCause": "Conceptual roadmap vocabulary was substituted for concrete source type identity.",
+      "correctiveAction": "Use OptimizationObjectivePolicy consistently and verify its declaration in the baseline before worktree creation.",
+      "permanentGuard": "Generated model extensions resolve canonical C# type identity from the baseline source contract; shortened guessed type names are forbidden.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-146",
+      "category": "namespace-symbol-map-accuracy",
+      "symptom": "The payload namespace audit is green but compilation cannot resolve MathematicalDomainKeyBuilder.",
+      "rootCause": "The audit table mapped MathematicalDomainKeyBuilder to Solver.Mapping instead of its declaring namespace Solver.Building.",
+      "correctiveAction": "Correct the namespace table and require LotSizingDataModel.Solver.Building for MathematicalDomainKeyBuilder.",
+      "permanentGuard": "Namespace self-audits are source contracts and must map every symbol to its actual declaring namespace.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-147",
+      "category": "enum-member-evidence",
+      "symptom": "Generated code references a roadmap concept as an enum member although that member is absent from the actual Core enum.",
+      "rootCause": "Roadmap vocabulary was treated as C# enum-member evidence.",
+      "correctiveAction": "Do not synthesize OptimizationObjectiveKind.Service; preserve Service as an explicit Core/model gap.",
+      "permanentGuard": "Every generated enum-member reference must already exist in the baseline or be introduced deliberately by the same milestone.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-148",
+      "category": "property-type-identity-separation",
+      "symptom": "Generated code correctly resolves the concrete type OptimizationObjectivePolicy but incorrectly renames the SupplyChain property access from ObjectivePolicy to OptimizationObjectivePolicy.",
+      "rootCause": "A global identifier correction was applied across both type positions and member-access positions, conflating declaration identity with property identity.",
+      "correctiveAction": "Keep OptimizationObjectivePolicy as the concrete C# type while preserving SupplyChain.ObjectivePolicy as the canonical property name; validate the property/type pair directly from the baseline before worktree creation.",
+      "permanentGuard": "Type names and property names are separate source contracts. Global identifier substitution across declaration and member-access contexts is forbidden.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-149",
+      "category": "generated-test-property-mutability",
+      "symptom": "Generated tests assign OptimizationObjectivePolicy.PrimaryObjectiveKind although the baseline declares that property read-only.",
+      "rootCause": "Test fixture generation treated a computed/convenience property as configuration state without checking its setter contract.",
+      "correctiveAction": "Configure WeightedSum/Lexicographic through AggregationMode and explicit ExecutionCriteria, and test unsupported Sustainability through an explicit criterion rather than by assigning PrimaryObjectiveKind.",
+      "permanentGuard": "Generated tests must not assign a baseline read-only property. PrimaryObjectiveKind mutability is validated before worktree creation and assignments are rejected by payload self-audit.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-150",
+      "category": "validated-child-attachment-order",
+      "symptom": "A generated fixture assigns a newly constructed OptimizationObjectivePolicy to SupplyChain.ObjectivePolicy before adding the native enabled criteria required by OptimizationObjectivePolicy.EnsureValid().",
+      "rootCause": "Fixture construction treated the parent setter as passive storage although the setter immediately validates the child object.",
+      "correctiveAction": "Construct the policy locally, synchronize native and alpha.33 execution criteria, call policy.EnsureValid(), and only then attach it to SupplyChain.ObjectivePolicy.",
+      "permanentGuard": "A child object whose parent setter invokes validation must be fully valid before attachment; generated tests may not rely on post-attachment completion.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-151",
+      "category": "roadmap-enum-exact-name",
+      "symptom": "Roadmap wording 'Service' is treated as evidence for OptimizationObjectiveKind.Service even though the established Core member is OptimizationObjectiveKind.ServiceLevel.",
+      "rootCause": "Conceptual roadmap labels and exact public C# enum identifiers were conflated.",
+      "correctiveAction": "Use the established ServiceLevel member in executable-support tests and keep both Sustainability and ServiceLevel explicitly unsupported until their real criteria are implemented.",
+      "permanentGuard": "Roadmap vocabulary must be mapped to exact established API identifiers before code generation; ServiceLevel is the current Core identifier.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-152",
+      "category": "exact-identifier-token-matching",
+      "symptom": "A payload self-audit rejects OptimizationObjectiveKind.ServiceLevel because it searches for the prefix string OptimizationObjectiveKind.Service.",
+      "rootCause": "The guard used substring matching for a C# identifier instead of exact token matching.",
+      "correctiveAction": "Use identifier-boundary-aware regex matching and self-test both the forbidden exact token and a valid prefixed identifier before scanning the payload.",
+      "permanentGuard": "Lexical guards for C# identifiers must match complete tokens, never prefixes; every such guard must include a positive and negative self-test.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-153",
+      "category": "behavior-contract-not-error-message",
+      "symptom": "A preflight rejects a valid baseline because it searches for the exact text of a runtime validation exception inside source code.",
+      "rootCause": "A demonstrated behavioral invariant was encoded as a brittle message-literal source contract.",
+      "correctiveAction": "Validate structural API evidence instead: policy declaration, EnsureValid contract, native criterion declaration and policy-to-criterion structural reference.",
+      "permanentGuard": "Behavioral contracts must not be validated by exact exception-message text unless the message itself is the public contract.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-154",
+      "category": "targeted-new-feature-runtime-smoke",
+      "symptom": "New feature tests compile but a fixture/runtime integration defect is discovered only after the full canonical validation pipeline.",
+      "rootCause": "The candidate had no focused execution gate for the tests introduced by the milestone before broad validation.",
+      "correctiveAction": "Execute MultiObjectiveFinancialExecutionTests immediately after candidate commit and before the full warnings-as-errors dependency closure.",
+      "permanentGuard": "Every milestone introducing nontrivial runtime tests must execute a focused new-feature smoke gate before broad Build-Validated.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-155",
+      "category": "test-fixture-aggregation-cardinality",
+      "symptom": "A test intended to verify an unsupported objective never reaches the objective planner because its WeightedSum policy contains only one enabled criterion and is rejected by the native Core policy validator.",
+      "rootCause": "The fixture satisfied the downstream test intent but violated the upstream aggregation invariant required for a valid WeightedSum policy.",
+      "correctiveAction": "Construct unsupported-objective tests with the unsupported criterion plus an Economic control criterion, and enforce at least two execution criteria in the canonical WeightedSum fixture helper.",
+      "permanentGuard": "A fixture testing downstream behavior must first satisfy every upstream Core invariant. Generated WeightedSum fixtures require at least two criteria before native policy construction.",
+      "status": "active"
     }
   ]
 }
