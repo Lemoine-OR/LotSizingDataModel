@@ -1756,6 +1756,87 @@
       "correctiveAction": "Run ParallelMultisiteSchedulingTests immediately after candidate commit.",
       "permanentGuard": "Advanced parallel/multi-site scheduling changes require a focused runtime smoke before Build-Validated.",
       "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-196",
+      "category": "closed-loop-explicit-return-semantics",
+      "symptom": "Product returns are modeled as negative forward demand or inferred implicitly from sales.",
+      "rootCause": "Return generation and forward customer demand were conflated.",
+      "correctiveAction": "Represent returned quantity explicitly per closed-loop return stream and period.",
+      "permanentGuard": "Closed-loop returns are explicit exogenous data unless a separately validated endogenous return model is introduced.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-197",
+      "category": "closed-loop-instance-extension-boundary",
+      "symptom": "Closed-loop metadata silently changes the historical forward SupplyChain XML semantics.",
+      "rootCause": "Reverse-network concepts were inserted by reinterpreting existing forward relationships.",
+      "correctiveAction": "Attach ClosedLoopReturnStreams to the partial LotSizingInstance extension and preserve SupplyChain unchanged.",
+      "permanentGuard": "New closed-loop semantics use explicit extension types rather than reinterpreting forward SupplyChain classes.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-198",
+      "category": "closed-loop-return-conservation",
+      "symptom": "Returned units can disappear or be used twice between recovery and disposal.",
+      "rootCause": "No closed-loop allocation balance was enforced.",
+      "correctiveAction": "Require recoveryInput + disposal = returnedQuantity for every stream and period.",
+      "permanentGuard": "Every explicit return stream has an exact return-allocation conservation equation.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-199",
+      "category": "closed-loop-recovery-yield-sign",
+      "symptom": "Recovered output is injected into inventory with the wrong sign or without applying process yield.",
+      "rootCause": "Closed-loop inflow semantics were disconnected from the established inventory-balance sign convention.",
+      "correctiveAction": "Inject -recoveryYield*recoveryInput into the standard balance lhs, where inflows carry negative coefficients.",
+      "permanentGuard": "Recovered usable output follows the canonical inventory-balance inflow sign and explicit recovery yield.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-200",
+      "category": "closed-loop-inventory-balance-identity",
+      "symptom": "A recovery inflow is attached to an inventory balance solely by a brittle text name.",
+      "rootCause": "Physical target identity was reduced to a generated label.",
+      "correctiveAction": "Locate the target inventory variable by canonical domain key, then require one enabled equality in the standard inventoryBalance family carrying that variable with current-state coefficient +1.",
+      "permanentGuard": "Closed-loop inventory injection combines canonical domain identity with structural balance evidence.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-201",
+      "category": "closed-loop-cost-separation",
+      "symptom": "Exogenous collection cost is multiplied by an endogenous recovery or disposal decision.",
+      "rootCause": "Return acquisition and return allocation costs were merged.",
+      "correctiveAction": "Collection cost is a constant on explicit returned quantity; recovery and disposal unit costs multiply their own decisions.",
+      "permanentGuard": "Closed-loop cost provenance distinguishes exogenous return acquisition from endogenous processing allocation.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-202",
+      "category": "closed-loop-source-preservation",
+      "symptom": "Adding recovery/disposal decisions mutates the standard forward mathematical model.",
+      "rootCause": "Closed-loop transformation was applied in place.",
+      "correctiveAction": "Clone MathematicalModel before adding return decisions, balances, costs and recovered inflows.",
+      "permanentGuard": "Closed-loop mathematical decoration is source-preserving.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-203",
+      "category": "closed-loop-horizon-consistency",
+      "symptom": "Return quantities, capacities and costs use different planning horizons from the parent instance.",
+      "rootCause": "Instance-level extension series were not synchronized or validated.",
+      "correctiveAction": "AddClosedLoopReturnStream resizes to the instance horizon and EnsureClosedLoopValid requires exact horizon parity.",
+      "permanentGuard": "Every closed-loop stream and all of its active series use the parent instance planning horizon.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-204",
+      "category": "targeted-alpha39-runtime-smoke",
+      "symptom": "Closed-loop XML, conservation, yield or inventory-injection defects reach the complete validation campaign.",
+      "rootCause": "No focused closed-loop runtime gate ran first.",
+      "correctiveAction": "Run ClosedLoopSupplyNetworkTests immediately after candidate commit.",
+      "permanentGuard": "Closed-loop milestones execute focused serialization and physical-balance tests before Build-Validated.",
+      "status": "active"
     }
   ]
 }

@@ -1019,6 +1019,20 @@
       "groupingInvariant": "coordination applies to canonical setup-start variables only; persistent setup state is excluded",
       "composition": "compatible with pre-existing lot-size, grouping and additional-capacity semantics because those constraints are not rewritten",
       "knownGaps": "resource-level alternative-machine quantity assignment, sequence and setup-time allocation remain open and are not approximated"
+    },
+    {
+      "id": "closed-loop-supply-network-alpha39",
+      "domain": "network",
+      "scientificStatus": "implemented-executable-foundation",
+      "implementationStatus": "implemented",
+      "instanceModel": "explicit serializable ClosedLoopReturnStream extension on LotSizingInstance; historical SupplyChain schema preserved",
+      "returns": "exogenous returned quantity per stream and period; no negative-demand reinterpretation",
+      "conservation": "recoveryInput + disposal = returnedQuantity",
+      "recovery": "usable recovered output = recoveryYield * recoveryInput and is injected as an inflow into the canonical target inventory balance",
+      "costs": "collection on fixed returned quantity; recovery and disposal on endogenous decisions",
+      "capacity": "optional period-dependent recovery capacity",
+      "projection": "dedicated ClosedLoopDecisionProjector exposes recovery, disposal and recovered output",
+      "knownGaps": "generic LotSizingSolution mapping/checker integration deferred to alpha.40; reverse physical transport lanes and endogenous return-generation models remain open"
     }
   ]
 }
