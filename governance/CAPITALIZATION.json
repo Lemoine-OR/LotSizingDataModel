@@ -1531,6 +1531,87 @@
       "correctiveAction": "Run UlsAlgorithmsHeuristicAdapterTests immediately after candidate commit and before the warnings-as-errors closure.",
       "permanentGuard": "Catalog-wide adapter milestones execute every pinned strategy in a focused runtime smoke before Build-Validated.",
       "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-171",
+      "category": "downstream-dependency-direction",
+      "symptom": "The generic data/model project depends on an algorithm project that is intended to be built later on top of it.",
+      "rootCause": "Roadmap integration wording was interpreted as a dependency from the foundational model toward a downstream algorithm platform.",
+      "correctiveAction": "Keep alpha.36 generic and dependency-free; downstream algorithm projects consume LotSizingDataModel instead.",
+      "permanentGuard": "LotSizingDataModel must not introduce references, packages or namespaces belonging to downstream algorithm projects.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-172",
+      "category": "lagrangian-minimization-sign-convention",
+      "symptom": "A Lagrangian multiplier sign is chosen without a single residual convention, invalidating dual-bound semantics.",
+      "rootCause": "Constraint sense and multiplier domain were treated independently.",
+      "correctiveAction": "Use residual lhs-rhs and enforce lambda>=0 for <=, lambda<=0 for >=, and free lambda for equality in minimization models.",
+      "permanentGuard": "Every relaxed minimization constraint must pass explicit multiplier-domain validation before model transformation.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-173",
+      "category": "lagrangian-source-preservation",
+      "symptom": "Building a relaxation mutates or removes constraints from the original mathematical model.",
+      "rootCause": "Relaxation transformation was applied in place.",
+      "correctiveAction": "Clone the MathematicalModel, disable selected constraints only in the clone, and add lambda*(lhs-rhs) to the cloned objective.",
+      "permanentGuard": "Generic relaxation builders are source-preserving transformations.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-174",
+      "category": "lagrangian-complete-residual",
+      "symptom": "A relaxed objective adds lambda*lhs but omits the -lambda*rhs constant.",
+      "rootCause": "Only variable coefficients were considered during transformation.",
+      "correctiveAction": "Relax the complete residual lhs-rhs, including its objective constant contribution.",
+      "permanentGuard": "Lagrangian objective construction must preserve both residual terms and constants exactly.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-175",
+      "category": "projected-subgradient-domain",
+      "symptom": "A subgradient update moves a multiplier outside the domain required by weak duality.",
+      "rootCause": "Dual ascent was implemented without projection.",
+      "correctiveAction": "Update lambda+step*residual then project onto the exact domain implied by the constraint sense.",
+      "permanentGuard": "Every generic subgradient update is domain-projected and rejects negative or non-finite step sizes.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-176",
+      "category": "dual-primal-bound-separation",
+      "symptom": "A Lagrangian dual value and a primal feasible value are stored without preserving their lower-bound/upper-bound roles.",
+      "rootCause": "Objective values were treated as interchangeable incumbent values.",
+      "correctiveAction": "Track best dual lower bound and best primal upper bound separately and reject weak-duality inversions beyond tolerance.",
+      "permanentGuard": "Minimization LR infrastructure never labels a dual value as an upper bound or a primal feasible value as a lower bound.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-177",
+      "category": "lagrangian-objective-direction-scope",
+      "symptom": "A minimization multiplier convention is silently reused for a maximization model.",
+      "rootCause": "Objective direction was not part of the applicability contract.",
+      "correctiveAction": "Alpha.36 explicitly rejects non-minimization models.",
+      "permanentGuard": "A new objective direction requires a dedicated proven sign convention and tests before support is enabled.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-178",
+      "category": "targeted-alpha36-runtime-smoke",
+      "symptom": "A generic relaxation sign, constant or projection defect reaches the complete validation campaign.",
+      "rootCause": "No focused mathematical transformation gate was executed first.",
+      "correctiveAction": "Run LagrangianRelaxationFoundationTests immediately after candidate commit.",
+      "permanentGuard": "Generic mathematical-infrastructure milestones execute focused algebraic/runtime tests before Build-Validated.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-179",
+      "category": "xunit-nullable-numeric-precision",
+      "symptom": "A generated test passes a nullable double directly to Assert.Equal(expected, actual, precision), causing overload resolution to select an incompatible comparer signature.",
+      "rootCause": "Numeric precision assertions were generated from semantic intent without checking the compile-time nullability of the actual expression.",
+      "correctiveAction": "Assert HasValue first, then compare the non-nullable .Value with the precision overload.",
+      "permanentGuard": "Generated numeric xUnit precision assertions must never target nullable numeric expressions directly.",
+      "status": "active"
     }
   ]
 }

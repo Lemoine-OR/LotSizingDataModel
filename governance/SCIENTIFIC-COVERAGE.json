@@ -981,6 +981,19 @@
       "solution": "Feasible only; UlsSolutionValidator required; normalized projection sets IsOptimal=false and no best bound/gap",
       "validation": "catalog-wide stationary positive-demand smoke plus Wagner-Whitin exact lower-bound comparison",
       "knownGaps": "heuristic parameterization beyond default public factories remains open; broader problem classes remain open"
+    },
+    {
+      "id": "generic-lagrangian-foundation-alpha36",
+      "domain": "relaxation-decomposition-foundation",
+      "scientificStatus": "implemented-minimization-foundation",
+      "implementationStatus": "implemented",
+      "scope": "solver-independent MathematicalModel only; no downstream algorithm-project dependency",
+      "residualConvention": "g(x)=lhs-rhs",
+      "multiplierDomains": "<=: lambda>=0; >=: lambda<=0; =: lambda free",
+      "modelTransformation": "source-preserving clone; selected cloned constraints disabled; complete lambda*(lhs-rhs) added to objective",
+      "subgradient": "generic projected update lambda_next=projection(lambda+step*residual); caller supplies step policy",
+      "bounds": "dual lower bound and primal upper bound tracked separately with weak-duality consistency check",
+      "knownGaps": "maximization LR not enabled; problem-specific decomposition, subproblem orchestration and stopping rules intentionally deferred to downstream algorithm projects"
     }
   ]
 }
