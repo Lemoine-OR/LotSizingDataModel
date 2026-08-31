@@ -17,7 +17,7 @@ public sealed class SmallBucketSchedulingApplicabilityService
         if(profile.BucketMode!=SchedulingBucketMode.SmallBucket || profile.MaximumProducedItemCount is null || profile.MaximumProducedItemCount.PlanningHorizon!=instance.PlanningHorizon || profile.HasSequenceDependentChangeoverTimes || profile.HasSequenceDependentChangeoverCosts || profile.Changeovers.Count>0) return false;
         if(kind==SmallBucketSchedulingFormulationKind.Plsp && profile.SetupCarryOverPolicy==SetupCarryOverPolicy.Forbidden) return false;
         if(!ValidCore(profile,instance.PlanningHorizon,kind)) return false;
-        if(wc.CapacityConstraint is null || wc.CapacityConstraint.PlanningHorizon!=instance.PlanningHorizon) return false;
+        var capacityConstraint=wc.CapacityConstraint; if(capacityConstraint is null || capacityConstraint.PlanningHorizon!=instance.PlanningHorizon) return false;
         if(wc.AdditionalCapacity is not null && (kind==SmallBucketSchedulingFormulationKind.Dlsp || wc.AdditionalCapacity.PlanningHorizon!=instance.PlanningHorizon)) return false;
         LotSizingProblemFeatures features; try{features=LotSizingProblemFeatureExtractor.Extract(instance.SupplyChain);}catch(InvalidOperationException){return false;}
         if(features.HasStartUpCosts || features.HasStartUpTimes || features.HasMinimumLotSizes || features.HasMaximumLotSizes || features.HasLotSizeMultiples || features.IsMultiSite) return false;
@@ -30,9 +30,10 @@ public sealed class SmallBucketSchedulingApplicabilityService
             if(routing.WorkCenters.Count!=1 || routing.WorkCenters[0].PlantId!=plantId || routing.WorkCenters[0].WorkCenterId!=wc.Id) return false;
             if(routing.GroupingConstraint is not null && routing.GroupingConstraint.PlanningHorizon!=instance.PlanningHorizon) return false;
             var matches=instance.SupplyChain.ProductionCharacteristics.Where(c=>c.ItemId==routing.ItemId && c.WorkCenter.PlantId==plantId && c.WorkCenter.WorkCenterId==wc.Id).Take(2).ToArray();
-            if(matches.Length!=1 || matches[0].UnitCapacityConsumption is null || matches[0].UnitCapacityConsumption.PlanningHorizon!=instance.PlanningHorizon) return false;
-            var c=matches[0]; if(c.SetupTime is not null && c.SetupTime.PlanningHorizon!=instance.PlanningHorizon) return false; if(c.FixedSetupCost is not null && c.FixedSetupCost.PlanningHorizon!=instance.PlanningHorizon) return false;
-            for(int t=1;t<=instance.PlanningHorizon;t++){double cap=wc.CapacityConstraint[t], cons=c.UnitCapacityConsumption[t];if(!double.IsFinite(cap)||cap<0||!double.IsFinite(cons)||cons<=0)return false;}
+            if(matches.Length!=1) return false;
+            var c=matches[0]; var unitCapacityConsumption=c.UnitCapacityConsumption; if(unitCapacityConsumption is null || unitCapacityConsumption.PlanningHorizon!=instance.PlanningHorizon) return false;
+            if(c.SetupTime is not null && c.SetupTime.PlanningHorizon!=instance.PlanningHorizon) return false; if(c.FixedSetupCost is not null && c.FixedSetupCost.PlanningHorizon!=instance.PlanningHorizon) return false;
+            for(int t=1;t<=instance.PlanningHorizon;t++){double cap=capacityConstraint[t], cons=unitCapacityConsumption[t];if(!double.IsFinite(cap)||cap<0||!double.IsFinite(cons)||cons<=0)return false;}
         }
         return true;
     }

@@ -1117,6 +1117,24 @@
       "correctiveAction": "Expose HasGroupingConstraints, GroupingConstraint extension and Group notation token while preserving its existing math semantics.",
       "permanentGuard": "Expose HasGroupingConstraints, GroupingConstraint extension and Group notation token while preserving its existing math semantics.",
       "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-125",
+      "category": "nullable-flow-stability",
+      "symptom": "A clean Release build emits CS8602 after a nullable property was checked for null and then dereferenced again through the owning object.",
+      "rootCause": "C# nullable flow analysis does not guarantee that repeated property reads are stable across statements and compound expressions.",
+      "correctiveAction": "Capture nullable properties in local variables, validate the locals once, and use the proven non-null locals for all subsequent reads.",
+      "permanentGuard": "Solver applicability/build code must not rely on repeated nullable property dereferences after a guard when a stable local can carry the proven non-null value.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-126",
+      "category": "clean-build-validation",
+      "symptom": "An initial clean build emits warnings while a later validated build reports zero warnings because prior bin/obj outputs made compilation incremental.",
+      "rootCause": "Validation reused build outputs produced by an earlier preflight, so the later warning count did not prove a clean recompilation.",
+      "correctiveAction": "Run a warnings-as-errors dependency-closure build, delete all bin/obj outputs, then execute the canonical validated build from clean outputs.",
+      "permanentGuard": "A zero-warning release claim is valid only after a clean recompilation; preflight outputs must never mask compiler diagnostics in the canonical validation gate.",
+      "status": "active"
     }
   ]
 }
