@@ -79,6 +79,7 @@ public static class StandardLotSizingFormulationFactory
         [
             new ProductionVariableFamilyBuilder(),
             new SetupVariableFamilyBuilder(),
+            new ProductionStartUpVariableFamilyBuilder(),
             new InventoryVariableFamilyBuilder(),
             new InventorySetupVariableFamilyBuilder(),
             new InventorySafetyStockViolationVariableFamilyBuilder(),
@@ -113,6 +114,7 @@ public static class StandardLotSizingFormulationFactory
         [
             new ProductionCostObjectiveTermBuilder(),
             new ProductionSetupCostObjectiveTermBuilder(),
+            new ProductionStartUpCostObjectiveTermBuilder(),
             new InventoryCostObjectiveTermBuilder(),
             new InventorySetupCostObjectiveTermBuilder(),
             new InventorySafetyStockViolationCostObjectiveTermBuilder(),
@@ -151,6 +153,7 @@ public static class StandardLotSizingFormulationFactory
         return
         [
             new ProductionSetupLinkConstraintFamilyBuilder(),
+            new ProductionStartUpDefinitionConstraintFamilyBuilder(),
             new MinimumLotSizeConstraintFamilyBuilder(),
             new MaximumLotSizeConstraintFamilyBuilder(),
             new LotSizeMultipleConstraintFamilyBuilder(),

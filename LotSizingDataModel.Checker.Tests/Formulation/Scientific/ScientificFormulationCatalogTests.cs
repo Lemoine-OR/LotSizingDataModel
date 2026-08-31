@@ -103,7 +103,6 @@ public sealed class ScientificFormulationCatalogTests
     }
 
     [Theory]
-    [InlineData(LotSizingProblemClassExtensionKind.StartUpCosts)]
     [InlineData(LotSizingProblemClassExtensionKind.StartUpTimes)]
     [InlineData(LotSizingProblemClassExtensionKind.MultipleObjectives)]
     [InlineData(LotSizingProblemClassExtensionKind.IntegratedScheduling)]

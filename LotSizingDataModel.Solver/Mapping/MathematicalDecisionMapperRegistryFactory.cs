@@ -1,4 +1,4 @@
-﻿namespace LotSizingDataModel.Solver.Mapping;
+namespace LotSizingDataModel.Solver.Mapping;
 
 /// <summary>
 /// Creates preconfigured mathematical decision-mapper
@@ -22,6 +22,7 @@ public static class MathematicalDecisionMapperRegistryFactory
         registry.Register(new AuxiliaryMicroPeriodChangeoverDecisionMapper());
         registry.Register(new AuxiliaryMicroPeriodSetupStartDecisionMapper());
         registry.Register(new AuxiliaryMacroProductionActivationDecisionMapper());
+        registry.Register(new AuxiliaryProductionStartUpDecisionMapper());
         registry.Register(new SetupDecisionMapper());
         registry.Register(new InventoryDecisionMapper());
         registry.Register(new InventorySetupDecisionMapper());

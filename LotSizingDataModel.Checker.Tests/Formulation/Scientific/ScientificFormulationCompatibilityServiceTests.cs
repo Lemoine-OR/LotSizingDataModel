@@ -60,12 +60,12 @@ public sealed class ScientificFormulationCompatibilityServiceTests
     }
 
     [Fact]
-    public void StandardFormulation_StartUpCostExtension_IsIncompatible()
+    public void StandardFormulation_StartUpTimeExtension_IsIncompatible()
     {
         LotSizingProblemFeatures features =
             BaseFeatures();
 
-        features.HasStartUpCosts = true;
+        features.HasStartUpTimes = true;
 
         ScientificFormulationCompatibilityResult result =
             _service.Assess(
@@ -79,7 +79,7 @@ public sealed class ScientificFormulationCompatibilityServiceTests
 
         Assert.Contains(
             LotSizingDataModel.Instance.ProblemClasses
-                .LotSizingProblemClassExtensionKind.StartUpCosts,
+                .LotSizingProblemClassExtensionKind.StartUpTimes,
             result.KnownUnsupportedExtensions);
 
         Assert.Contains(

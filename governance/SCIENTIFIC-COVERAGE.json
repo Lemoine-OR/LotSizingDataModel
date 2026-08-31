@@ -920,6 +920,18 @@
       "notation": "Existing capacity semantics",
       "checker": "Existing WorkCenterCapacityDecision projection",
       "notes": "DLSP remains unsupported pending exact formulation."
+    },
+    {
+      "id": "start-up-execution-alpha31",
+      "domain": "setup-scheduling",
+      "scientificStatus": "implemented",
+      "implementationStatus": "implemented",
+      "core": "Existing StartUpCost and StartUpTime on ProductionCharacteristic",
+      "instance": "Existing HasStartUpCosts/HasStartUpTimes + SU/SUT notation",
+      "mathematics": "Dedicated auxiliaryProductionStartUp event; exact transition synchronization; separate start-up objective/capacity terms",
+      "notation": "SU and SUT retained; no nominal token is used as executable evidence",
+      "checker": "Independent MathematicalSolutionValueProjector reconstruction from normalized setup/scheduling state",
+      "notes": "StartUpCost executable in Standard, DLSP, CSLP, PLSP and GLSP. StartUpTime executable in CSLP, PLSP and GLSP; KnownUnsupported in Standard and DLSP."
     }
   ]
 }

@@ -78,7 +78,7 @@ public sealed class ScientificFormulationSelectionServiceTests
         LotSizingProblemFeatures features =
             BaseFeatures();
 
-        features.HasStartUpCosts = true;
+        features.HasStartUpTimes = true;
 
         var registry =
             new MathematicalModelFormulationRegistry();

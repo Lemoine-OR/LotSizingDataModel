@@ -12,8 +12,6 @@ public static class MathematicalFormulationScientificCatalog
         SmallBucketKnownUnsupportedExtensions =
             new[]
             {
-                LotSizingProblemClassExtensionKind.StartUpCosts,
-                LotSizingProblemClassExtensionKind.StartUpTimes,
                 LotSizingProblemClassExtensionKind.ProductionLeadTimes,
                 LotSizingProblemClassExtensionKind.MinimumLotSize,
                 LotSizingProblemClassExtensionKind.MaximumLotSize,
@@ -53,6 +51,7 @@ public static class MathematicalFormulationScientificCatalog
                 new[]
                 {
                     LotSizingProblemClassExtensionKind.InitialInventory,
+                    LotSizingProblemClassExtensionKind.StartUpCosts,
                     LotSizingProblemClassExtensionKind.SafetyStock,
                     LotSizingProblemClassExtensionKind.Backlogging,
                     LotSizingProblemClassExtensionKind.SetupTimes,
@@ -81,7 +80,6 @@ public static class MathematicalFormulationScientificCatalog
             knownUnsupportedExtensions:
                 new[]
                 {
-                    LotSizingProblemClassExtensionKind.StartUpCosts,
                     LotSizingProblemClassExtensionKind.StartUpTimes,
                     LotSizingProblemClassExtensionKind.MultipleObjectives,
                     LotSizingProblemClassExtensionKind.IntegratedScheduling,
@@ -119,7 +117,10 @@ public static class MathematicalFormulationScientificCatalog
                     "SupplierCapacityConstraintFamilyBuilder",
                     "TransportVariableFamilyBuilder",
                     "WarehouseCapacityConstraintFamilyBuilder",
-                    "PeriodicOperatingExpenditureBudgetConstraintFamilyBuilder"
+                    "PeriodicOperatingExpenditureBudgetConstraintFamilyBuilder",
+                    "ProductionStartUpVariableFamilyBuilder",
+                    "ProductionStartUpDefinitionConstraintFamilyBuilder",
+                    "ProductionStartUpCostObjectiveTermBuilder"
                 });
 
     public static MathematicalFormulationScientificProfile
@@ -139,6 +140,7 @@ public static class MathematicalFormulationScientificCatalog
                     new[]
                     {
                         LotSizingProblemClassExtensionKind.InitialInventory,
+                        LotSizingProblemClassExtensionKind.StartUpCosts,
                         LotSizingProblemClassExtensionKind.SafetyStock,
                         LotSizingProblemClassExtensionKind.Backlogging,
                         LotSizingProblemClassExtensionKind
@@ -164,6 +166,7 @@ public static class MathematicalFormulationScientificCatalog
                     SmallBucketKnownUnsupportedExtensions
                         .Concat(new[]
                         {
+                            LotSizingProblemClassExtensionKind.StartUpTimes,
                             LotSizingProblemClassExtensionKind.SetupTimes,
                             LotSizingProblemClassExtensionKind.AdditionalProductionCapacity
                         })
@@ -186,7 +189,10 @@ public static class MathematicalFormulationScientificCatalog
                         "SmallBucketGroupingConstraintFamilyBuilder",
                         "SmallBucketProductionStateConstraintFamilyBuilder",
                         "SmallBucketProducedItemCountConstraintFamilyBuilder",
-                        "SmallBucketSetupStartCostObjectiveTermBuilder"
+                        "SmallBucketSetupStartCostObjectiveTermBuilder",
+                        "SmallBucketStartUpVariableFamilyBuilder",
+                        "SmallBucketStartUpDefinitionConstraintFamilyBuilder",
+                        "SmallBucketStartUpCostObjectiveTermBuilder"
                     });
 
     public static MathematicalFormulationScientificProfile
@@ -206,6 +212,8 @@ public static class MathematicalFormulationScientificCatalog
                     new[]
                     {
                         LotSizingProblemClassExtensionKind.InitialInventory,
+                        LotSizingProblemClassExtensionKind.StartUpCosts,
+                        LotSizingProblemClassExtensionKind.StartUpTimes,
                         LotSizingProblemClassExtensionKind.SafetyStock,
                         LotSizingProblemClassExtensionKind.Backlogging,
                         LotSizingProblemClassExtensionKind
@@ -248,7 +256,10 @@ public static class MathematicalFormulationScientificCatalog
                         "SmallBucketGroupingConstraintFamilyBuilder",
                         "SmallBucketProductionStateConstraintFamilyBuilder",
                         "SmallBucketProducedItemCountConstraintFamilyBuilder",
-                        "SmallBucketSetupStartCostObjectiveTermBuilder"
+                        "SmallBucketSetupStartCostObjectiveTermBuilder",
+                        "SmallBucketStartUpVariableFamilyBuilder",
+                        "SmallBucketStartUpDefinitionConstraintFamilyBuilder",
+                        "SmallBucketStartUpCostObjectiveTermBuilder"
                     });
 
     public static MathematicalFormulationScientificProfile
@@ -268,6 +279,8 @@ public static class MathematicalFormulationScientificCatalog
                     new[]
                     {
                         LotSizingProblemClassExtensionKind.InitialInventory,
+                        LotSizingProblemClassExtensionKind.StartUpCosts,
+                        LotSizingProblemClassExtensionKind.StartUpTimes,
                         LotSizingProblemClassExtensionKind.SafetyStock,
                         LotSizingProblemClassExtensionKind.Backlogging,
                         LotSizingProblemClassExtensionKind
@@ -315,7 +328,10 @@ public static class MathematicalFormulationScientificCatalog
                         "SmallBucketProductionStateConstraintFamilyBuilder",
                         "SmallBucketProducedItemCountConstraintFamilyBuilder",
                         "PlspSetupTransitionLimitConstraintFamilyBuilder",
-                        "SmallBucketSetupStartCostObjectiveTermBuilder"
+                        "SmallBucketSetupStartCostObjectiveTermBuilder",
+                        "SmallBucketStartUpVariableFamilyBuilder",
+                        "SmallBucketStartUpDefinitionConstraintFamilyBuilder",
+                        "SmallBucketStartUpCostObjectiveTermBuilder"
                     });
 
     public static MathematicalFormulationScientificProfile
@@ -394,6 +410,9 @@ public static class MathematicalFormulationScientificCatalog
                         "GlspSetupStartVariableFamilyBuilder",
                         "GlspSetupStartDefinitionConstraintFamilyBuilder",
                         "GlspSetupStartCostObjectiveTermBuilder",
+                        "GlspStartUpVariableFamilyBuilder",
+                        "GlspStartUpDefinitionConstraintFamilyBuilder",
+                        "GlspStartUpCostObjectiveTermBuilder",
                         "GlspSetupCountConstraintFamilyBuilder",
                         "GlspGroupingConstraintFamilyBuilder",
                         "GlspProducedItemCountConstraintFamilyBuilder",

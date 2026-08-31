@@ -1,4 +1,4 @@
-﻿using LotSizingDataModel.Checker.Contracts;
+using LotSizingDataModel.Checker.Contracts;
 using LotSizingDataModel.Core.PhysicalModel;
 using LotSizingDataModel.Solution;
 using LotSizingDataModel.Solution.Decisions;
@@ -157,6 +157,9 @@ public sealed class MathematicalSolutionValueProjector :
 
             MathematicalDecisionCategory.AuxiliaryMacroProductionActivation =>
                 ResolveProduction(solution, key, production => Math.Abs(production.GetQuantity(GetPeriod(key))) > 1e-9 ? 1.0 : 0.0),
+
+            MathematicalDecisionCategory.AuxiliaryProductionStartUp =>
+                ResolveProductionStartUp(solution, key),
 
             MathematicalDecisionCategory.Inventory =>
                 ResolveInventory(
@@ -348,6 +351,24 @@ public sealed class MathematicalSolutionValueProjector :
         if (currentIndex < 0) { throw new InvalidOperationException("No candidate micro-period decision matches the changeover domain key."); }
         if (currentIndex == 0) { return ordered[0].SetupItemId == toItemId ? 1.0 : 0.0; }
         return ordered[currentIndex - 1].SetupItemId == fromItemId && ordered[currentIndex].SetupItemId == toItemId ? 1.0 : 0.0;
+    }
+
+    private static double ResolveProductionStartUp(
+        LotSizingSolution solution,
+        MathematicalDomainKey key)
+    {
+        if (key.TryGetInt32(MathematicalDomainKeySegment.MicroPeriod, out _))
+        {
+            return ResolveMicroSetupStart(solution, key);
+        }
+
+        return ResolveProduction(
+            solution,
+            key,
+            production =>
+                IsSchedulingSetupStart(production, key)
+                    ? 1.0
+                    : 0.0);
     }
 
     private static double ResolveMicroSetupStart(

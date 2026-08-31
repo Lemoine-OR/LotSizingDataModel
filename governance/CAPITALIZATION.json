@@ -1135,6 +1135,60 @@
       "correctiveAction": "Run a warnings-as-errors dependency-closure build, delete all bin/obj outputs, then execute the canonical validated build from clean outputs.",
       "permanentGuard": "A zero-warning release claim is valid only after a clean recompilation; preflight outputs must never mask compiler diagnostics in the canonical validation gate.",
       "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-127",
+      "category": "start-up-distinct-event-semantics",
+      "symptom": "StartUpCost or StartUpTime is charged through setup state, setup-start cost/time, or sequence-dependent changeover variables.",
+      "rootCause": "Start-up, setup occurrence and changeover were conflated although the Core model exposes distinct parameter families.",
+      "correctiveAction": "Represent start-up with its own mathematical category and synchronize it exactly with the applicable transition event while keeping all cost/time parameters separate.",
+      "permanentGuard": "SU/SUT may never reuse FixedSetupCost, SetupTime, SDCC or SDCT parameters or categories; coexistence must be additive and independently testable.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-128",
+      "category": "startup-executable-support-boundary",
+      "symptom": "StartUpTime is advertised executable in a scheduling formulation whose capacity semantics cannot represent it exactly.",
+      "rootCause": "Representation-level support was confused with executable mathematical support.",
+      "correctiveAction": "Keep StartUpTime KnownUnsupported for DLSP and the standard formulation until an exact capacity formulation is implemented; enable it only for CSLP, PLSP and GLSP in alpha.31.",
+      "permanentGuard": "Executable support requires exact event, capacity/objective propagation and independent checker projection; notation tokens alone never establish executable support.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-129",
+      "category": "generated-csharp-namespace-closure",
+      "symptom": "A generated C# source compiles only after manually adding a namespace import for a symbol introduced by the same pack.",
+      "rootCause": "Pack generation validated file presence and syntax shape but did not validate namespace closure of generated downstream sources before delivery.",
+      "correctiveAction": "Audit generated C# payload files for known cross-namespace symbols before creating a worktree and fail the pack self-audit when the required namespace import is absent.",
+      "permanentGuard": "Generated Solver.Formulation sources using MathematicalDecisionCategory, MathematicalDomainKeyBuilder or MathematicalDomainKeySegment must explicitly import LotSizingDataModel.Solver.Mapping unless they are themselves in that namespace.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-130",
+      "category": "generated-payload-line-ending-contract",
+      "symptom": "Git emits repeated LF-to-CRLF conversion warnings while staging a generated Windows-oriented pack.",
+      "rootCause": "Generated payload files used LF while the repository checkout contract normalizes these text files to CRLF.",
+      "correctiveAction": "Seal generated C# and payload text with CRLF and verify line endings before creating the transactional worktree.",
+      "permanentGuard": "Windows-targeted LotSizingDataModel pack payloads must pass a CRLF self-audit and must never contain CRCRLF.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-131",
+      "category": "generated-xunit-analyzer-contract",
+      "symptom": "A generated test compiles as C# but fails the warnings-as-errors gate because xUnit analyzer xUnit2031 rejects Assert.Single(collection.Where(predicate)).",
+      "rootCause": "Generated tests were checked for C# namespace closure but not for repository-enforced xUnit analyzer idioms.",
+      "correctiveAction": "Use Assert.Single(collection, predicate) and audit generated test payloads for the forbidden Where-before-Assert.Single pattern before creating a worktree.",
+      "permanentGuard": "Generated xUnit tests must respect repository analyzer rules before delivery; Assert.Single(collection.Where(...)) is forbidden in generated payloads.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-132",
+      "category": "scientific-catalog-test-parity",
+      "symptom": "A scientific catalog correctly promotes an extension from KnownUnsupported to Supported, but historical compatibility/selection tests still assert the previous unsupported contract.",
+      "rootCause": "The milestone updated implementation and scientific catalog without treating historical scientific tests as another parity surface of the same executable-support contract.",
+      "correctiveAction": "Retarget obsolete incompatibility fixtures to a genuinely unsupported neighboring extension and remove promoted extensions from KnownUnsupported theory data without weakening the tests.",
+      "permanentGuard": "Every ScientificFormulationCatalog support-status change must update and post-validate catalog, compatibility and selection tests in the same transactional candidate.",
+      "status": "active"
     }
   ]
 }

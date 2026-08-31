@@ -1,4 +1,4 @@
-﻿namespace LotSizingDataModel.Solver.Mapping;
+namespace LotSizingDataModel.Solver.Mapping;
 
 /// <summary>
 /// Provides the canonical mathematical domain-key categories
@@ -159,4 +159,7 @@ public static class MathematicalDecisionCategory
 
     public const string AuxiliaryMacroProductionActivation =
         "auxiliaryMacroProductionActivation";
+
+    public const string AuxiliaryProductionStartUp =
+        "auxiliaryProductionStartUp";
 }
