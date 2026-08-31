@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.ComponentModel;
 using System.Linq;
 using System.Xml.Serialization;
@@ -20,7 +20,7 @@ namespace LotSizingDataModel.Solution.Decisions;
 /// </remarks>
 [Serializable]
 [XmlType(TypeName = "inventoryDecision")]
-public sealed class InventoryDecision :
+public sealed partial class InventoryDecision :
     ModelObject,
     IPlanningHorizonAware
 {
@@ -575,6 +575,7 @@ public sealed class InventoryDecision :
     public void Clear()
     {
         Levels.Fill(0.0);
+        InitialInventoryLevel = 0.0;
         SafetyStockViolations.Fill(0.0);
         Setups.Fill(0);
         AdditionalCapacityUsed.Fill(0.0);

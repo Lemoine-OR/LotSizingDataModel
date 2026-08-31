@@ -932,6 +932,19 @@
       "notation": "SU and SUT retained; no nominal token is used as executable evidence",
       "checker": "Independent MathematicalSolutionValueProjector reconstruction from normalized setup/scheduling state",
       "notes": "StartUpCost executable in Standard, DLSP, CSLP, PLSP and GLSP. StartUpTime executable in CSLP, PLSP and GLSP; KnownUnsupported in Standard and DLSP."
+    },
+    {
+      "id": "historical-semantics-alpha32",
+      "domain": "historical-classification",
+      "scientificStatus": "implemented-with-explicit-gaps",
+      "implementationStatus": "implemented",
+      "core": "InitialInventoryDecisionMode + SalesOption generic semantics",
+      "instance": "Wolsey exact counters, DLS/DLSI projection, SB1/SB2/BB and SET projection, source-only IM/VM metadata",
+      "mathematics": "Standard MILP period-zero initial inventory variable and cost for VariableDecision",
+      "solution": "InventoryDecision.InitialInventoryLevel",
+      "checker": "Independent mathematical projection for period-zero inventory plus historical semantic consistency analyzer",
+      "knownGaps": "SalesOption execution remains open; IM/VM generic meaning remains intentionally unresolved; inverse historical detection stays conservative",
+      "notes": "Historical labels are projections of generic semantics and never evidence by themselves."
     }
   ]
 }

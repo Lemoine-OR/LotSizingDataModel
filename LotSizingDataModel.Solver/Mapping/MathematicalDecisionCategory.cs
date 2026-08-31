@@ -21,6 +21,8 @@ public static class MathematicalDecisionCategory
     /// </summary>
     public const string Inventory = "inventory";
 
+    public const string InitialInventory = "initialInventory";
+
     /// <summary>
     /// Identifies inventory setup decision variables.
     /// </summary>

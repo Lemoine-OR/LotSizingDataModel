@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Serialization;
@@ -253,6 +253,12 @@ public sealed class SupplyChain :
     [XmlArray("demands")]
     [XmlArrayItem("demand")]
     public List<Demand> Demands { get; } = new();
+    /// <summary>
+    /// Gets optional additional-sales opportunities.
+    /// </summary>
+    [XmlArray("salesOptions")]
+    [XmlArrayItem("salesOption")]
+    public List<SalesOption> SalesOptions { get; } = new();
 
     /// <summary>
     /// Gets the warehouse sourcing options available
@@ -520,6 +526,22 @@ public sealed class SupplyChain :
             "A demand already exists for this item " +
             "and distribution center.");
     }
+    /// <summary>
+    /// Adds an optional additional-sales relationship.
+    /// </summary>
+    public void AddSalesOption(SalesOption salesOption)
+    {
+        AddUnique(
+            SalesOptions,
+            salesOption,
+            existing =>
+                existing.ItemId == salesOption.ItemId &&
+                existing.DistributionCenterId ==
+                    salesOption.DistributionCenterId,
+            nameof(SalesOptions),
+            "A sales option already exists for this item " +
+            "and distribution center.");
+    }
 
     /// <summary>
     /// Adds a distribution-center sourcing relationship.
@@ -687,6 +709,10 @@ public sealed class SupplyChain :
         foreach (Demand demand in Demands)
         {
             yield return demand;
+        }
+        foreach (SalesOption salesOption in SalesOptions)
+        {
+            yield return salesOption;
         }
 
         foreach (DistributionCenterSourcing sourcing

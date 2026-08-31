@@ -161,6 +161,9 @@ public sealed class MathematicalSolutionValueProjector :
             MathematicalDecisionCategory.AuxiliaryProductionStartUp =>
                 ResolveProductionStartUp(solution, key),
 
+            MathematicalDecisionCategory.InitialInventory =>
+                ResolveInitialInventory(solution, key),
+
             MathematicalDecisionCategory.Inventory =>
                 ResolveInventory(
                     solution,
@@ -353,6 +356,44 @@ public sealed class MathematicalSolutionValueProjector :
         return ordered[currentIndex - 1].SetupItemId == fromItemId && ordered[currentIndex].SetupItemId == toItemId ? 1.0 : 0.0;
     }
 
+    private static double ResolveInitialInventory(
+        LotSizingSolution solution,
+        MathematicalDomainKey key)
+    {
+        int itemId =
+            key.GetRequiredInt32(
+                MathematicalDomainKeySegment.Item);
+
+        bool hasWarehouse =
+            key.TryGetInt32(
+                MathematicalDomainKeySegment.Warehouse,
+                out int warehouseId);
+
+        bool hasPlant =
+            key.TryGetInt32(
+                MathematicalDomainKeySegment.Plant,
+                out int plantId);
+
+        if (hasWarehouse == hasPlant)
+        {
+            throw new InvalidOperationException(
+                "An initial-inventory key must identify exactly one warehouse.");
+        }
+
+        var decision =
+            solution.InventoryDecisions.SingleOrDefault(
+                candidate =>
+                    candidate.ItemId == itemId &&
+                    (hasWarehouse
+                        ? candidate.Warehouse.Kind ==
+                            WarehouseReferenceKind.StandaloneWarehouse &&
+                          candidate.Warehouse.ReferenceId == warehouseId
+                        : candidate.Warehouse.Kind ==
+                            WarehouseReferenceKind.PlantWarehouse &&
+                          candidate.Warehouse.ReferenceId == plantId));
+
+        return decision?.InitialInventoryLevel ?? 0.0;
+    }
     private static double ResolveProductionStartUp(
         LotSizingSolution solution,
         MathematicalDomainKey key)

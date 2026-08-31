@@ -89,7 +89,12 @@ public sealed class InventoryBalanceConstraintFamilyBuilder :
                                     inventory.ItemId,
                                     inventory.Warehouse,
                                     period - 1))
-                        : null;
+                        : inventory.InitialInventoryDecisionMode ==
+                            InitialInventoryDecisionMode.VariableDecision
+                            ? context.GetVariable(
+                                InitialInventoryDecisionDomainKeyFactory.Create(
+                                    inventory))
+                            : null;
 
                 var balance =
                     new InventoryBalanceConstraintBuilder()
@@ -131,9 +136,21 @@ public sealed class InventoryBalanceConstraintFamilyBuilder :
                     inventory.ScheduledReceipt?[period] ??
                     0.0;
 
+                if (period == 1 &&
+                    inventory.InitialInventoryDecisionMode !=
+                        InitialInventoryDecisionMode.FixedParameter &&
+                    inventory.InitialInventory != 0.0)
+                {
+                    throw new InvalidOperationException(
+                        "DLS/DLSI initial-stock semantics require the fixed " +
+                        "InitialInventory value to be zero.");
+                }
+
                 double rightHandSide =
                     fixedInflow +
-                    (period == 1
+                    (period == 1 &&
+                     inventory.InitialInventoryDecisionMode ==
+                        InitialInventoryDecisionMode.FixedParameter
                         ? inventory.InitialInventory
                         : 0.0);
 

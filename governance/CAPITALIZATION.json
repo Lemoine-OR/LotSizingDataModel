@@ -1189,6 +1189,51 @@
       "correctiveAction": "Retarget obsolete incompatibility fixtures to a genuinely unsupported neighboring extension and remove promoted extensions from KnownUnsupported theory data without weakening the tests.",
       "permanentGuard": "Every ScientificFormulationCatalog support-status change must update and post-validate catalog, compatibility and selection tests in the same transactional candidate.",
       "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-133",
+      "category": "historical-semantic-evidence",
+      "symptom": "A historical acronym is treated as proof that the corresponding generic business or mathematical semantics exist.",
+      "rootCause": "Declared historical classification and detected generic semantics were allowed to collapse into one evidence channel.",
+      "correctiveAction": "Represent generic semantics first and project the historical classification only from model evidence; preserve source codes separately.",
+      "permanentGuard": "Declared historical labels never count as detected semantic evidence.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-134",
+      "category": "initial-stock-decision-distinction",
+      "symptom": "Fixed initial inventory, variable initial inventory and absence of an initial-stock variable are represented by the same scalar field.",
+      "rootCause": "A parameter value was used to encode three mathematically different problem semantics.",
+      "correctiveAction": "Use an explicit InitialInventoryDecisionMode and a real period-zero variable for VariableDecision.",
+      "permanentGuard": "DLSI requires a real period-zero variable; DLS requires no such variable and fixed zero; neither may be inferred from a numeric zero alone.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-135",
+      "category": "historical-exact-counters",
+      "symptom": "Exact NK/NI/NT/NL values are lost or approximated by coarse universal-notation tokens.",
+      "rootCause": "Cardinality descriptors and compact notation were conflated.",
+      "correctiveAction": "Keep exact historical counters in a lossless descriptor and postpone notation-v2 changes until a real grammar need exists.",
+      "permanentGuard": "Exact historical counters must remain lossless even when universal notation intentionally stays coarser.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-136",
+      "category": "source-label-no-inference",
+      "symptom": "An undocumented or insufficiently defined historical label such as IM/VM is assigned a guessed generic meaning.",
+      "rootCause": "Acronym resemblance or contextual intuition was substituted for primary-source semantics.",
+      "correctiveAction": "Preserve the label as source metadata and keep automatic inference disabled until primary-source semantics are verified.",
+      "permanentGuard": "Unknown historical source labels are preserved, never semantically invented.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-137",
+      "category": "generated-core-namespace-closure",
+      "symptom": "A generated downstream C# source uses a Core decision-model type such as CapacityConstraint but omits its namespace import.",
+      "rootCause": "The pack self-audit covered line endings and selected Solver.Mapping symbols but did not cover cross-namespace Core decision-model types.",
+      "correctiveAction": "Audit generated C# payloads for known cross-namespace symbols before worktree creation and require the corresponding explicit using directive.",
+      "permanentGuard": "Generated code using CapacityConstraint must import LotSizingDataModel.Core.DecisionModel.Constraints unless declared in that namespace; the closure table is extensible for future cross-namespace symbols.",
+      "status": "active"
     }
   ]
 }
