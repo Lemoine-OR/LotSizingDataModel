@@ -1007,6 +1007,18 @@
       "applicability": "continuous, integer and binary mathematical variables with finite native or explicit search bounds; semi-domains deferred",
       "exactRepairScope": "OriginalObjective mode with fixings, bounds, allowed-active binaries, Hamming radius and objective cutoff",
       "knownGaps": "semi-continuous and semi-integer latent encoding and distance/proximity exact-repair objective modes remain open"
+    },
+    {
+      "id": "advanced-parallel-multisite-scheduling-alpha38",
+      "domain": "scheduling",
+      "scientificStatus": "implemented-partial-executable",
+      "implementationStatus": "implemented",
+      "topology": "parallel routings detected by common ItemId; exact routing and plant identifiers preserved",
+      "multiSite": "explicitly detected when alternative routings for one item span multiple PlantId values",
+      "execution": "source-preserving setup-start concurrency constraints across alternative routings, with AcrossAllSites or WithinEachPlant scope",
+      "groupingInvariant": "coordination applies to canonical setup-start variables only; persistent setup state is excluded",
+      "composition": "compatible with pre-existing lot-size, grouping and additional-capacity semantics because those constraints are not rewritten",
+      "knownGaps": "resource-level alternative-machine quantity assignment, sequence and setup-time allocation remain open and are not approximated"
     }
   ]
 }

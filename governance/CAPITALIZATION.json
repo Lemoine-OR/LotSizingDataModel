@@ -1693,6 +1693,69 @@
       "correctiveAction": "Execute MetaheuristicsMatheuristicsBridgeTests immediately after candidate commit.",
       "permanentGuard": "External metaheuristic and matheuristic bridge milestones run focused integration tests before Build-Validated.",
       "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-189",
+      "category": "routing-workcenter-semantics-preservation",
+      "symptom": "Multiple work centers inside one historical production routing are silently reinterpreted as alternative parallel machines.",
+      "rootCause": "Cardinality 1..* was confused with an alternative-resource choice.",
+      "correctiveAction": "Detect parallelism from multiple routings of the same item; keep each routing's WorkCenters semantics unchanged.",
+      "permanentGuard": "Existing WorkCenters collections are never reinterpreted as parallel alternatives without an explicit new business semantic.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-190",
+      "category": "parallel-multisite-derived-topology",
+      "symptom": "Multi-site scheduling topology is inferred by aggregating unrelated items or work centers.",
+      "rootCause": "Plant and routing identifiers were not grouped under the manufactured item.",
+      "correctiveAction": "ParallelSchedulingTopologyAnalyzer groups exact ProductionRouting objects by ItemId and preserves routing/plant identifiers losslessly.",
+      "permanentGuard": "Parallel or multi-site topology detection is item-scoped and identifier-preserving.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-191",
+      "category": "setup-start-vs-setup-state-coordination",
+      "symptom": "A parallel-routing concurrency constraint is applied to persistent setup-state variables.",
+      "rootCause": "Setup occurrences and persistent machine state were conflated.",
+      "correctiveAction": "Consume only canonical setup domain-key variables carrying routing and period coordinates.",
+      "permanentGuard": "Parallel routing coordination in alpha.38 limits setup-start occurrences only and never persistent setup state.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-192",
+      "category": "parallel-coordination-scope-explicit",
+      "symptom": "A multi-site setup coordination limit is applied globally or per site without an explicit policy.",
+      "rootCause": "Coordination scope was implicit.",
+      "correctiveAction": "Require AcrossAllSites or WithinEachPlant explicitly in ParallelRoutingSetupStartLimitPolicy.",
+      "permanentGuard": "Every parallel-routing concurrency limit carries an explicit site scope.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-193",
+      "category": "parallel-scheduling-source-preservation",
+      "symptom": "Adding parallel-routing coordination mutates the canonical source mathematical model.",
+      "rootCause": "Scheduling decoration was applied in place.",
+      "correctiveAction": "Clone MathematicalModel before adding coordination constraints.",
+      "permanentGuard": "Advanced scheduling decorators are source-preserving.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-194",
+      "category": "no-fake-parallel-capacity-assignment",
+      "symptom": "A routing quantity is split or assigned to parallel machines without explicit sequence, setup-time and capacity semantics.",
+      "rootCause": "Parallel-machine execution was approximated using historical sequential WorkCenters data.",
+      "correctiveAction": "Alpha.38 does not claim machine-level quantity assignment; it implements only topology detection and setup-start coordination until explicit resource-assignment semantics exist.",
+      "permanentGuard": "Never create parallel-machine quantity or capacity assignment by reinterpreting sequential routing data.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-195",
+      "category": "targeted-alpha38-runtime-smoke",
+      "symptom": "Parallel/multi-site topology or setup-start coordination defects reach the full validation campaign.",
+      "rootCause": "No focused scheduling bridge test ran first.",
+      "correctiveAction": "Run ParallelMultisiteSchedulingTests immediately after candidate commit.",
+      "permanentGuard": "Advanced parallel/multi-site scheduling changes require a focused runtime smoke before Build-Validated.",
+      "status": "active"
     }
   ]
 }
