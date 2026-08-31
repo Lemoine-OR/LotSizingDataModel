@@ -1396,6 +1396,78 @@
       "correctiveAction": "Construct unsupported-objective tests with the unsupported criterion plus an Economic control criterion, and enforce at least two execution criteria in the canonical WeightedSum fixture helper.",
       "permanentGuard": "A fixture testing downstream behavior must first satisfy every upstream Core invariant. Generated WeightedSum fixtures require at least two criteria before native policy construction.",
       "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-156",
+      "category": "external-dependency-immutable-pin",
+      "symptom": "An external algorithm bridge restores an unpinned or mutable dependency.",
+      "rootCause": "Library version identity was treated as sufficient reproducibility evidence.",
+      "correctiveAction": "Pin ULSAlgorithms 1.1.0, its source commit and exact release-package SHA-256; vendor the verified nupkg.",
+      "permanentGuard": "External algorithm dependencies require version, source commit and immutable artifact hash before candidate creation.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-157",
+      "category": "external-exact-method-identity",
+      "symptom": "An adapter guesses an algorithm name or activates a method merely because it appears related to ULS.",
+      "rootCause": "Roadmap labels were substituted for canonical external catalog identifiers.",
+      "correctiveAction": "Use only wagner-whitin-classical and zangwill-network from the ULSAlgorithms v1.1.0 catalog and verify UlsSolverKind.Exact.",
+      "permanentGuard": "Every external method ID must come from the pinned public catalog and its exact/heuristic kind must be checked at runtime.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-158",
+      "category": "no-silent-algorithm-fallback",
+      "symptom": "A requested exact method is unavailable or inapplicable and another algorithm runs silently.",
+      "rootCause": "Method selection was conflated with fallback-oriented backend selection.",
+      "correctiveAction": "Alpha.34 maps one explicit enum value to one immutable external solver ID; unsupported values fail.",
+      "permanentGuard": "Exact-method adapters execute the requested algorithm or fail; no automatic method fallback is permitted.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-159",
+      "category": "canonical-uls-model-shape-contract",
+      "symptom": "A specialized ULS algorithm is applied to a richer capacitated, multi-item, scheduling or network instance.",
+      "rootCause": "Applicability was inferred from a broad class label without checking the executable mathematical shape.",
+      "correctiveAction": "Require the narrow canonical SI-ULS instance/model structure and reject every unexpected decision category or constraint family.",
+      "permanentGuard": "Specialized adapters validate their complete mathematical applicability contract before calling the external method.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-160",
+      "category": "external-result-completeness",
+      "symptom": "An external solution is projected despite missing periods, inconsistent objective value or failed feasibility validation.",
+      "rootCause": "Successful external return was treated as sufficient normalized-solution evidence.",
+      "correctiveAction": "Require complete horizon vectors, UlsSolutionValidator feasibility and objective parity before projection.",
+      "permanentGuard": "External solver output is untrusted until independently validated and complete.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-161",
+      "category": "targeted-alpha34-runtime-smoke",
+      "symptom": "External-package/catalog/runtime integration fails only during the complete validation campaign.",
+      "rootCause": "No focused gate exercised the newly introduced exact adapters first.",
+      "correctiveAction": "Run UlsAlgorithmsExactAdapterTests immediately after candidate commit and before broad warnings-as-errors validation.",
+      "permanentGuard": "Every external adapter milestone has a focused runtime smoke before Build-Validated.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-162",
+      "category": "repository-wide-nuget-source-visibility",
+      "symptom": "A transitive restore reports NU1101 for a vendored package even though the package file exists in the solver project tree.",
+      "rootCause": "RestoreAdditionalProjectSources was declared only in the package-consuming project and was not visible to the complete restore graph started from another project.",
+      "correctiveAction": "Declare the vendored source in repository-root NuGet.Config so every project restored under the repository sees the same source.",
+      "permanentGuard": "A vendored PackageReference must have repository-level restore-source visibility and must be exercised from a transitive test-project restore.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-163",
+      "category": "vendored-artifact-git-tracking",
+      "symptom": "A verified vendored nupkg exists in the worktree but disappears from the committed candidate.",
+      "rootCause": "The repository-wide Visual Studio .gitignore contains *.nupkg.",
+      "correctiveAction": "Force-add the exact verified ULSAlgorithms.1.1.0.nupkg and assert that git ls-files --stage contains it before committing.",
+      "permanentGuard": "Every intentionally vendored artifact ignored by a generic pattern must be explicitly force-added and staged-verified.",
+      "status": "active"
     }
   ]
 }

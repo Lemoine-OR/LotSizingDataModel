@@ -958,6 +958,17 @@
       "checker": "independent cash-balance mathematical projection",
       "knownGaps": "Sustainability and ServiceLevel criteria remain unsupported; SalesOption execution remains open; legacy scalar LotSizingSolverService is unchanged",
       "notes": "Lexicographic stages require proven optimality. Cash flow is distinct from periodic OPEX."
+    },
+    {
+      "id": "ulsalgorithms-exact-alpha34",
+      "domain": "methods",
+      "scientificStatus": "implemented-with-explicit-applicability",
+      "implementationStatus": "implemented",
+      "methods": "wagner-whitin-classical; zangwill-network",
+      "externalDependency": "ULSAlgorithms 1.1.0 @ 3e5595996d35373dd93f90a9245c6bc9e65f9e0d; nupkg sha256 4eff21da87a9ff7649ee2e0f1c6f835b0af3cfa6bc08dd9ba91306fdd5ff2a3c",
+      "applicability": "canonical deterministic single-item uncapacitated ULS only; strict model-shape rejection otherwise",
+      "solution": "external exact result independently validated, projected to MathematicalModelSolveResult, then mapped by existing IMathematicalSolutionMappingService",
+      "knownGaps": "other exact ULSAlgorithms methods remain open; heuristics deferred to alpha.35; no silent fallback"
     }
   ]
 }
