@@ -1045,6 +1045,20 @@
       "closedLoopSolution": "normalized serializable ClosedLoopDecision mapping plus independent return conservation, yield and recovery-capacity checker",
       "diagnostics": "stable LSDM-FEAS-00x, LSDM-FEAS-SOL-00x and LSDM-FEAS-CL-00x namespaces",
       "knownGaps": "bound-interval analysis is not a complete feasibility proof; campaign-wide audit remains alpha.42"
+    },
+    {
+      "id": "historical-mapping-registry-alpha41",
+      "domain": "historical-classification",
+      "scientificStatus": "implemented-versioned-auditable",
+      "implementationStatus": "implemented",
+      "registryVersion": "1.0-alpha.41",
+      "families": "Wolsey; BitranYanasse; Other",
+      "forwardMapping": "exact, conservative and source-only confidence are explicit",
+      "inverseDetection": "exact rules only, explicit AllowsInverse, complete token-set equality, unique match required",
+      "declaredDetected": "audited as independent sources; declarations never become detection evidence",
+      "wolsey": "validated mappings centralized; SB1/SB2/BB conservative; IM/VM source-only",
+      "bitranYanasse": "family structurally supported; no unproven default rules invented in alpha.41",
+      "knownGaps": "source-backed Bitran-Yanasse rule population and additional historical classifications remain future additions"
     }
   ]
 }

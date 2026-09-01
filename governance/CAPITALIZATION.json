@@ -1927,6 +1927,69 @@
       "correctiveAction": "Run FeasibilityCheckerExpansionTests immediately after candidate commit.",
       "permanentGuard": "Feasibility/checker milestones execute focused runtime tests before Build-Validated.",
       "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-215",
+      "category": "historical-mapping-central-registry",
+      "symptom": "Historical correspondences remain scattered across parsers, descriptors and documentation.",
+      "rootCause": "No versioned authoritative mapping registry existed.",
+      "correctiveAction": "Introduce HistoricalClassificationMappingRegistry with stable rule identifiers, family, projection, confidence, provenance and inverse policy.",
+      "permanentGuard": "Historical mapping knowledge promoted to project semantics must be represented by an auditable registry rule.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-216",
+      "category": "historical-inverse-exact-only",
+      "symptom": "A conservative or partial universal projection is used to recreate a historical label.",
+      "rootCause": "Forward interpretability was confused with invertibility.",
+      "correctiveAction": "Permit inverse detection only for Exact rules explicitly marked AllowsInverse and only on exact complete token-set equality.",
+      "permanentGuard": "Conservative, source-only, subset and superset matches never produce inverse historical labels.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-217",
+      "category": "historical-declared-detected-separation",
+      "symptom": "A source-declared historical label is reused as evidence that the same label was detected.",
+      "rootCause": "Metadata and independent classification evidence were merged.",
+      "correctiveAction": "Audit Declared and Detected token sets as independent inputs and report asymmetric differences.",
+      "permanentGuard": "Declared historical metadata is never a detection proof.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-218",
+      "category": "historical-source-only-labels",
+      "symptom": "A historical machine label such as IM or VM is assigned invented generic semantics.",
+      "rootCause": "Source vocabulary retention was mistaken for semantic interpretation.",
+      "correctiveAction": "Represent unproven labels with SourceOnly confidence and an empty universal projection.",
+      "permanentGuard": "Historical labels without source-backed semantics remain source-only and non-invertible.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-219",
+      "category": "historical-family-no-invented-defaults",
+      "symptom": "A registry milestone fabricates default Bitran-Yanasse mappings merely to populate the family.",
+      "rootCause": "Registry completeness was confused with scientific completeness.",
+      "correctiveAction": "Support BitranYanasse structurally but leave the alpha.41 default rule set empty until source-backed mappings are encoded.",
+      "permanentGuard": "An empty proven mapping set is preferable to invented historical semantics.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-220",
+      "category": "historical-rule-identity-versioning",
+      "symptom": "An existing historical mapping changes meaning silently while retaining the same identity and registry version.",
+      "rootCause": "Mapping rules lacked stable IDs and registry versioning.",
+      "correctiveAction": "Give every rule a stable RuleId and expose BaselineRegistryVersion 1.0-alpha.41.",
+      "permanentGuard": "Semantic changes to established historical rules require explicit versioning and migration evidence.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-221",
+      "category": "targeted-alpha41-historical-smoke",
+      "symptom": "Registry uniqueness, inverse detection or declared/detected separation defects reach the full campaign.",
+      "rootCause": "No focused historical-mapping gate ran first.",
+      "correctiveAction": "Run HistoricalMappingRegistryTests immediately after candidate commit.",
+      "permanentGuard": "Historical-registry milestones execute focused mapping and audit tests before Build-Validated.",
+      "status": "active"
     }
   ]
 }
