@@ -1,0 +1,145 @@
+{
+  "schemaVersion": 1,
+  "contractVersion": "1.0-alpha.43",
+  "stability": "candidate-stable",
+  "uiPolicy": "out-of-scope-separate-downstream-project",
+  "downstreamDependencyDirection": "downstream-projects -> LotSizingDataModel",
+  "criticalPublicTypes": [
+    {
+      "assembly": "LotSizingDataModel.Instance",
+      "type": "LotSizingDataModel.Instance.LotSizingInstance",
+      "sourcePath": "LotSizingDataModel.Instance/LotSizingInstance.cs",
+      "role": "instance-root"
+    },
+    {
+      "assembly": "LotSizingDataModel.Solution",
+      "type": "LotSizingDataModel.Solution.LotSizingSolution",
+      "sourcePath": "LotSizingDataModel.Solution/LotSizingSolution.cs",
+      "role": "solution-root"
+    },
+    {
+      "assembly": "LotSizingDataModel.Solver",
+      "type": "LotSizingDataModel.Solver.Modeling.MathematicalModel",
+      "sourcePath": "LotSizingDataModel.Solver/Modeling/MathematicalModel.cs",
+      "role": "solver-independent-mathematical-model"
+    },
+    {
+      "assembly": "LotSizingDataModel.Checker",
+      "type": "LotSizingDataModel.Checker.Facade.LotSizingSolutionVerificationService",
+      "sourcePath": "LotSizingDataModel.Checker/Facade/LotSizingSolutionVerificationService.cs",
+      "role": "verification-facade"
+    },
+    {
+      "assembly": "LotSizingDataModel.Checker.Campaign",
+      "type": "LotSizingDataModel.Checker.Campaign.DirectoryVerificationCampaignService",
+      "sourcePath": "LotSizingDataModel.Checker.Campaign/Campaign/DirectoryVerificationCampaignService.cs",
+      "role": "directory-campaign-facade"
+    },
+    {
+      "assembly": "LotSizingDataModel.Instance",
+      "type": "LotSizingDataModel.Instance.Historical.HistoricalClassificationMappingRegistry",
+      "sourcePath": "LotSizingDataModel.Instance/Historical/HistoricalClassificationMappingRegistry.cs",
+      "role": "historical-mapping-registry"
+    },
+    {
+      "assembly": "LotSizingDataModel.Instance",
+      "type": "LotSizingDataModel.Instance.Benchmark.BenchmarkRunProvenance",
+      "sourcePath": "LotSizingDataModel.Instance/Benchmark/BenchmarkRunProvenance.cs",
+      "role": "benchmark-run-provenance"
+    },
+    {
+      "assembly": "LotSizingDataModel.Checker.Campaign",
+      "type": "LotSizingDataModel.Checker.Campaign.Benchmark.BenchmarkCampaignReportWriter",
+      "sourcePath": "LotSizingDataModel.Checker.Campaign/Benchmark/BenchmarkCampaignReportWriter.cs",
+      "role": "benchmark-campaign-reporting"
+    }
+  ],
+  "consumerProfiles": [
+    {
+      "id": "data",
+      "assemblies": [
+        "LotSizingDataModel.Core",
+        "LotSizingDataModel.Instance",
+        "LotSizingDataModel.Solution"
+      ]
+    },
+    {
+      "id": "optimization",
+      "assemblies": [
+        "LotSizingDataModel.Core",
+        "LotSizingDataModel.Instance",
+        "LotSizingDataModel.Solution",
+        "LotSizingDataModel.Solver"
+      ]
+    },
+    {
+      "id": "verification",
+      "assemblies": [
+        "LotSizingDataModel.Core",
+        "LotSizingDataModel.Instance",
+        "LotSizingDataModel.Solution",
+        "LotSizingDataModel.Solver",
+        "LotSizingDataModel.Checker"
+      ]
+    },
+    {
+      "id": "campaign",
+      "assemblies": [
+        "LotSizingDataModel.Core",
+        "LotSizingDataModel.Instance",
+        "LotSizingDataModel.Solution",
+        "LotSizingDataModel.Solver",
+        "LotSizingDataModel.Checker",
+        "LotSizingDataModel.Checker.Campaign"
+      ]
+    }
+  ],
+  "forbiddenFoundationDependencies": [
+    "MLLPAlgorithm",
+    "MLLPAlgorithms",
+    "Avalonia",
+    "PresentationFramework",
+    "PresentationCore",
+    "Microsoft.UI.Xaml",
+    "WinUI",
+    "System.Windows.Forms"
+  ],
+  "layerRules": [
+    {
+      "assembly": "LotSizingDataModel.Core",
+      "mustNotReferencePrefixes": [
+        "LotSizingDataModel.Instance",
+        "LotSizingDataModel.Solution",
+        "LotSizingDataModel.Solver",
+        "LotSizingDataModel.Checker"
+      ]
+    },
+    {
+      "assembly": "LotSizingDataModel.Solution",
+      "mustNotReferencePrefixes": [
+        "LotSizingDataModel.Instance",
+        "LotSizingDataModel.Solver",
+        "LotSizingDataModel.Checker"
+      ]
+    },
+    {
+      "assembly": "LotSizingDataModel.Instance",
+      "mustNotReferencePrefixes": [
+        "LotSizingDataModel.Solver",
+        "LotSizingDataModel.Checker"
+      ]
+    },
+    {
+      "assembly": "LotSizingDataModel.Solver",
+      "mustNotReferencePrefixes": [
+        "LotSizingDataModel.Checker"
+      ]
+    },
+    {
+      "assembly": "LotSizingDataModel.Checker",
+      "mustNotReferencePrefixes": [
+        "LotSizingDataModel.Checker.Campaign"
+      ]
+    }
+  ]
+}

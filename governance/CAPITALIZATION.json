@@ -2107,6 +2107,87 @@
       "correctiveAction": "Parse CAPITALIZATION.json and SCIENTIFIC-COVERAGE.json immediately after transforms and run the scientific-governance validator before committing the candidate.",
       "permanentGuard": "Every governance-changing pack must prove post-transform JSON parseability and governance validity before candidate commit.",
       "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-235",
+      "category": "ui-outside-foundational-project",
+      "symptom": "Presentation-framework dependencies enter the scientific data/model library.",
+      "rootCause": "A future user-interface requirement is implemented inside the foundational project.",
+      "correctiveAction": "Keep UI frameworks in separate downstream applications and expose reusable public contracts from LotSizingDataModel.",
+      "permanentGuard": "Core, Instance, Solution, Solver, Checker and Campaign must not reference WPF, Avalonia, WinUI or Windows Forms.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-236",
+      "category": "downstream-project-dependency-direction",
+      "symptom": "LotSizingDataModel references a future specialized consumer such as MLLPAlgorithm.",
+      "rootCause": "Integration readiness was confused with reverse dependency.",
+      "correctiveAction": "Expose generic public contracts and require specialized projects to reference LotSizingDataModel.",
+      "permanentGuard": "Dependency direction remains downstream project to LotSizingDataModel.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-237",
+      "category": "public-api-contract-manifest",
+      "symptom": "External consumers rely on public types without any explicit project-level compatibility contract.",
+      "rootCause": "Technical public visibility was treated as equivalent to supported public API.",
+      "correctiveAction": "Introduce versioned governance/PUBLIC-API-CONTRACT.json containing explicit critical consumer anchors.",
+      "permanentGuard": "Externally supported public anchors are governed explicitly rather than inferred from all public CLR types.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-238",
+      "category": "public-entrypoint-source-identity",
+      "symptom": "A critical public consumer type is renamed, moved or made non-public without an integration failure.",
+      "rootCause": "No source/runtime identity tests protected supported entry points.",
+      "correctiveAction": "Validate expected source declarations before commit and runtime type resolution in PublicApiIntegrationSurfaceTests.",
+      "permanentGuard": "Critical consumer types must remain source-identifiable, public and runtime-resolvable until an explicit compatibility migration.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-239",
+      "category": "public-layer-dependency-direction",
+      "symptom": "A lower-level assembly starts referencing a higher-level orchestration assembly.",
+      "rootCause": "Public API growth is allowed to reverse established layering.",
+      "correctiveAction": "Runtime smoke checks direct assembly references against the alpha.43 layer rules.",
+      "permanentGuard": "Core, Solution, Instance, Solver and Checker cannot acquire forbidden upward LotSizingDataModel references.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-240",
+      "category": "consumer-reference-profile",
+      "symptom": "A downstream project references every assembly or internal artifact because supported consumption profiles are undocumented.",
+      "rootCause": "Integration guidance describes implementation topology instead of consumer needs.",
+      "correctiveAction": "Define data, optimization, verification and campaign consumer profiles.",
+      "permanentGuard": "Consumer documentation identifies the smallest supported direct assembly set for each usage profile.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-241",
+      "category": "existing-facade-reuse",
+      "symptom": "API hardening creates a second facade around an existing high-level service solely to rename or regroup it.",
+      "rootCause": "Public API consolidation was interpreted as mandatory wrapper creation.",
+      "correctiveAction": "Promote and govern existing high-level facades where their contracts already match the consumer use case.",
+      "permanentGuard": "Do not introduce redundant orchestration wrappers without a demonstrated missing semantic contract.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-242",
+      "category": "public-api-change-review",
+      "symptom": "A critical consumer anchor changes without updating governance or consumer tests.",
+      "rootCause": "Public API evolution is reviewed only at compilation level.",
+      "correctiveAction": "Require PUBLIC-API-CONTRACT, integration documentation and consumer smoke parity for critical API changes.",
+      "permanentGuard": "Critical public API changes are explicit compatibility events.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-243",
+      "category": "targeted-alpha43-public-api-smoke",
+      "symptom": "Public type identity, presentation dependency or layer-direction defects reach stable-release hardening.",
+      "rootCause": "No focused downstream-consumer gate protects the integration surface.",
+      "correctiveAction": "Run PublicApiIntegrationSurfaceTests before broad warnings-as-errors and Build-Validated.",
+      "permanentGuard": "Public API hardening milestones execute focused consumer-surface tests first.",
+      "status": "active"
     }
   ]
 }

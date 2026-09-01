@@ -1073,6 +1073,19 @@
       "historicalAudit": "alpha.41 declared-vs-detected audit snapshot embedded without reimplementation",
       "gapSemantics": "relative deterioration to selected BKS only; never an optimality proof",
       "knownGaps": "large benchmark corpus ingestion, source-by-source BKS adjudication and performance baselines remain data-population work rather than missing infrastructure"
+    },
+    {
+      "id": "public-api-integration-surface-alpha43",
+      "domain": "integration",
+      "scientificStatus": "implemented",
+      "implementationStatus": "implemented",
+      "contractVersion": "1.0-alpha.43",
+      "uiBoundary": "UI is explicitly downstream and absent from foundational project dependencies",
+      "downstreamBoundary": "MLLPAlgorithm and specialized applications consume LotSizingDataModel; reverse dependencies are forbidden",
+      "consumerProfiles": "data; optimization; verification; campaign",
+      "criticalAnchors": "Instance root, Solution root, MathematicalModel, Checker verification facade, Campaign service, historical registry, benchmark provenance/reporting",
+      "compatibility": "critical consumer anchors are source-validated and runtime-resolved by targeted tests",
+      "knownGaps": "full stable API freeze and binary/package compatibility baseline are deferred to alpha.44 stable-release hardening"
     }
   ]
 }
