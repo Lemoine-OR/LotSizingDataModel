@@ -84,7 +84,7 @@ public sealed class StableReleaseHardeningTests
     }
 
     [Fact]
-    public void FirstPartyAssemblies_ReportAlpha44InformationalVersion()
+    public void FirstPartyAssemblies_ReportStableInformationalVersion()
     {
         Assembly[] assemblies =
         [
@@ -108,14 +108,19 @@ public sealed class StableReleaseHardeningTests
                 informationalVersion,
                 StringComparison.Ordinal);
 
+            Assert.DoesNotContain(
+                "-alpha",
+                informationalVersion,
+                StringComparison.OrdinalIgnoreCase);
+
             Assert.Contains(
-                "-alpha.44+",
+                "+",
                 informationalVersion,
                 StringComparison.Ordinal);
 
             string numericPrefix =
                 informationalVersion.Split(
-                    '-',
+                    '+',
                     2,
                     StringSplitOptions.None)[0];
 

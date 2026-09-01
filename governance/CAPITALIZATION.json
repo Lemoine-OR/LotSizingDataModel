@@ -2278,6 +2278,114 @@
       "correctiveAction": "Validate declared version through version.json/NBGV identity gates and validate AssemblyInformationalVersion by its numeric base, prerelease suffix and metadata structure instead of literal declared-version substring equality.",
       "permanentGuard": "Tests must distinguish declared semantic version identity from NBGV informational version formatting.",
       "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-254",
+      "category": "stable-promotion-no-feature-change",
+      "symptom": "The stable promotion commit contains new scientific or operational functionality.",
+      "rootCause": "Version promotion and feature development were combined.",
+      "correctiveAction": "Restrict stable promotion to version identity, stable contracts, release metadata and explicit non-claim documentation.",
+      "permanentGuard": "The 1.2.0 stable promotion contains no new scientific semantics.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-255",
+      "category": "stable-contract-finalization",
+      "symptom": "Release-candidate contracts remain marked prerelease after version promotion.",
+      "rootCause": "Version identity was promoted without contract-state promotion.",
+      "correctiveAction": "Promote public API and XML compatibility contracts from alpha.44 release-candidate state to stable 1.0.",
+      "permanentGuard": "Stable version identity and stable contract identity move together.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-256",
+      "category": "stable-open-gap-explicit-nonclaim",
+      "symptom": "Known unsupported or unfinished capabilities disappear from release documentation and may be mistaken for supported features.",
+      "rootCause": "Stable readiness was equated with universal feature completeness.",
+      "correctiveAction": "Maintain STABLE-OPEN-GAPS.json and release notes listing explicit non-claims.",
+      "permanentGuard": "Stable release never silently upgrades an open gap into a supported capability.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-257",
+      "category": "stable-informational-version-contract",
+      "symptom": "Stable assemblies retain an alpha prerelease suffix after stable version promotion.",
+      "rootCause": "Declared version and NBGV informational version were not checked together.",
+      "correctiveAction": "StablePromotionTests require 1.2.0 build-height prefix, no alpha suffix and Git metadata.",
+      "permanentGuard": "Stable assembly informational versions cannot contain alpha prerelease identity.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-258",
+      "category": "stable-publication-explicit-authorization",
+      "symptom": "A validated stable candidate automatically pushes, tags or publishes.",
+      "rootCause": "Candidate validation and external publication were conflated.",
+      "correctiveAction": "Keep releaseMayBePublishedByThisPack=false and require a separate explicitly authorized publication step.",
+      "permanentGuard": "Stable validation alone never authorizes push, tag or GitHub Release.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-259",
+      "category": "targeted-stable-promotion-smoke",
+      "symptom": "Stable version metadata drift reaches the full canonical validation stage.",
+      "rootCause": "No focused stable identity smoke exists.",
+      "correctiveAction": "Run StablePromotionTests immediately after committing the exact stable candidate.",
+      "permanentGuard": "Stable promotion executes focused version-identity tests before broad Build-Validated.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-260",
+      "category": "prerelease-test-migration-on-stable-promotion",
+      "symptom": "A stable candidate is rejected by an inherited test whose assertion intentionally requires the previous prerelease suffix.",
+      "rootCause": "Release-hardening tests were treated as timeless even when some assertions were specific to the prerelease identity being promoted.",
+      "correctiveAction": "During stable promotion, migrate prerelease-identity assertions to stable-version assertions while preserving non-version compatibility checks.",
+      "permanentGuard": "Stable promotion audits inherited tests for prerelease-only expectations; excluding them from a targeted smoke is insufficient because the full canonical suite must pass.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-261",
+      "category": "powershell-pack-parser-gate",
+      "symptom": "A delivered transactional pack fails in the PowerShell parser before repository preflight.",
+      "rootCause": "Generated launcher or transform syntax was sealed without a native Windows PowerShell parser check.",
+      "correctiveAction": "The CMD runner parses every delivered PS1 with System.Management.Automation.Language.Parser before executing the launcher.",
+      "permanentGuard": "A transactional pack cannot enter repository preflight unless all shipped PowerShell scripts parse with zero errors.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-262",
+      "category": "generated-powershell-literal-newline-escape",
+      "symptom": "A multi-line insertion is emitted into a PowerShell source file as literal backslash-n text and corrupts surrounding expressions.",
+      "rootCause": "String construction escaped line breaks for transport instead of materializing real source line endings.",
+      "correctiveAction": "Generated PowerShell payloads must contain real CRLF line endings; literal backslash-n sequences are rejected outside quoted diagnostic fixtures.",
+      "permanentGuard": "PowerShell source-generation audits reject transport-escaped newline artifacts before ZIP sealing.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-263",
+      "category": "cmd-trailing-directory-separator-quoting",
+      "symptom": "A CMD runner passes percent-tilde-dp-zero directly as a quoted argument and PowerShell receives a package path ending with a stray quote.",
+      "rootCause": "The CMD script directory variable includes a trailing directory separator, which interacts badly with native command-line quoting when used as a terminal quoted argument.",
+      "correctiveAction": "Materialize PACKAGE_ROOT from SCRIPT_DIR with the final separator removed before passing it as a quoted PowerShell argument.",
+      "permanentGuard": "CMD runners never pass raw percent-tilde-dp-zero as a terminal quoted path argument.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-264",
+      "category": "powershell-path-argument-defensive-normalization",
+      "symptom": "A parser or launcher receives a path argument containing surrounding or trailing quote artifacts and fails with invalid-path exceptions.",
+      "rootCause": "Filesystem path arguments were trusted without normalization at the PowerShell boundary.",
+      "correctiveAction": "Trim whitespace and quote characters, normalize with GetFullPath, and verify the directory exists before filesystem enumeration.",
+      "permanentGuard": "Package-path entry points normalize and validate external path arguments before use.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-265",
+      "category": "runner-package-root-existence-gate",
+      "symptom": "The runner invokes a validation script using a malformed package root and the failure appears inside a later filesystem command.",
+      "rootCause": "The CMD boundary did not validate the normalized package root before invoking PowerShell.",
+      "correctiveAction": "Check for the parser-gate script under the normalized PACKAGE_ROOT before starting any PowerShell process.",
+      "permanentGuard": "Runner path validity is proven at the CMD boundary before parser or repository logic executes.",
+      "status": "active"
     }
   ]
 }

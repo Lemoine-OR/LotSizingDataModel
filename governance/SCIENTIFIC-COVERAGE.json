@@ -1098,6 +1098,18 @@
       "releaseContract": "stable target 1.2.0 defined; publication explicitly forbidden in alpha.44",
       "metadata": "API stability policy, release checklist and CITATION.cff present",
       "nextStep": "dedicated stable-promotion candidate from validated alpha.44 baseline"
+    },
+    {
+      "id": "stable-promotion-1.2.0",
+      "domain": "release-governance",
+      "scientificStatus": "implemented",
+      "implementationStatus": "implemented",
+      "version": "1.2.0",
+      "scope": "stable identity and contract promotion only; no new scientific semantics",
+      "publicApi": "stable contract 1.0",
+      "xmlCompatibility": "stable contract 1.0",
+      "openGaps": "explicit non-claims preserved in STABLE-OPEN-GAPS.json",
+      "publication": "not performed by the stable promotion pack"
     }
   ]
 }

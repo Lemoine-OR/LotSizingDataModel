@@ -1,7 +1,8 @@
 {
   "schemaVersion": 1,
-  "contractVersion": "1.0-alpha.44",
-  "stability": "release-candidate",
+  "contractVersion": "1.0",
+  "stability": "stable",
+  "stableLine": "1.2.x",
   "uiPolicy": "out-of-scope-separate-downstream-project",
   "downstreamDependencyDirection": "downstream-projects -> LotSizingDataModel",
   "criticalPublicTypes": [
@@ -104,43 +105,5 @@
     "WinUI",
     "System.Windows.Forms"
   ],
-  "layerRules": [
-    {
-      "assembly": "LotSizingDataModel.Core",
-      "mustNotReferencePrefixes": [
-        "LotSizingDataModel.Instance",
-        "LotSizingDataModel.Solution",
-        "LotSizingDataModel.Solver",
-        "LotSizingDataModel.Checker"
-      ]
-    },
-    {
-      "assembly": "LotSizingDataModel.Solution",
-      "mustNotReferencePrefixes": [
-        "LotSizingDataModel.Instance",
-        "LotSizingDataModel.Solver",
-        "LotSizingDataModel.Checker"
-      ]
-    },
-    {
-      "assembly": "LotSizingDataModel.Instance",
-      "mustNotReferencePrefixes": [
-        "LotSizingDataModel.Solver",
-        "LotSizingDataModel.Checker"
-      ]
-    },
-    {
-      "assembly": "LotSizingDataModel.Solver",
-      "mustNotReferencePrefixes": [
-        "LotSizingDataModel.Checker"
-      ]
-    },
-    {
-      "assembly": "LotSizingDataModel.Checker",
-      "mustNotReferencePrefixes": [
-        "LotSizingDataModel.Checker.Campaign"
-      ]
-    }
-  ],
-  "stablePromotionRule": "The first stable 1.2.0 promotion must preserve all critical public type identities unless an explicit compatibility review updates this contract before the stable tag."
+  "stableCompatibilityRule": "For the 1.2.x line, critical public type identities remain compatible unless an explicitly reviewed breaking change is deferred to a later major/minor line."
 }

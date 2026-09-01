@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "version": "1.2.0",
+  "status": "explicit-non-claims",
+  "openItems": [
+    {
+      "id": "parallel-machine-quantity-assignment",
+      "status": "open",
+      "statement": "Parallel/multi-site topology and setup-start coordination are supported; explicit machine-level quantity/capacity assignment remains outside 1.2.0."
+    },
+    {
+      "id": "closed-loop-reverse-physical-transport",
+      "status": "open",
+      "statement": "Closed-loop return allocation/recovery/disposal is supported; explicit reverse physical transport routing remains outside 1.2.0."
+    },
+    {
+      "id": "closed-loop-endogenous-return-generation",
+      "status": "open",
+      "statement": "Return quantities are explicit exogenous data in 1.2.0; endogenous return generation is not claimed."
+    },
+    {
+      "id": "bitran-yanasse-default-registry-population",
+      "status": "open",
+      "statement": "Bitran-Yanasse family support exists structurally; unproven default inverse mappings are intentionally absent."
+    },
+    {
+      "id": "catalog-only-or-known-unsupported-extensions",
+      "status": "open",
+      "statement": "CatalogOnly and KnownUnsupported capabilities remain explicit non-claims and are not silently promoted by the stable release."
+    }
+  ]
+}
