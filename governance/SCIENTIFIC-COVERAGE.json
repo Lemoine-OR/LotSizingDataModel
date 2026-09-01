@@ -1033,6 +1033,18 @@
       "capacity": "optional period-dependent recovery capacity",
       "projection": "dedicated ClosedLoopDecisionProjector exposes recovery, disposal and recovered output",
       "knownGaps": "generic LotSizingSolution mapping/checker integration deferred to alpha.40; reverse physical transport lanes and endogenous return-generation models remain open"
+    },
+    {
+      "id": "feasibility-checker-expansion-alpha40",
+      "domain": "feasibility-checking",
+      "scientificStatus": "implemented-conservative-pre-solve-and-independent-candidate-checking",
+      "implementationStatus": "implemented",
+      "intrinsicFeasibility": "bound-interval necessary-condition proofs; status only Unknown or Infeasible",
+      "instanceFacade": "any IMathematicalModelFormulation can be built and analyzed before solve; standard convenience path provided; alpha.39 closed-loop decoration included",
+      "candidateChecker": "independent variable completeness, finite/bound/integrality and enabled-constraint checks over MathematicalModelSolveResult",
+      "closedLoopSolution": "normalized serializable ClosedLoopDecision mapping plus independent return conservation, yield and recovery-capacity checker",
+      "diagnostics": "stable LSDM-FEAS-00x, LSDM-FEAS-SOL-00x and LSDM-FEAS-CL-00x namespaces",
+      "knownGaps": "bound-interval analysis is not a complete feasibility proof; campaign-wide audit remains alpha.42"
     }
   ]
 }

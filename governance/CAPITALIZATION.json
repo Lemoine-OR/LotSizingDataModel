@@ -1837,6 +1837,96 @@
       "correctiveAction": "Run ClosedLoopSupplyNetworkTests immediately after candidate commit.",
       "permanentGuard": "Closed-loop milestones execute focused serialization and physical-balance tests before Build-Validated.",
       "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-205",
+      "category": "intrinsic-feasibility-no-false-feasible",
+      "symptom": "A pre-solve necessary-condition analyzer labels an instance feasible merely because it found no contradiction.",
+      "rootCause": "Failure to prove infeasibility was confused with proof of feasibility.",
+      "correctiveAction": "Intrinsic feasibility status is restricted to Unknown or Infeasible.",
+      "permanentGuard": "Pre-solve bound analysis never emits Feasible without a complete proof mechanism.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-206",
+      "category": "interval-arithmetic-conservative-infinity",
+      "symptom": "Infinite variable bounds create NaN interval arithmetic and a spurious infeasibility conclusion.",
+      "rootCause": "Opposing infinite contributions were treated as ordinary finite sums.",
+      "correctiveAction": "When interval arithmetic becomes indeterminate, widen conservatively to negative/positive infinity.",
+      "permanentGuard": "Indeterminate infinite bound arithmetic can only reduce proof strength, never create an infeasibility proof.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-207",
+      "category": "feasibility-layer-separation",
+      "symptom": "Structural validation, intrinsic infeasibility and candidate feasibility are reported as one status.",
+      "rootCause": "Different validation questions were collapsed into one checker.",
+      "correctiveAction": "Keep validators, InstanceFeasibilityAnalyzer and candidate feasibility checkers as distinct layers.",
+      "permanentGuard": "Every feasibility diagnostic states which layer produced it.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-208",
+      "category": "candidate-completeness-before-feasible",
+      "symptom": "A mathematical candidate with missing variables is declared feasible because all available values satisfy constraints.",
+      "rootCause": "Partial candidate data was treated as complete.",
+      "correctiveAction": "Missing mathematical variable values produce PartiallyEvaluated.",
+      "permanentGuard": "A mathematical candidate cannot be Feasible until every model variable has a value.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-209",
+      "category": "independent-domain-checks",
+      "symptom": "Solver-reported feasibility bypasses bound or integrality verification.",
+      "rootCause": "Backend status was trusted as a domain proof.",
+      "correctiveAction": "Check finite values, bounds, integer and binary domains independently from solver status.",
+      "permanentGuard": "Candidate feasibility is independently reconstructed from model domains and constraints.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-210",
+      "category": "closed-loop-normalized-solution",
+      "symptom": "Closed-loop recovery/disposal remains only in solver-specific mathematical values.",
+      "rootCause": "Alpha.39 projection stopped before normalized business-solution persistence.",
+      "correctiveAction": "Add serializable ClosedLoopDecision to the partial LotSizingSolution extension and map snapshots explicitly.",
+      "permanentGuard": "Closed-loop business decisions are represented independently of the producing solver.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-211",
+      "category": "closed-loop-independent-semantic-check",
+      "symptom": "Recovery/disposal feasibility is accepted only because the same mathematical constraints generated it.",
+      "rootCause": "No independent business-semantic checker existed.",
+      "correctiveAction": "Check return conservation, recovery yield and recovery capacity from normalized ClosedLoopDecision values.",
+      "permanentGuard": "Closed-loop feasibility has an independent semantic reconstruction path.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-212",
+      "category": "missing-decision-partial-status",
+      "symptom": "An absent optional or not-yet-mapped decision is reported as a physical violation.",
+      "rootCause": "Incompleteness and infeasibility were conflated.",
+      "correctiveAction": "Missing required closed-loop decision produces PartiallyEvaluated; explicit contradictory values produce Infeasible.",
+      "permanentGuard": "Checker status distinguishes missing evidence from violated evidence.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-213",
+      "category": "stable-feasibility-diagnostics",
+      "symptom": "Feasibility failures are only available as unstable free-text messages.",
+      "rootCause": "No dedicated FEAS diagnostic namespace was defined.",
+      "correctiveAction": "Introduce LSDM-FEAS, LSDM-FEAS-SOL and LSDM-FEAS-CL codes.",
+      "permanentGuard": "New feasibility checks expose stable machine-readable codes in addition to messages.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-214",
+      "category": "targeted-alpha40-runtime-smoke",
+      "symptom": "Feasibility/checker integration defects reach the complete validation campaign.",
+      "rootCause": "No focused alpha.40 gate ran first.",
+      "correctiveAction": "Run FeasibilityCheckerExpansionTests immediately after candidate commit.",
+      "permanentGuard": "Feasibility/checker milestones execute focused runtime tests before Build-Validated.",
+      "status": "active"
     }
   ]
 }
