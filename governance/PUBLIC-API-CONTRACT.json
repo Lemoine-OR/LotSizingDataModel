@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "contractVersion": "1.0-alpha.43",
-  "stability": "candidate-stable",
+  "contractVersion": "1.0-alpha.44",
+  "stability": "release-candidate",
   "uiPolicy": "out-of-scope-separate-downstream-project",
   "downstreamDependencyDirection": "downstream-projects -> LotSizingDataModel",
   "criticalPublicTypes": [
@@ -141,5 +141,6 @@
         "LotSizingDataModel.Checker.Campaign"
       ]
     }
-  ]
+  ],
+  "stablePromotionRule": "The first stable 1.2.0 promotion must preserve all critical public type identities unless an explicit compatibility review updates this contract before the stable tag."
 }

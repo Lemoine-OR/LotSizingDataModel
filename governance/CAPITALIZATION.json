@@ -2188,6 +2188,96 @@
       "correctiveAction": "Run PublicApiIntegrationSurfaceTests before broad warnings-as-errors and Build-Validated.",
       "permanentGuard": "Public API hardening milestones execute focused consumer-surface tests first.",
       "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-244",
+      "category": "stable-hardening-no-feature-creep",
+      "symptom": "Stable-release hardening introduces new scientific semantics or changes model behavior.",
+      "rootCause": "Release preparation is used as another feature milestone.",
+      "correctiveAction": "Restrict alpha.44 to compatibility, metadata, validation, packaging and release-readiness contracts.",
+      "permanentGuard": "Stable hardening does not introduce a new scientific problem semantic.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-245",
+      "category": "xml-root-stability",
+      "symptom": "A stable promotion changes the root element used for instance or solution XML.",
+      "rootCause": "Serialized identity was not governed as a compatibility contract.",
+      "correctiveAction": "Protect lotSizingInstance and lotSizingSolution in XML-COMPATIBILITY-CONTRACT.json and runtime tests.",
+      "permanentGuard": "Stable/minor maintenance cannot rename protected XML roots without explicit breaking-change review.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-246",
+      "category": "xml-roundtrip-release-gate",
+      "symptom": "Serialization compiles but stable promotion breaks canonical Instance or Solution deserialization.",
+      "rootCause": "Schema compatibility was reviewed only from source declarations.",
+      "correctiveAction": "Run minimal canonical Instance and Solution serialize-deserialize round trips in the alpha.44 smoke.",
+      "permanentGuard": "Stable promotion requires executable XML round-trip evidence for both root documents.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-247",
+      "category": "public-api-release-candidate-freeze",
+      "symptom": "Critical alpha.43 consumer anchors drift immediately before stable release.",
+      "rootCause": "Candidate public API remained advisory during release hardening.",
+      "correctiveAction": "Promote PUBLIC-API-CONTRACT to release-candidate and protect the same critical type identities.",
+      "permanentGuard": "Stable promotion preserves alpha.44 release-candidate anchors unless an explicit compatibility review changes the contract first.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-248",
+      "category": "stable-promotion-separated-from-hardening",
+      "symptom": "Hardening code also tags, pushes or publishes the stable release.",
+      "rootCause": "Validation and publication were combined into one irreversible step.",
+      "correctiveAction": "Alpha.44 remains prerelease and releaseMayBePublishedByThisPack=false; stable promotion is a separate validated candidate.",
+      "permanentGuard": "No stable tag or release is created by the hardening milestone.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-249",
+      "category": "stable-version-identity-parity",
+      "symptom": "Assemblies used for stable readiness do not carry the expected prerelease identity during alpha.44 validation.",
+      "rootCause": "Repository version and built assembly informational versions can drift.",
+      "correctiveAction": "Runtime smoke requires first-party informational versions to contain 1.2.0-alpha.44.",
+      "permanentGuard": "Release hardening proves repository and assembly version identity before stable promotion.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-250",
+      "category": "citation-release-metadata",
+      "symptom": "A research software release has no machine-readable citation metadata or carries stale version identity.",
+      "rootCause": "Citation metadata was treated as optional documentation.",
+      "correctiveAction": "Add CITATION.cff and validate its project, repository and prerelease version tokens during alpha.44.",
+      "permanentGuard": "Stable promotion updates and validates citation version metadata.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-251",
+      "category": "stable-release-contract-precommit",
+      "symptom": "Release-readiness metadata defects are found only after candidate compilation or Build-Validated.",
+      "rootCause": "Release contract files were not checked before commit.",
+      "correctiveAction": "Execute Test-StableReleaseContract.ps1 plus public API and scientific governance validation before candidate commit.",
+      "permanentGuard": "Stable hardening contract validation is a pre-commit gate.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-252",
+      "category": "targeted-alpha44-stable-hardening-smoke",
+      "symptom": "XML, version or stable-contract regression reaches the final canonical validation stage.",
+      "rootCause": "No focused stable-readiness runtime smoke exists.",
+      "correctiveAction": "Run StableReleaseHardeningTests immediately after candidate commit.",
+      "permanentGuard": "Stable hardening executes focused compatibility/version tests before broad Build-Validated.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-253",
+      "category": "nbgv-declared-vs-informational-version",
+      "symptom": "A release-readiness test expects AssemblyInformationalVersion to contain the declared semantic version text verbatim.",
+      "rootCause": "Nerdbank.GitVersioning may inject build height into the numeric informational version while preserving prerelease and Git metadata.",
+      "correctiveAction": "Validate declared version through version.json/NBGV identity gates and validate AssemblyInformationalVersion by its numeric base, prerelease suffix and metadata structure instead of literal declared-version substring equality.",
+      "permanentGuard": "Tests must distinguish declared semantic version identity from NBGV informational version formatting.",
+      "status": "active"
     }
   ]
 }

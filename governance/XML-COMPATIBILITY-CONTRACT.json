@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "contractVersion": "1.0-alpha.44",
+  "compatibilityPolicy": "backward-compatible-additive-with-explicit-breaking-review",
+  "instance": {
+    "rootElement": "lotSizingInstance",
+    "rootType": "LotSizingDataModel.Instance.LotSizingInstance",
+    "serializerType": "LotSizingDataModel.Instance.Serialization.LotSizingInstanceXmlSerializer",
+    "roundTripRequired": true
+  },
+  "solution": {
+    "rootElement": "lotSizingSolution",
+    "rootType": "LotSizingDataModel.Solution.LotSizingSolution",
+    "serializerType": "LotSizingDataModel.Solution.Serialization.LotSizingSolutionXmlSerializer",
+    "roundTripRequired": true
+  },
+  "rules": [
+    "Existing XML root names cannot change in a patch or minor release.",
+    "New optional elements and attributes must preserve readability of older valid documents unless explicitly documented otherwise.",
+    "Removing or renaming serialized members requires a breaking-change review and migration documentation.",
+    "Serializer hardening must not silently reinterpret existing business semantics."
+  ]
+}

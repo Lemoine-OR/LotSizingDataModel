@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "contractVersion": "1.0-alpha.44",
+  "targetStableVersion": "1.2.0",
+  "currentHardeningVersion": "1.2.0-alpha.44",
+  "promotionState": "release-candidate-hardening",
+  "releaseMayBePublishedByThisPack": false,
+  "requiredGates": [
+    "PUBLIC-API-CONTRACT parse and source identity",
+    "XML-COMPATIBILITY-CONTRACT parse and runtime round-trip",
+    "scientific governance validation",
+    "warnings-as-errors closure",
+    "clean-output recompilation",
+    "Build-Validated",
+    "no UI foundational dependency",
+    "no downstream MLLPAlgorithm dependency",
+    "citation metadata present",
+    "API stability policy present",
+    "stable release checklist present"
+  ],
+  "stablePromotionRequirements": [
+    "alpha.44 candidate validated successfully",
+    "version changed from 1.2.0-alpha.44 to 1.2.0 in a dedicated stable-promotion candidate",
+    "same public API and XML compatibility contracts revalidated",
+    "full Build-Validated green from clean outputs",
+    "explicit user authorization before push/tag/release"
+  ]
+}

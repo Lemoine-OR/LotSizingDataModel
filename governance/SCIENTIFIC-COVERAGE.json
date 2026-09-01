@@ -1086,6 +1086,18 @@
       "criticalAnchors": "Instance root, Solution root, MathematicalModel, Checker verification facade, Campaign service, historical registry, benchmark provenance/reporting",
       "compatibility": "critical consumer anchors are source-validated and runtime-resolved by targeted tests",
       "knownGaps": "full stable API freeze and binary/package compatibility baseline are deferred to alpha.44 stable-release hardening"
+    },
+    {
+      "id": "stable-release-hardening-alpha44",
+      "domain": "release-governance",
+      "scientificStatus": "implemented",
+      "implementationStatus": "implemented",
+      "scope": "compatibility, API/XML contracts, metadata, validation and stable-promotion readiness only; no new scientific semantics",
+      "publicApi": "alpha.43 critical public anchors promoted to release-candidate contract",
+      "xmlCompatibility": "lotSizingInstance and lotSizingSolution protected with executable round-trip smoke",
+      "releaseContract": "stable target 1.2.0 defined; publication explicitly forbidden in alpha.44",
+      "metadata": "API stability policy, release checklist and CITATION.cff present",
+      "nextStep": "dedicated stable-promotion candidate from validated alpha.44 baseline"
     }
   ]
 }
