@@ -1059,6 +1059,20 @@
       "wolsey": "validated mappings centralized; SB1/SB2/BB conservative; IM/VM source-only",
       "bitranYanasse": "family structurally supported; no unproven default rules invented in alpha.41",
       "knownGaps": "source-backed Bitran-Yanasse rule population and additional historical classifications remain future additions"
+    },
+    {
+      "id": "benchmark-bks-campaign-alpha42",
+      "domain": "benchmark-reproducibility",
+      "scientificStatus": "implemented",
+      "implementationStatus": "implemented",
+      "bks": "native KnownResult and KnownResultVerificationStatus reused; disputed/invalidated excluded from automatic reference selection",
+      "sourceEvidence": "BKS audit retains source title/reference/URI/DOI evidence",
+      "layout": "benchmarks/raw, annotated, solutions and campaigns are separated canonically",
+      "runProvenance": "formulation, method/version, backend/version, stochastic seed and ordinal-sorted parameters",
+      "campaignOutput": "deterministic UTF-8 JSON and CSV plus SHA-256 manifest",
+      "historicalAudit": "alpha.41 declared-vs-detected audit snapshot embedded without reimplementation",
+      "gapSemantics": "relative deterioration to selected BKS only; never an optimality proof",
+      "knownGaps": "large benchmark corpus ingestion, source-by-source BKS adjudication and performance baselines remain data-population work rather than missing infrastructure"
     }
   ]
 }

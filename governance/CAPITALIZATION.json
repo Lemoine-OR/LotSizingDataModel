@@ -1990,6 +1990,123 @@
       "correctiveAction": "Run HistoricalMappingRegistryTests immediately after candidate commit.",
       "permanentGuard": "Historical-registry milestones execute focused mapping and audit tests before Build-Validated.",
       "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-222",
+      "category": "benchmark-native-known-result-status-reuse",
+      "symptom": "Benchmark consolidation introduces a second BKS verification-status system beside KnownResultVerificationStatus.",
+      "rootCause": "Campaign reporting was designed without reusing the existing Instance result contract.",
+      "correctiveAction": "Benchmark services consume KnownResult and KnownResultVerificationStatus directly.",
+      "permanentGuard": "BKS verification semantics have one authority: the native KnownResult verification contract.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-223",
+      "category": "benchmark-disputed-invalid-reference-exclusion",
+      "symptom": "A disputed or invalidated objective value becomes the automatic BKS because it is numerically better.",
+      "rootCause": "Objective ordering was evaluated before evidence quality.",
+      "correctiveAction": "Filter benchmark reference candidates by verification eligibility before objective comparison.",
+      "permanentGuard": "Disputed and Invalidated known results are never automatically reference-eligible.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-224",
+      "category": "benchmark-bks-source-evidence",
+      "symptom": "A verified benchmark reference loses its bibliographic or documentary provenance.",
+      "rootCause": "Objective and verification status were treated as sufficient reproducibility metadata.",
+      "correctiveAction": "Reference selection can require source title, reference, URI or DOI and reports missing source evidence explicitly.",
+      "permanentGuard": "BKS provenance remains auditable independently from its numerical value.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-225",
+      "category": "benchmark-objective-direction-explicit",
+      "symptom": "BKS ordering or gap computation assumes minimization for every objective.",
+      "rootCause": "Objective direction was implicit.",
+      "correctiveAction": "BenchmarkObjectiveDirection is mandatory for BKS selection and gap computation.",
+      "permanentGuard": "Benchmark objective comparison never infers minimize or maximize from a value alone.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-226",
+      "category": "benchmark-artifact-provenance-layout",
+      "symptom": "Raw source instances, annotations and solutions overwrite or contaminate one another.",
+      "rootCause": "Benchmark artifacts shared one undifferentiated storage location.",
+      "correctiveAction": "Use canonical benchmarks/raw, annotated, solutions and campaigns directories.",
+      "permanentGuard": "Raw benchmark evidence is immutable and stored separately from annotations, solutions and reports.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-227",
+      "category": "benchmark-run-reproducibility-contract",
+      "symptom": "A campaign result cannot be reproduced because method version, backend version, parameters or random seed are absent.",
+      "rootCause": "Run provenance was optional or free-form.",
+      "correctiveAction": "BenchmarkRunProvenance requires formulation, method/version, backend/version and an explicit seed for stochastic runs; parameters are ordinal-sorted.",
+      "permanentGuard": "Every stochastic benchmark record carries a seed and every run carries versioned method/backend provenance.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-228",
+      "category": "benchmark-deterministic-reporting",
+      "symptom": "Equivalent campaign runs produce different artifacts because of locale, dictionary order or filesystem order.",
+      "rootCause": "Report serialization was not normalized.",
+      "correctiveAction": "Order runs and parameters deterministically, use invariant numeric formatting, UTF-8 JSON/CSV and SHA-256 manifests.",
+      "permanentGuard": "Benchmark campaign artifacts are deterministic modulo the explicit GeneratedAtUtc field.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-229",
+      "category": "benchmark-historical-audit-reuse",
+      "symptom": "Benchmark declared-vs-detected checking reimplements historical mapping logic independently from alpha.41.",
+      "rootCause": "Campaign reporting duplicated classification audit behavior.",
+      "correctiveAction": "Snapshot HistoricalMappingAuditResult directly in benchmark campaign records.",
+      "permanentGuard": "Benchmark historical audits reuse the alpha.41 registry and audit contracts.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-230",
+      "category": "benchmark-gap-not-optimality-proof",
+      "symptom": "A zero gap to a reported BKS is interpreted as proof of optimality.",
+      "rootCause": "Benchmark comparison metric and mathematical optimality certificate were conflated.",
+      "correctiveAction": "Document RelativeGapToBks strictly as deterioration against a selected reference, retaining the native BKS verification status.",
+      "permanentGuard": "BKS gap never upgrades solver optimality or reference verification status.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-231",
+      "category": "targeted-alpha42-benchmark-smoke",
+      "symptom": "BKS eligibility, path separation, seed enforcement or deterministic reporting defects reach the full campaign.",
+      "rootCause": "No focused benchmark-consolidation gate ran first.",
+      "correctiveAction": "Run BenchmarkCampaignConsolidationTests immediately after candidate commit.",
+      "permanentGuard": "Benchmark/BKS/campaign milestones execute focused reproducibility tests before Build-Validated.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-232",
+      "category": "readonly-public-collection-mutable-construction",
+      "symptom": "A constructor exposes a collection as IReadOnlyDictionary and then tries to populate it through the read-only property.",
+      "rootCause": "Public immutability and local construction mutability were conflated.",
+      "correctiveAction": "Build a mutable local SortedDictionary first, populate it, then assign it to the IReadOnlyDictionary property.",
+      "permanentGuard": "Generated code never mutates a collection through an IReadOnlyCollection or IReadOnlyDictionary public surface.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-233",
+      "category": "string-api-overload-type-identity",
+      "symptom": "Generated code calls StartsWith(char, StringComparison), an overload that does not exist.",
+      "rootCause": "A character literal was substituted where the selected API overload requires a string.",
+      "correctiveAction": "Use the string overload StartsWith with slash text and StringComparison.Ordinal; statically reject char-plus-StringComparison overload patterns.",
+      "permanentGuard": "Generated string API calls must match exact overload parameter types, not only semantic intent.",
+      "status": "active"
+    },
+    {
+      "id": "LSDM-CAP-234",
+      "category": "governance-json-post-transform-validation",
+      "symptom": "A candidate passes compilation and targeted tests but Build-Validated fails because a transformed governance JSON file is syntactically invalid.",
+      "rootCause": "Governance fragments were inserted as raw text and were not parsed after transformation before the candidate commit.",
+      "correctiveAction": "Parse CAPITALIZATION.json and SCIENTIFIC-COVERAGE.json immediately after transforms and run the scientific-governance validator before committing the candidate.",
+      "permanentGuard": "Every governance-changing pack must prove post-transform JSON parseability and governance validity before candidate commit.",
+      "status": "active"
     }
   ]
 }
