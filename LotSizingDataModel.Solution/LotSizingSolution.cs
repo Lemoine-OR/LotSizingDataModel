@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -29,7 +29,7 @@ namespace LotSizingDataModel.Solution;
 [Serializable]
 [XmlRoot("lotSizingSolution")]
 [XmlType(TypeName = "lotSizingSolution")]
-public sealed class LotSizingSolution :
+public sealed partial class LotSizingSolution :
     ModelObject,
     IPlanningHorizonAware
 {

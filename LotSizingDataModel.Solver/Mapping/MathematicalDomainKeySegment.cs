@@ -125,4 +125,15 @@ public static class MathematicalDomainKeySegment
     /// </summary>
     public const string Operation =
         "operation";
+    /// <summary>
+    /// Production setup-family identifier segment.
+    /// </summary>
+    public const string SetupFamily =
+        "setupFamily";
+    public const string MicroPeriod =
+        "microPeriod";
+    public const string FromItem =
+        "fromItem";
+    public const string ToItem =
+        "toItem";
 }

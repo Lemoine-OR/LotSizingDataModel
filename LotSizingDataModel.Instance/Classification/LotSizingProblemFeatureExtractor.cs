@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using LotSizingDataModel.Core;
@@ -271,7 +271,8 @@ public static class LotSizingProblemFeatureExtractor
                  * a MaximumLotSize parameter.
                  */
                 HasMaximumLotSizes =
-                    false,
+                    supplyChain.ProductionRoutings.Any(
+                        routing => routing.MaximumLotSize is not null),
 
                 HasLotSizeMultiples =
                     supplyChain
@@ -281,6 +282,9 @@ public static class LotSizingProblemFeatureExtractor
                                 routing.LotSizeMultiple
                                     is not null),
 
+                HasGroupingConstraints =
+                    supplyChain.ProductionRoutings.Any(
+                        routing => routing.GroupingConstraint is not null),
                 HasAdditionalProductionCapacity =
                     workCenters.Any(
                         workCenter =>
@@ -298,7 +302,8 @@ public static class LotSizingProblemFeatureExtractor
                  * Core model.
                  */
                 HasSupplierCapacityConstraints =
-                    false,
+                    supplyChain.SupplierDeliveries.Any(
+                        delivery => delivery.CapacityConstraint is not null),
 
                 HasSupplierLeadTimes =
                     supplyChain

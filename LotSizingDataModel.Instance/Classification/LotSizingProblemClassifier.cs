@@ -1,9 +1,10 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using LotSizingDataModel.Core;
 using LotSizingDataModel.Instance.Analysis;
 using LotSizingDataModel.Instance.Common;
+using LotSizingDataModel.Instance.Classification.Notation;
 
 namespace LotSizingDataModel.Instance.Classification;
 
@@ -101,12 +102,22 @@ public static class LotSizingProblemClassifier
                 productStructureAnalysis,
                 numericalTolerance);
 
-        return ClassifyCore(
-            features,
-            catalog,
-            supplyChainFingerprint,
-            productStructureAnalysis.Warnings,
-            productStructureAnalysis.Errors);
+        LotSizingProblemClassification classification =
+            ClassifyCore(
+                features,
+                catalog,
+                supplyChainFingerprint,
+                productStructureAnalysis.Warnings,
+                productStructureAnalysis.Errors);
+
+        classification.Signature =
+            LotSizingInstanceSignatureExtractor.Extract(
+                supplyChain,
+                features,
+                productStructureAnalysis,
+                numericalTolerance);
+
+        return classification;
     }
 
     /// <summary>

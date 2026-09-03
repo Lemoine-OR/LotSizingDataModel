@@ -148,6 +148,40 @@ public sealed class WorkCenterCapacityConstraintFamilyBuilder :
                     }
                 }
 
+                foreach (ProductionSetupFamily family
+                         in instance.SupplyChain.ProductionSetupFamilies)
+                {
+                    if (family.WorkCenter.PlantId != entry.PlantId ||
+                        family.WorkCenter.WorkCenterId != workCenter.Id)
+                    {
+                        continue;
+                    }
+
+                    double familySetupTime =
+                        family.SetupTime?[period] ?? 0.0;
+
+                    if (familySetupTime <= 0.0)
+                    {
+                        continue;
+                    }
+
+                    string familySetupKey =
+                        new MathematicalDomainKeyBuilder(
+                            MathematicalDecisionCategory
+                                .AuxiliaryProductionFamilySetup)
+                            .Add(
+                                MathematicalDomainKeySegment.SetupFamily,
+                                family.Id)
+                            .Add(
+                                MathematicalDomainKeySegment.Period,
+                                period)
+                            .Build();
+
+                    expression.Add(
+                        context.GetVariable(familySetupKey),
+                        familySetupTime);
+                }
+
                 string additionalKey =
                     new MathematicalDomainKeyBuilder(
                         MathematicalDecisionCategory

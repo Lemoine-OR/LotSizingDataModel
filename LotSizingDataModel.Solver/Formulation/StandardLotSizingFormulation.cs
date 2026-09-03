@@ -141,7 +141,10 @@ public sealed class StandardLotSizingFormulation :
             return false;
         }
 
-        return instance.PlanningHorizon > 0;
+        return
+            instance.PlanningHorizon > 0 &&
+            !SetupTransitionExecutionGuard.HasUnsupportedSemantics(
+                instance.SupplyChain);
     }
 
     /// <summary>

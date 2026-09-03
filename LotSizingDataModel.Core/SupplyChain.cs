@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Serialization;
@@ -22,7 +22,7 @@ namespace LotSizingDataModel.Core;
 [Serializable]
 [XmlRoot("supplyChain")]
 [XmlType(TypeName = "supplyChain")]
-public sealed class SupplyChain :
+public sealed partial class SupplyChain :
     ModelObject,
     IPlanningHorizonAware
 {
@@ -589,6 +589,12 @@ public sealed class SupplyChain :
                  in ProductionRoutings)
         {
             yield return routing;
+        }
+
+        foreach (ProductionSetupFamily setupFamily
+                 in ProductionSetupFamilies)
+        {
+            yield return setupFamily;
         }
 
         foreach (ProductionCharacteristic characteristic

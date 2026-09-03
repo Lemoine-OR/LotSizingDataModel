@@ -79,6 +79,9 @@ public static class StandardLotSizingFormulationFactory
         [
             new ProductionVariableFamilyBuilder(),
             new SetupVariableFamilyBuilder(),
+            new ProductionFamilySetupVariableFamilyBuilder(),
+            new SchedulingSetupStateVariableFamilyBuilder(),
+            new SchedulingChangeoverVariableFamilyBuilder(),
             new InventoryVariableFamilyBuilder(),
             new InventorySetupVariableFamilyBuilder(),
             new InventorySafetyStockViolationVariableFamilyBuilder(),
@@ -151,6 +154,8 @@ public static class StandardLotSizingFormulationFactory
         return
         [
             new ProductionSetupLinkConstraintFamilyBuilder(),
+            new ProductionFamilySetupLinkConstraintFamilyBuilder(),
+            new SchedulingTransitionConstraintFamilyBuilder(),
             new MinimumLotSizeConstraintFamilyBuilder(),
             new LotSizeMultipleConstraintFamilyBuilder(),
             new GroupingConstraintFamilyBuilder(),

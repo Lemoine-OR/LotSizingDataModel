@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Xml.Serialization;
 using LotSizingDataModel.Core.Common;
 using LotSizingDataModel.Instance.Common;
@@ -56,6 +56,7 @@ public sealed class LotSizingProblemFeatures : ModelObject
     private bool _hasMinimumLotSizes;
     private bool _hasMaximumLotSizes;
     private bool _hasLotSizeMultiples;
+    private bool _hasGroupingConstraints;
 
     private bool _hasAdditionalProductionCapacity;
     private bool _hasAdditionalWarehouseCapacity;
@@ -513,6 +514,16 @@ public sealed class LotSizingProblemFeatures : ModelObject
         }
     }
 
+    /// <summary>
+    /// Gets or sets a value indicating whether at least one
+    /// production routing imposes a setup-spacing grouping rule.
+    /// </summary>
+    [XmlAttribute("hasGroupingConstraints")]
+    public bool HasGroupingConstraints
+    {
+        get => _hasGroupingConstraints;
+        set => SetProperty(ref _hasGroupingConstraints, value);
+    }
     /// <summary>
     /// Gets or sets a value indicating whether additional
     /// production capacity can be acquired or activated.

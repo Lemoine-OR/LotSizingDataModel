@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using LotSizingDataModel.Core.PhysicalModel;
@@ -122,6 +122,12 @@ public sealed class SupplyChainValidator
             supplyChain,
             issues);
         ValidateSupplierDeliveries(supplyChain, issues);
+        ProductionSetupFamilyValidator.AppendIssues(
+            supplyChain,
+            issues);
+        ProductionSetupTransitionValidator.AppendIssues(
+            supplyChain,
+            issues);
 
         return issues.AsReadOnly();
     }

@@ -1,6 +1,7 @@
-﻿using LotSizingDataModel.Core.Common;
+using LotSizingDataModel.Core.Common;
 using LotSizingDataModel.Core.DecisionModel;
 using LotSizingDataModel.Core.DecisionModel.Costs;
+using LotSizingDataModel.Core.DecisionModel.Constraints;
 using System;
 using System.ComponentModel;
 using System.Xml.Serialization;
@@ -16,6 +17,7 @@ public sealed partial class SupplierDelivery :
 {
     private PurchasePrice? _purchasePrice;
 
+    private CapacityConstraint? _capacityConstraint;
     /// <summary>
     /// Gets or sets the unit purchase price of the item
     /// for each planning period.
@@ -63,9 +65,46 @@ public sealed partial class SupplierDelivery :
     ///
     /// Returns zero when no purchase price is defined.
     /// </summary>
+    /// <summary>
+    /// Gets or sets the maximum procurement quantity available
+    /// from this supplier for this item and destination.
+    /// </summary>
+    [XmlElement("capacityConstraint")]
+    public CapacityConstraint? CapacityConstraint
+    {
+        get => _capacityConstraint;
+        set
+        {
+            if (ReferenceEquals(_capacityConstraint, value))
+            {
+                return;
+            }
+
+            if (_capacityConstraint is not null)
+            {
+                _capacityConstraint.PropertyChanged -=
+                    OnCapacityConstraintPropertyChanged;
+            }
+
+            _capacityConstraint = value;
+
+            if (_capacityConstraint is not null)
+            {
+                _capacityConstraint.PropertyChanged +=
+                    OnCapacityConstraintPropertyChanged;
+            }
+
+            OnPropertyChanged(nameof(CapacityConstraint));
+            OnPropertyChanged(nameof(PlanningHorizon));
+            OnPropertyChanged(nameof(HasDecisionParameters));
+            OnPropertyChanged(nameof(HasConsistentPlanningHorizon));
+        }
+    }
+
     [XmlIgnore]
     public int PlanningHorizon =>
-        PurchasePrice?.PlanningHorizon ?? 0;
+        PurchasePrice?.PlanningHorizon ?? CapacityConstraint?.PlanningHorizon ??
+        0;
 
     /// <summary>
     /// Gets a value indicating whether this delivery
@@ -73,7 +112,15 @@ public sealed partial class SupplierDelivery :
     /// </summary>
     [XmlIgnore]
     public bool HasDecisionParameters =>
-        PurchasePrice is not null;
+        PurchasePrice is not null ||
+        CapacityConstraint is not null;
+
+    [XmlIgnore]
+    public bool HasConsistentPlanningHorizon =>
+        PurchasePrice is null ||
+        CapacityConstraint is null ||
+        PurchasePrice.PlanningHorizon ==
+            CapacityConstraint.PlanningHorizon;
 
     /// <summary>
     /// Resizes the purchase-price time series.
@@ -97,6 +144,7 @@ public sealed partial class SupplierDelivery :
         // Resize the purchase price if present.
         PurchasePrice?.ResizeTimeSeries(periodCount);
 
+        CapacityConstraint?.ResizeTimeSeries(periodCount);
         // Notify dependent computed property.
         OnPropertyChanged(nameof(PlanningHorizon));
     }
@@ -108,6 +156,16 @@ public sealed partial class SupplierDelivery :
     public void ClearDecisionParameters()
     {
         PurchasePrice = null;
+        CapacityConstraint = null;
+    }
+
+    private void OnCapacityConstraintPropertyChanged(
+        object? sender,
+        PropertyChangedEventArgs e)
+    {
+        OnPropertyChanged(nameof(CapacityConstraint));
+        OnPropertyChanged(nameof(PlanningHorizon));
+        OnPropertyChanged(nameof(HasConsistentPlanningHorizon));
     }
 
     private void OnPurchasePricePropertyChanged(

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Xml.Serialization;
@@ -118,7 +118,9 @@ public sealed partial class WorkCenter :
         CapacityConstraint is not null ||
         AdditionalCapacity is not null ||
         FixedUsageCost is not null ||
-        AdditionalCapacityCost is not null;
+        AdditionalCapacityCost is not null ||
+        SetupTransitionProfile is not null ||
+        SchedulingProfile is not null;
 
     /// <summary>
     /// Gets a value indicating whether every active parameter
@@ -206,6 +208,8 @@ public sealed partial class WorkCenter :
         AdditionalCapacity = null;
         FixedUsageCost = null;
         AdditionalCapacityCost = null;
+        SetupTransitionProfile = null;
+        SchedulingProfile = null;
     }
 
     private void SetDecisionParameter<T>(
@@ -266,6 +270,16 @@ public sealed partial class WorkCenter :
         if (AdditionalCapacityCost is not null)
         {
             yield return AdditionalCapacityCost;
+        }
+
+        if (SetupTransitionProfile is not null)
+        {
+            yield return SetupTransitionProfile;
+        }
+
+        if (SchedulingProfile is not null)
+        {
+            yield return SchedulingProfile;
         }
     }
 

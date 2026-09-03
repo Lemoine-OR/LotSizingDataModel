@@ -1,9 +1,10 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Serialization;
 using LotSizingDataModel.Core.Common;
 using LotSizingDataModel.Instance.Common;
+using LotSizingDataModel.Instance.Classification.Notation;
 
 namespace LotSizingDataModel.Instance.Classification;
 
@@ -29,6 +30,9 @@ public sealed class LotSizingProblemClassification :
         ProblemClassificationStatus.NotAnalyzed;
 
     private LotSizingProblemFeatures _features =
+        new();
+
+    private LotSizingInstanceSignature _signature =
         new();
 
     private string _primaryProblemTypeCode =
@@ -126,6 +130,18 @@ public sealed class LotSizingProblemClassification :
         }
     }
 
+    /// <summary>
+    /// Gets or sets the canonical LSI semantic signature of
+    /// the classified problem instance.
+    /// </summary>
+    [XmlElement("signature")]
+    public LotSizingInstanceSignature Signature
+    {
+        get => _signature;
+        set => SetProperty(
+            ref _signature,
+            value ?? new LotSizingInstanceSignature());
+    }
     /// <summary>
     /// Gets or sets the stable code of the primary recognized
     /// problem family.

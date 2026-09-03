@@ -48,6 +48,9 @@ public static class MathematicalDecisionMapperRegistryFactory
         registry.Register(
             new AuxiliaryLotSizeMultiplierDecisionMapper());
 
+        registry.Register(
+            new AuxiliaryProductionFamilySetupDecisionMapper());
+
         return registry;
     }
 }

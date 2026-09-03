@@ -132,4 +132,14 @@ public static class MathematicalDecisionCategory
     /// </remarks>
     public const string AuxiliaryLotSizeMultiplier =
         "auxiliaryLotSizeMultiplier";
+    /// <summary>
+    /// Auxiliary shared production-family setup activation.
+    /// </summary>
+    public const string AuxiliaryProductionFamilySetup =
+        "auxiliaryProductionFamilySetup";
+    public const string MicroPeriodSetupState =
+        "microPeriodSetupState";
+
+    public const string AuxiliaryMicroPeriodChangeover =
+        "auxiliaryMicroPeriodChangeover";
 }
