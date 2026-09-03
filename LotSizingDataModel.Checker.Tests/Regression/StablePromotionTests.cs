@@ -18,18 +18,24 @@ public sealed class StablePromotionTests
             typeof(LotSizingSolution).Assembly
         ];
 
-        foreach (Assembly assembly
-                 in assemblies)
+        foreach (Assembly assembly in assemblies)
         {
+            Version version =
+                assembly.GetName().Version ??
+                throw new InvalidOperationException(
+                    $"Assembly '{assembly.GetName().Name}' has no version.");
+
             string informationalVersion =
                 assembly
-                    .GetCustomAttribute<
-                        AssemblyInformationalVersionAttribute>()
+                    .GetCustomAttribute<AssemblyInformationalVersionAttribute>()
                     ?.InformationalVersion ??
                 string.Empty;
 
+            string expectedStablePrefix =
+                $"{version.Major}.{version.Minor}.{version.Build}.";
+
             Assert.StartsWith(
-                "1.2.0.",
+                expectedStablePrefix,
                 informationalVersion,
                 StringComparison.Ordinal);
 
@@ -55,22 +61,24 @@ public sealed class StablePromotionTests
             typeof(LotSizingSolution).Assembly
         ];
 
-        foreach (Assembly assembly
-                 in assemblies)
+        Version[] versions =
+            assemblies
+                .Select(
+                    assembly =>
+                        assembly.GetName().Version ??
+                        throw new InvalidOperationException(
+                            $"Assembly '{assembly.GetName().Name}' has no version."))
+                .ToArray();
+
+        Version reference = versions[0];
+
+        Assert.True(reference.Major > 0);
+
+        foreach (Version version in versions)
         {
-            Version? version =
-                assembly.GetName().Version;
-
-            Assert.NotNull(
-                version);
-
-            Assert.Equal(
-                1,
-                version.Major);
-
-            Assert.Equal(
-                2,
-                version.Minor);
+            Assert.Equal(reference.Major, version.Major);
+            Assert.Equal(reference.Minor, version.Minor);
+            Assert.Equal(reference.Build, version.Build);
         }
     }
 }

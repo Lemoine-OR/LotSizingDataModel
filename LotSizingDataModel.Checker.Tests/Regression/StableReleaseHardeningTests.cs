@@ -93,18 +93,24 @@ public sealed class StableReleaseHardeningTests
             typeof(LotSizingSolution).Assembly
         ];
 
-        foreach (Assembly assembly
-                 in assemblies)
+        foreach (Assembly assembly in assemblies)
         {
+            Version version =
+                assembly.GetName().Version ??
+                throw new InvalidOperationException(
+                    $"Assembly '{assembly.GetName().Name}' has no version.");
+
             string informationalVersion =
                 assembly
-                    .GetCustomAttribute<
-                        AssemblyInformationalVersionAttribute>()
+                    .GetCustomAttribute<AssemblyInformationalVersionAttribute>()
                     ?.InformationalVersion ??
                 string.Empty;
 
+            string expectedStablePrefix =
+                $"{version.Major}.{version.Minor}.{version.Build}.";
+
             Assert.StartsWith(
-                "1.2.0.",
+                expectedStablePrefix,
                 informationalVersion,
                 StringComparison.Ordinal);
 
@@ -134,15 +140,15 @@ public sealed class StableReleaseHardeningTests
                 numericParts.Length);
 
             Assert.Equal(
-                "1",
+                version.Major.ToString(),
                 numericParts[0]);
 
             Assert.Equal(
-                "2",
+                version.Minor.ToString(),
                 numericParts[1]);
 
             Assert.Equal(
-                "0",
+                version.Build.ToString(),
                 numericParts[2]);
 
             Assert.True(
