@@ -1,4 +1,4 @@
-﻿namespace LotSizingDataModel.Solver.Mapping;
+namespace LotSizingDataModel.Solver.Mapping;
 
 /// <summary>
 /// Provides the canonical mathematical domain-key segment names
@@ -128,6 +128,9 @@ public static class MathematicalDomainKeySegment
 
     public const string ToItem =
         "toItem";
+
+    public const string SetupFamily =
+        "setupFamily";
 
     public const string SetupReset =
         "setupReset";

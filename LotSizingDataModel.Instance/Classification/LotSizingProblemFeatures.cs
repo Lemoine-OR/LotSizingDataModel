@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Xml.Serialization;
 using LotSizingDataModel.Core.Common;
 using LotSizingDataModel.Core.DecisionModel.Objectives;
@@ -19,7 +19,7 @@ namespace LotSizingDataModel.Instance.Classification;
 /// </remarks>
 [Serializable]
 [XmlType(TypeName = "lotSizingProblemFeatures")]
-public sealed class LotSizingProblemFeatures : ModelObject
+public sealed partial class LotSizingProblemFeatures : ModelObject
 {
     private int _itemCount;
     private int _planningHorizon;

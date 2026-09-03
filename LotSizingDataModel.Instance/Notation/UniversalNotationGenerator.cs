@@ -216,6 +216,16 @@ public sealed class UniversalNotationGenerator
             yield return UniversalNotationFeature.StartUpTime;
         }
 
+        if (descriptor.Setup.HasProductionSetupFamilies)
+        {
+            yield return UniversalNotationFeature.ProductionSetupFamily;
+        }
+
+        if (descriptor.Setup.HasProductionSetupFamilyTimes)
+        {
+            yield return UniversalNotationFeature.ProductionSetupFamilyTime;
+        }
+
         if (descriptor.Production.HasLeadTimes)
         {
             yield return UniversalNotationFeature.ProductionLeadTime;

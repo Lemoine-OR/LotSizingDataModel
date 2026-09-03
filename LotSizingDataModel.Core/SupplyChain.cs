@@ -683,6 +683,12 @@ public sealed partial class SupplyChain :
             yield return resource;
         }
 
+        foreach (ProductionSetupFamily setupFamily
+                 in ProductionSetupFamilies)
+        {
+            yield return setupFamily;
+        }
+
         foreach (ProductionRouting routing
                  in ProductionRoutings)
         {

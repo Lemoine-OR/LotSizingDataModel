@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using LotSizingDataModel.Core;
@@ -261,6 +261,13 @@ public static class LotSizingProblemFeatureExtractor
                             characteristic =>
                                 characteristic.StartUpTime
                                     is not null),
+
+                HasProductionSetupFamilies =
+                    supplyChain.ProductionSetupFamilies.Count > 0,
+
+                HasProductionSetupFamilyTimes =
+                    supplyChain.ProductionSetupFamilies.Any(
+                        family => family.SetupTime is not null),
 
                 HasProductionLeadTimes =
                     supplyChain

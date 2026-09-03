@@ -78,7 +78,9 @@ internal static class UniversalNotationTokenCatalog
                 [UniversalNotationFeature.MultipleItemsPerMicroPeriod] = "MicroItem:N",
                 [UniversalNotationFeature.VariableMicroPeriodCount] = "MicroN:Var",
                 [UniversalNotationFeature.SetupCarryOverForbidden] = "SCO:0",
-                [UniversalNotationFeature.GroupingConstraint] = "Group"
+                [UniversalNotationFeature.GroupingConstraint] = "Group",
+                [UniversalNotationFeature.ProductionSetupFamily] = "SetupFam",
+                [UniversalNotationFeature.ProductionSetupFamilyTime] = "SetupFamT"
             };
 
     private static readonly IReadOnlyDictionary<

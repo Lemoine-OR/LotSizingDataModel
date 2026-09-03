@@ -23,6 +23,7 @@ public static class MathematicalDecisionMapperRegistryFactory
         registry.Register(new AuxiliaryMicroPeriodSetupStartDecisionMapper());
         registry.Register(new AuxiliaryMacroProductionActivationDecisionMapper());
         registry.Register(new AuxiliaryProductionStartUpDecisionMapper());
+        registry.Register(new AuxiliaryProductionFamilySetupDecisionMapper());
         registry.Register(new SetupDecisionMapper());
         registry.Register(new InventoryDecisionMapper());
         registry.Register(new InitialInventoryDecisionMapper());
