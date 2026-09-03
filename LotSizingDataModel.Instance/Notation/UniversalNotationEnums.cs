@@ -101,5 +101,7 @@ public enum UniversalNotationFeature
     MultipleItemsPerMicroPeriod = 99,
     VariableMicroPeriodCount = 100,
     SetupCarryOverForbidden = 101,
-    GroupingConstraint = 102
+    GroupingConstraint = 102,
+    ProductionSetupFamily = 103,
+    ProductionSetupFamilyTime = 104
 }

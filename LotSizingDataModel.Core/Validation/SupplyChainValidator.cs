@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using LotSizingDataModel.Core.PhysicalModel;
@@ -115,6 +115,9 @@ public sealed class SupplyChainValidator
         ValidatePhysicalSubsystem(supplyChain, issues);
         ValidateProductionRoutings(supplyChain, issues);
         ValidateProductionCharacteristics(supplyChain, issues);
+        ProductionSetupFamilyValidator.AppendIssues(
+            supplyChain,
+            issues);
         ValidateInventories(supplyChain, issues);
         ValidateTransportCharacteristics(supplyChain, issues);
         ValidateDemands(supplyChain, issues);

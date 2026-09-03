@@ -164,6 +164,9 @@ public static class MathematicalDecisionCategory
     public const string AuxiliaryMacroProductionActivation =
         "auxiliaryMacroProductionActivation";
 
+    public const string AuxiliaryProductionFamilySetup =
+        "auxiliaryProductionFamilySetup";
+
     public const string AuxiliaryProductionStartUp =
         "auxiliaryProductionStartUp";
 }
