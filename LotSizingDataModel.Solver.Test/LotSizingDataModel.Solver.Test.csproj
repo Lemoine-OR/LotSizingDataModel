@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\LotSizingDataModel.Solver.Cplex\LotSizingDataModel.Solver.Cplex.csproj" />
+    <ProjectReference Include="..\LotSizingDataModel.Solver.Xpress\LotSizingDataModel.Solver.Xpress.csproj" />
   </ItemGroup>
 
 </Project>

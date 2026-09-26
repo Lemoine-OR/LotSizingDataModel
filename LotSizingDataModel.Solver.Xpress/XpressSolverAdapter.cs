@@ -301,12 +301,15 @@ public sealed class XpressSolverAdapter :
                         solutionPath,
                         out string mappingDiagnostic);
 
-                bool hasSolution =
-                    solution is not null &&
-                    values.Count > 0;
-
-                string status =
-                    api.TryGetStatus(problem);
+                string status = api.TryGetStatus(problem);
+                bool hasSolution = solution is not null &&
+                    values.Count == request.Model.VariableCount &&
+                    !status.Contains("infeasible", StringComparison.OrdinalIgnoreCase) &&
+                    !status.Contains("unbounded", StringComparison.OrdinalIgnoreCase);
+                if (!hasSolution)
+                {
+                    values = new Dictionary<int, double>();
+                }
 
                 var result =
                     new MathematicalModelSolveResult
@@ -437,13 +440,15 @@ public sealed class XpressSolverAdapter :
         object problem,
         XpressReflectionApi api)
     {
-        double? objective =
-            api.TryGetDoubleProperty(
+        bool isMixedInteger = model.Variables.Any(
+            variable => variable.VariableType != MathematicalVariableType.Continuous);
+        double? objective = result.HasFeasibleSolution
+            ? api.TryGetDoubleProperty(
                 problem,
-                "MIPBestObjVal",
-                "MIPObjVal",
-                "LPObjVal",
-                "ObjVal");
+                isMixedInteger
+                    ? ["MIPObjVal", "MIPBestObjVal", "ObjVal"]
+                    : ["LPObjVal", "ObjVal"])
+            : null;
 
         if (objective.HasValue)
         {
@@ -465,18 +470,12 @@ public sealed class XpressSolverAdapter :
                 "objective attribute/property.");
         }
 
-        result.BestBound =
-            api.TryGetDoubleProperty(
-                problem,
-                "BestBound",
-                "MIPBestBound");
-
-        if (!result.BestBound.HasValue &&
-            result.IsOptimal &&
-            result.ObjectiveValue.HasValue)
+        result.BestBound = isMixedInteger
+            ? api.TryGetDoubleProperty(problem, "BestBound", "MIPBestBound")
+            : null;
+        if (!result.BestBound.HasValue && result.IsOptimal)
         {
-            result.BestBound =
-                result.ObjectiveValue;
+            result.BestBound = result.ObjectiveValue;
         }
 
         ExternalSolverResultUtilities.PopulateGapStatistics(
@@ -1015,8 +1014,20 @@ internal sealed class XpressReflectionApi
                 "Version",
                 "VERSION");
 
-        return value?.ToString() ??
-               string.Empty;
+        if (value is not null)
+        {
+            return value.ToString() ?? string.Empty;
+        }
+
+        try
+        {
+            return InvokeRequiredStatic(_xprsType, "GetVersion")?.ToString()
+                ?? string.Empty;
+        }
+        catch
+        {
+            return string.Empty;
+        }
     }
 
     internal double? TryGetDoubleProperty(

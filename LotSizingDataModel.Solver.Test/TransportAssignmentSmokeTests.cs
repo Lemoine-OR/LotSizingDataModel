@@ -6,21 +6,23 @@ using LotSizingDataModel.Core.PhysicalModel;
 using LotSizingDataModel.Core.Relationships;
 using LotSizingDataModel.Instance;
 using LotSizingDataModel.Solver.Cplex;
+using LotSizingDataModel.Solver.Xpress;
+using LotSizingDataModel.Solver.Adapters;
 using LotSizingDataModel.Solver.Execution;
 using LotSizingDataModel.Solver.Formulation;
 
-/// <summary>Optional native CPLEX regression, run with --transport-smoke.</summary>
+/// <summary>Optional native transport regressions for CPLEX and Xpress.</summary>
 public static class TransportAssignmentSmokeTests
 {
-    public static async Task RunAsync()
+    public static async Task RunAsync(bool useXpress = false)
     {
-        await CheckAsync(3, false, 19);
-        await CheckAsync(6, false, null);
-        await CheckAsync(6, true, 37);
+        await CheckAsync(3, false, 19, useXpress);
+        await CheckAsync(6, false, null, useXpress);
+        await CheckAsync(6, true, 37, useXpress);
         Console.WriteLine("Transport native regressions: 3/3 passed.");
     }
 
-    private static async Task CheckAsync(int quantityPerLane, bool additional, double? expected)
+    private static async Task CheckAsync(int quantityPerLane, bool additional, double? expected, bool useXpress)
     {
         var chain = new SupplyChain(1);
         chain.AddItem(new Item(1, "Item", 0));
@@ -50,13 +52,17 @@ public static class TransportAssignmentSmokeTests
         // Force the two planned departures; the actual MILP must enforce shared capacity and costs.
         foreach (var variable in model.Variables.Where(v => v.Name.StartsWith("T_i1_", StringComparison.Ordinal)))
             variable.LowerBound = quantityPerLane;
-        var result = await new CplexSolverAdapter().SolveAsync(new MathematicalModelSolveRequest { Model = model });
+        MathematicalModelSolverAdapterBase adapter = useXpress ? new XpressSolverAdapter() : new CplexSolverAdapter();
+        var result = await adapter.SolveAsync(new MathematicalModelSolveRequest { Model = model });
         Console.WriteLine($"quantity/lane={quantityPerLane}; extra={additional}; status={result.TerminationReason}; objective={result.ObjectiveValue}");
         if (expected is double objective)
         {
+            XpressNativeSmokeTests.Verify(model, result);
             if (!result.IsOptimal || result.ObjectiveValue is not double actual || Math.Abs(actual - objective) > 1e-7)
                 throw new InvalidOperationException($"Expected optimal objective {objective}. {string.Join("; ", result.Diagnostics)}");
         }
+        else if (useXpress && (result.HasFeasibleSolution || result.ObjectiveValue is not null || result.VariableValues.Count != 0))
+            throw new InvalidOperationException("Infeasible Xpress result must not expose an incumbent.");
         else if (result.TerminationReason != LotSizingDataModel.Solver.Common.SolverTerminationReason.Infeasible)
             throw new InvalidOperationException($"Expected infeasible shared-capacity case. {string.Join("; ", result.Diagnostics)}");
     }
