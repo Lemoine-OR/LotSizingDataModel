@@ -1,5 +1,8 @@
 # Standard Formulation Capability Evidence
 
+For the current transport domain, shared-capacity equations, activation rules and
+executable regression cases, see [central transport assignments](transport-assignments.md).
+
 The alpha.17 profile is deliberately tied to actual source components rather
 than broad claims.
 
