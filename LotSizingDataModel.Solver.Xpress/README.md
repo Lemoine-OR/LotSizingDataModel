@@ -31,4 +31,4 @@ Native testing of the published 2.0.0 binaries passed the transport cases but ex
 an incorrect LP objective: the adapter read an unset MIP attribute (`1E+40`) instead
 of the LP objective. This correction selects LP/MIP attributes by model type, omits
 incumbent values for infeasible/unbounded results, and reports the SDK version.
-The published 2.0.0 release is unchanged; this fix must be included in a subsequent release.
+The published 2.0.0 release is unchanged; these fixes are included in version 2.0.1.
