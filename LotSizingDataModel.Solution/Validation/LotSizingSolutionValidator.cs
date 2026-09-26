@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using LotSizingDataModel.Core;
@@ -1257,7 +1257,7 @@ public sealed class LotSizingSolutionValidator
             }
 
             bool laneExists =
-                resource.Lanes.Any(
+                supplyChain.GetTransportLanes(resource.Id).Any(
                     lane =>
                         SameWarehouse(
                             lane.Origin,

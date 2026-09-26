@@ -74,7 +74,8 @@ public sealed class TransportSpecificCapacityConstraintFamilyBuilder :
                 var expression =
                     new LinearExpressionBuilder();
 
-                foreach (TransportLane lane in resource.Lanes)
+                var additionalAllocation = new LinearExpressionBuilder();
+                foreach (AssignedTransportLane lane in instance.SupplyChain.GetTransportLanes(resource.Id))
                 {
                     string transportKey =
                         CreateKey(
@@ -130,7 +131,15 @@ public sealed class TransportSpecificCapacityConstraintFamilyBuilder :
                     {
                         expression.Subtract(
                             additionalVariable);
+                        additionalAllocation.Add(additionalVariable);
                     }
+                }
+
+                if (characteristic.AdditionalCapacity is not null)
+                {
+                    AddConstraint(context, $"transportAdditionalCapacityBudget_i{characteristic.ItemId}_r{resource.Id}_t{period}",
+                        additionalAllocation.Build(), MathematicalConstraintSense.LessThanOrEqual,
+                        characteristic.AdditionalCapacity[period], description: "Shared item-resource additional capacity across all assignments.");
                 }
 
                 AddConstraint(
@@ -153,7 +162,7 @@ public sealed class TransportSpecificCapacityConstraintFamilyBuilder :
         string category,
         int itemId,
         int resourceId,
-        TransportLane lane,
+        AssignedTransportLane lane,
         int period)
     {
         var keyBuilder =

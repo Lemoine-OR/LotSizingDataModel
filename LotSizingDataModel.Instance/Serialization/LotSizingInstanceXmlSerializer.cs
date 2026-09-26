@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Text;
 using System.Xml;
@@ -521,13 +521,15 @@ public static class LotSizingInstanceXmlSerializer
         XmlSerializer serializer =
             CreateSerializer();
 
+        var document = LotSizingDataModel.Core.Serialization.TransportXmlMigration.ReadAndMigrate(reader);
+        using var migratedReader = document.CreateReader();
         object? deserializedObject;
 
         try
         {
             deserializedObject =
                 serializer.Deserialize(
-                    reader);
+                    migratedReader);
         }
         catch (InvalidOperationException exception)
         {

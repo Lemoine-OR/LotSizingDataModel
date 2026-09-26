@@ -1,54 +1,9 @@
-# LotSizingDataModel API Stability Policy
+# Public API stability: 2.0.x
 
-## Status
+Version 2.0.0 establishes the stable 2.0.x API line. Its intentional breaking change replaces resource-owned transport lanes with central directed lanes and explicit lane/resource assignments. See [release notes](docs/integration/stable-2.0.0-release-notes.md) and [migration/API mapping](docs/scientific/transport-assignments.md).
 
-The public integration surface introduced in alpha.43 and hardened in alpha.44
-is a **release-candidate contract** for LotSizingDataModel 1.2.0.
+Critical type identities are recorded in `governance/PUBLIC-API-CONTRACT.json`. Patch releases preserve these identities and the documented 2.0 transport contract. Additive evolution is preferred; further breaking changes require explicit review, migration documentation and a suitable major version.
 
-`governance/PUBLIC-API-CONTRACT.json` is the machine-readable authority for the
-critical consumer anchors protected during stable promotion.
+The instance and solution XML root names remain protected. Canonical serializers migrate the legacy transport representation to transport format version 2 without silently choosing between conflicting data. XML compatibility rules are in `governance/XML-COMPATIBILITY-CONTRACT.json`.
 
-## Compatibility principles
-
-For the 1.2.x stable line:
-
-- critical public type identities listed in the public API contract are not
-  removed, renamed or made non-public in a patch release;
-- existing public behavior is not silently reinterpreted;
-- additive APIs are preferred to breaking changes;
-- lower-level assemblies must not gain upward dependencies that violate the
-  documented layer rules;
-- UI frameworks and downstream specialized projects remain outside the
-  foundational dependency graph.
-
-A breaking public contract change requires an explicit compatibility review,
-migration notes and an appropriate versioning decision.
-
-## XML compatibility
-
-The XML compatibility contract is defined in
-`governance/XML-COMPATIBILITY-CONTRACT.json`.
-
-Existing `lotSizingInstance` and `lotSizingSolution` roots are protected.
-
-Serialized schema evolution should be additive whenever possible. Removing or
-renaming serialized members requires migration documentation and explicit
-breaking-change review.
-
-## What is not automatically stable
-
-A CLR type is not part of the supported stable API merely because it is
-technically `public`.
-
-The supported compatibility anchors are those explicitly listed in the public
-API contract plus contracts explicitly documented as stable elsewhere.
-
-Internal implementation structure, helper classes and non-contracted public
-types may continue to evolve, subject to normal semantic-versioning review.
-
-## Downstream projects
-
-MLLPAlgorithm, future UI applications and other specialized projects consume
-LotSizingDataModel.
-
-LotSizingDataModel does not depend on those downstream projects.
+UI and algorithm applications remain separate downstream projects. Dependencies point from consumers to LotSizingDataModel.

@@ -11,104 +11,68 @@ using LotSizingDataModel.Solver.Modeling;
 
 namespace LotSizingDataModel.Solver.Formulation;
 
-/// <summary>
-/// Links aggregate transport load to binary transport-resource activation.
-/// </summary>
-public sealed class TransportResourceActivationLinkConstraintFamilyBuilder :
-    StandardLotSizingConstraintFamilyBuilderBase
+/// <summary>Links each departure to the shared resource activation and existing per-lane item setup.</summary>
+public sealed class TransportResourceActivationLinkConstraintFamilyBuilder : StandardLotSizingConstraintFamilyBuilderBase
 {
-    /// <summary>Gets the family identifier.</summary>
-    public override string ConstraintFamilyId =>
-        "transportResourceActivationLink";
+    public override string ConstraintFamilyId => "transportResourceActivationLink";
+    public override bool IsEnabled(LotSizingInstance instance, StandardLotSizingFormulationOptions options) =>
+        options.IncludeTransport && (options.IncludeResourceActivation || options.IncludeTransportSetups);
 
-    /// <summary>Determines whether the family is enabled.</summary>
-    public override bool IsEnabled(
-        LotSizingInstance instance,
-        StandardLotSizingFormulationOptions options)
+    protected override ValueTask BuildConstraintsAsync(LotSizingInstance instance, MathematicalModelBuildContext context,
+        StandardLotSizingFormulationOptions options, CancellationToken cancellationToken)
     {
-        ArgumentNullException.ThrowIfNull(instance);
-        ArgumentNullException.ThrowIfNull(options);
-
-        return options.IncludeTransport &&
-               options.IncludeResourceActivation &&
-               instance.SupplyChain.TransportResources.Any(resource =>
-                   resource.FixedUsageCost is not null &&
-                   resource.CapacityConstraint is not null);
-    }
-
-    /// <summary>Builds transport-resource activation links.</summary>
-    protected override ValueTask BuildConstraintsAsync(
-        LotSizingInstance instance,
-        MathematicalModelBuildContext context,
-        StandardLotSizingFormulationOptions options,
-        CancellationToken cancellationToken)
-    {
-        foreach (TransportResource resource
-                 in instance.SupplyChain.TransportResources)
+        foreach (var characteristic in instance.SupplyChain.TransportCharacteristics)
         {
-            if (resource.FixedUsageCost is null ||
-                resource.CapacityConstraint is null)
-            {
-                continue;
-            }
-
-            TransportCharacteristic[] characteristics =
-                instance.SupplyChain.TransportCharacteristics
-                    .Where(characteristic =>
-                        characteristic.TransportResourceId == resource.Id)
-                    .ToArray();
-
+            var resource = instance.SupplyChain.TransportResources.Single(r => r.Id == characteristic.TransportResourceId);
+            bool activate = options.IncludeResourceActivation && resource.FixedUsageCost is not null;
+            bool setup = options.IncludeTransportSetups && (characteristic.FixedSetupCost is not null || characteristic.SetupTime is not null);
+            if (!activate && !setup) continue;
+            foreach (var lane in instance.SupplyChain.GetTransportLanes(resource.Id))
             for (int period = 1; period <= instance.PlanningHorizon; period++)
             {
                 cancellationToken.ThrowIfCancellationRequested();
-
-                var expression = new LinearExpressionBuilder();
-
-                foreach (TransportCharacteristic characteristic
-                         in characteristics)
+                double bound = QuantityBound(resource, characteristic, period, options);
+                var quantity = context.GetVariable(StandardFormulationVariableKeyFactory.CreateTransportKey(
+                    characteristic.ItemId, resource.Id, lane.Origin, lane.Destination, period));
+                if (activate)
                 {
-                    foreach (TransportLane lane in resource.Lanes)
-                    {
-                        expression.Add(
-                            context.GetVariable(
-                                StandardFormulationVariableKeyFactory
-                                    .CreateTransportKey(
-                                        characteristic.ItemId,
-                                        resource.Id,
-                                        lane.Origin,
-                                        lane.Destination,
-                                        period)),
-                            characteristic.UnitCapacityConsumption?[period] ??
-                                1.0);
-                    }
+                    string key = new MathematicalDomainKeyBuilder(MathematicalDecisionCategory.TransportResourceActivation)
+                        .Add(MathematicalDomainKeySegment.TransportResource, resource.Id)
+                        .Add(MathematicalDomainKeySegment.Period, period).Build();
+                    AddConstraint(context, $"transportResourceActivationLink_i{characteristic.ItemId}_r{resource.Id}_l{lane.Id}_t{period}",
+                        new LinearExpressionBuilder().Add(quantity).Subtract(context.GetVariable(key), bound).Build(),
+                        MathematicalConstraintSense.LessThanOrEqual, 0, description: "Departure requires the shared resource activation.");
                 }
-
-                string activationKey =
-                    new MathematicalDomainKeyBuilder(
-                        MathematicalDecisionCategory
-                            .TransportResourceActivation)
-                        .Add(
-                            MathematicalDomainKeySegment.TransportResource,
-                            resource.Id)
-                        .Add(MathematicalDomainKeySegment.Period, period)
-                        .Build();
-
-                expression.Subtract(
-                    context.GetVariable(activationKey),
-                    resource.CapacityConstraint[period]);
-
-                AddConstraint(
-                    context,
-                    $"transportResourceActivationLink_r{resource.Id}" +
-                    $"_t{period}",
-                    expression.Build(),
-                    MathematicalConstraintSense.LessThanOrEqual,
-                    0.0,
-                    description:
-                        "Transport load requires resource activation.");
+                if (setup)
+                {
+                    var key = new MathematicalDomainKeyBuilder(MathematicalDecisionCategory.TransportSetup)
+                        .Add(MathematicalDomainKeySegment.Item, characteristic.ItemId)
+                        .Add(MathematicalDomainKeySegment.TransportResource, resource.Id);
+                    StandardFormulationDomainKeyFactory.AddOriginWarehouse(key, lane.Origin);
+                    StandardFormulationDomainKeyFactory.AddDestinationWarehouse(key, lane.Destination);
+                    AddConstraint(context, $"transportSetupLink_i{characteristic.ItemId}_r{resource.Id}_l{lane.Id}_t{period}",
+                        new LinearExpressionBuilder().Add(quantity).Subtract(context.GetVariable(key.Add(MathematicalDomainKeySegment.Period, period).Build()), bound).Build(),
+                        MathematicalConstraintSense.LessThanOrEqual, 0, description: "Departure requires the existing per-lane item transport setup.");
+                }
             }
         }
-
         return ValueTask.CompletedTask;
+    }
+
+    private static double QuantityBound(TransportResource resource, TransportCharacteristic characteristic, int period,
+        StandardLotSizingFormulationOptions options)
+    {
+        double unit = characteristic.UnitCapacityConsumption?[period] ?? 1;
+        double bound = double.PositiveInfinity;
+        if (unit > 0)
+        {
+            if (resource.CapacityConstraint is not null)
+                bound = (resource.CapacityConstraint[period] + (options.IncludeAdditionalCapacity ? resource.AdditionalCapacity?[period] ?? 0 : 0)) / unit;
+            if (characteristic.CapacityConstraint is not null)
+                bound = Math.Min(bound, (characteristic.CapacityConstraint[period] + (options.IncludeAdditionalCapacity ? characteristic.AdditionalCapacity?[period] ?? 0 : 0)) / unit);
+        }
+        if (double.IsFinite(bound)) return bound;
+        return options.TransportActivationBigM ?? throw new InvalidOperationException(
+            $"Transport activation for item {characteristic.ItemId}, resource {resource.Id}, period {period} requires a finite capacity-derived quantity bound or explicit TransportActivationBigM.");
     }
 }

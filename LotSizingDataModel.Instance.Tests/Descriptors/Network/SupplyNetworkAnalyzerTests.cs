@@ -83,20 +83,14 @@ public sealed class SupplyNetworkAnalyzerTests
             new StandaloneWarehouse(3, "Regional B"));
 
         var resource = new TransportResource(1, "Truck");
-
-        resource.AddLane(
-            new TransportLane(
-                WarehouseReference.ForStandaloneWarehouse(1),
-                WarehouseReference.ForStandaloneWarehouse(2),
-                0));
-
-        resource.AddLane(
-            new TransportLane(
-                WarehouseReference.ForStandaloneWarehouse(1),
-                WarehouseReference.ForStandaloneWarehouse(3),
-                0));
-
         supplyChain.AddTransportResource(resource);
+
+        supplyChain.AddTransportLane(new TransportLane(1, WarehouseReference.ForStandaloneWarehouse(1), WarehouseReference.ForStandaloneWarehouse(2)));
+        supplyChain.AddTransportAssignment(new TransportAssignment(1, resource.Id, 0));
+
+        supplyChain.AddTransportLane(new TransportLane(2, WarehouseReference.ForStandaloneWarehouse(1), WarehouseReference.ForStandaloneWarehouse(3)));
+        supplyChain.AddTransportAssignment(new TransportAssignment(2, resource.Id, 0));
+
 
         SupplyNetworkDescriptor descriptor =
             new SupplyNetworkAnalyzer().Analyze(supplyChain);
@@ -143,20 +137,14 @@ public sealed class SupplyNetworkAnalyzerTests
         supplyChain.AddStandaloneWarehouse(new StandaloneWarehouse(2, "B"));
 
         var resource = new TransportResource(1, "Loop");
-
-        resource.AddLane(
-            new TransportLane(
-                WarehouseReference.ForStandaloneWarehouse(1),
-                WarehouseReference.ForStandaloneWarehouse(2),
-                0));
-
-        resource.AddLane(
-            new TransportLane(
-                WarehouseReference.ForStandaloneWarehouse(2),
-                WarehouseReference.ForStandaloneWarehouse(1),
-                0));
-
         supplyChain.AddTransportResource(resource);
+
+        supplyChain.AddTransportLane(new TransportLane(3, WarehouseReference.ForStandaloneWarehouse(1), WarehouseReference.ForStandaloneWarehouse(2)));
+        supplyChain.AddTransportAssignment(new TransportAssignment(3, resource.Id, 0));
+
+        supplyChain.AddTransportLane(new TransportLane(4, WarehouseReference.ForStandaloneWarehouse(2), WarehouseReference.ForStandaloneWarehouse(1)));
+        supplyChain.AddTransportAssignment(new TransportAssignment(4, resource.Id, 0));
+
 
         SupplyNetworkDescriptor descriptor =
             new SupplyNetworkAnalyzer().Analyze(supplyChain);

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using LotSizingDataModel.Core.Indexing;
@@ -360,7 +360,7 @@ public sealed class TransportPathFinder
                 continue;
             }
 
-            foreach (TransportLane lane in resource.Lanes)
+            foreach (AssignedTransportLane lane in SupplyChain.GetTransportLanes(resource.Id))
             {
                 if (lane.Origin is null ||
                     lane.Destination is null)
@@ -487,7 +487,7 @@ public sealed class TransportPathFinder
         /// </param>
         public TransportLeg(
             TransportResource transportResource,
-            TransportLane lane)
+            AssignedTransportLane lane)
         {
             TransportResource = transportResource ??
                 throw new ArgumentNullException(
@@ -505,7 +505,7 @@ public sealed class TransportPathFinder
         /// <summary>
         /// Gets the transport lane used for this leg.
         /// </summary>
-        public TransportLane Lane { get; }
+        public AssignedTransportLane Lane { get; }
 
         /// <summary>
         /// Gets the origin warehouse reference.

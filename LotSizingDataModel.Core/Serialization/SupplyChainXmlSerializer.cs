@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Text;
 using System.Xml;
@@ -293,8 +293,10 @@ public sealed class SupplyChainXmlSerializer
                 input,
                 settings);
 
+        var document = TransportXmlMigration.ReadAndMigrate(reader);
+        using var migratedReader = document.CreateReader();
         object? result =
-            Serializer.Deserialize(reader);
+            Serializer.Deserialize(migratedReader);
 
         if (result is not SupplyChain supplyChain)
         {

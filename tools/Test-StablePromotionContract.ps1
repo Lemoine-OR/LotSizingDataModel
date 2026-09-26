@@ -37,8 +37,8 @@ $version=
         -Path (Join-Path $RepositoryPath 'version.json') `
         -Label 'version'
 
-if([string]$version.version -ne '1.2.0') {
-    throw ('Stable promotion requires version 1.2.0; found '+[string]$version.version)
+if([string]$version.version -notmatch '^\d+\.\d+\.\d+$') {
+    throw ('Stable promotion requires a stable semantic version; found '+[string]$version.version)
 }
 
 $api=
@@ -46,9 +46,9 @@ $api=
         -Path (Join-Path $RepositoryPath 'governance\PUBLIC-API-CONTRACT.json') `
         -Label 'PUBLIC-API-CONTRACT'
 
-if([string]$api.contractVersion -ne '1.0' -or
+if([string]$api.contractVersion -ne '2.0' -or
    [string]$api.stability -ne 'stable') {
-    throw 'Public API contract is not stable 1.0.'
+    throw 'Public API contract is not stable 2.0.'
 }
 
 $xml=
@@ -56,8 +56,8 @@ $xml=
         -Path (Join-Path $RepositoryPath 'governance\XML-COMPATIBILITY-CONTRACT.json') `
         -Label 'XML-COMPATIBILITY-CONTRACT'
 
-if([string]$xml.contractVersion -ne '1.0') {
-    throw 'XML compatibility contract is not stable 1.0.'
+if([string]$xml.contractVersion -ne '2.0') {
+    throw 'XML compatibility contract is not stable 2.0.'
 }
 
 if([string]$xml.instance.rootElement -ne 'lotSizingInstance' -or
@@ -70,12 +70,12 @@ $release=
         -Path (Join-Path $RepositoryPath 'governance\STABLE-RELEASE-CONTRACT.json') `
         -Label 'STABLE-RELEASE-CONTRACT'
 
-if([string]$release.stableVersion -ne '1.2.0') {
+if([string]$release.stableVersion -ne [string]$version.version) {
     throw 'Stable release contract version mismatch.'
 }
 
-if([bool]$release.releaseMayBePublishedByThisPack) {
-    throw 'Stable promotion pack must not publish the release.'
+if(-not [bool]$release.publicationRequiresExplicitAuthorization) {
+    throw 'Stable publication must retain the explicit authorization requirement.'
 }
 
 $gaps=
@@ -87,19 +87,29 @@ if(@($gaps.openItems).Count -eq 0) {
     throw 'Stable open-gap register is unexpectedly empty.'
 }
 
+if([string]$gaps.version -ne [string]$version.version) {
+    throw 'Stable open-gap register version mismatch.'
+}
+
+$stableLine = ([string]$version.version -replace '\.\d+$', '.x')
+if([string]$api.stableLine -ne $stableLine -or
+   [string]$xml.stableLine -ne $stableLine) {
+    throw 'API/XML stable line does not match the release version.'
+}
+
 $citation=
     [System.IO.File]::ReadAllText(
         (Join-Path $RepositoryPath 'CITATION.cff'))
 
 if($citation.IndexOf(
-        'version: "1.2.0"',
+        ('version: "'+[string]$version.version+'"'),
         [System.StringComparison]::Ordinal) -lt 0) {
     throw 'CITATION.cff stable version token is missing.'
 }
 
 Write-Host 'Stable version identity             : GREEN'
-Write-Host 'Public API contract                 : STABLE 1.0'
-Write-Host 'XML compatibility contract          : STABLE 1.0'
-Write-Host 'Stable release publication          : FORBIDDEN IN PACK'
+Write-Host 'Public API contract                 : STABLE 2.0'
+Write-Host 'XML compatibility contract          : STABLE 2.0'
+Write-Host ('Stable publication eligibility      : '+[bool]$release.releaseMayBePublishedByThisPack)
 Write-Host 'Stable open-gap register            : PRESENT'
 Write-Host 'CITATION stable version             : GREEN'

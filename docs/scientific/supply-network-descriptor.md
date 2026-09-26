@@ -8,8 +8,12 @@
 The forward physical graph is extracted from current Core semantics:
 
 - `SupplierDelivery`: supplier -> warehouse;
-- `TransportLane`: warehouse -> warehouse;
+- `TransportAssignment` joined to its central `TransportLane`: warehouse -> warehouse;
 - `DistributionCenterSourcing`: warehouse -> distribution center.
+
+Only assigned lanes participate in operational network analysis. Multiple resource
+assignments on a central lane preserve the existing arc multiplicity convention.
+See [transport assignments and migration](transport-assignments.md).
 
 Detected properties include topology, physical cycles, sources/sinks,
 echelon count for acyclic networks, supplier/DC multi-sourcing,

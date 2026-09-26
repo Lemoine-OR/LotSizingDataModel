@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "contractVersion": "1.0",
+  "contractVersion": "2.0",
   "stability": "stable",
-  "stableLine": "1.2.x",
+  "stableLine": "2.0.x",
   "uiPolicy": "out-of-scope-separate-downstream-project",
   "downstreamDependencyDirection": "downstream-projects -> LotSizingDataModel",
   "criticalPublicTypes": [
@@ -105,5 +105,5 @@
     "WinUI",
     "System.Windows.Forms"
   ],
-  "stableCompatibilityRule": "For the 1.2.x line, critical public type identities remain compatible unless an explicitly reviewed breaking change is deferred to a later major/minor line."
+  "stableCompatibilityRule": "For the 2.0.x line, critical public type identities remain compatible. Version 2.0 introduces the documented breaking transport API: central lanes, independent resources and explicit assignments."
 }

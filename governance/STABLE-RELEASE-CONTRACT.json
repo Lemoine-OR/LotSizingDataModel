@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
-  "contractVersion": "1.0",
-  "stableVersion": "1.2.0",
-  "promotionState": "validated-stable-candidate",
-  "releaseMayBePublishedByThisPack": false,
+  "contractVersion": "2.0",
+  "stableVersion": "2.0.0",
+  "promotionState": "authorized-stable-candidate",
+  "releaseMayBePublishedByThisPack": true,
   "publicationRequiresExplicitAuthorization": true,
   "requiredValidation": [
     "public API contract stable",
@@ -14,5 +14,6 @@
     "warnings-as-errors closure",
     "clean-output recompilation",
     "Build-Validated"
-  ]
+  ],
+  "publicationWorkflow": ".github/workflows/release.yml"
 }

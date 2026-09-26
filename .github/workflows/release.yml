@@ -83,6 +83,10 @@ jobs:
         shell: pwsh
         run: |
           ./tools/Test-Automation.ps1
+          $version = Get-Content version.json -Raw | ConvertFrom-Json
+          if ($version.version -notmatch '-') {
+            ./tools/Test-StablePromotionContract.ps1
+          }
 
       - name: Full public-release build
         shell: pwsh
@@ -190,6 +194,11 @@ jobs:
             "LotSizingDataModel $env:RELEASE_VERSION",
             "--generate-notes"
           )
+
+          $notesPath = "docs/integration/stable-$env:RELEASE_VERSION-release-notes.md"
+          if (Test-Path -LiteralPath $notesPath -PathType Leaf) {
+            $arguments += @("--notes-file", $notesPath)
+          }
 
           if ($env:RELEASE_PRERELEASE -eq "true") {
             $arguments += "--prerelease"

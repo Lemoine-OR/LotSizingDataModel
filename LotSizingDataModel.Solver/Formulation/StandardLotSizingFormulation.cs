@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using LotSizingDataModel.Instance;
@@ -197,6 +198,17 @@ public sealed class StandardLotSizingFormulation :
         MathematicalModelBuildContext context,
         CancellationToken cancellationToken)
     {
+        if (_options.IncludeTransport)
+        {
+            var transportErrors = new LotSizingDataModel.Core.Validation.SupplyChainValidator()
+                .Validate(instance.SupplyChain)
+                .Where(issue => issue.Severity == LotSizingDataModel.Core.Validation.SupplyChainValidator.ValidationSeverity.Error
+                    && issue.Path.StartsWith("supplyChain.transport", StringComparison.Ordinal))
+                .ToArray();
+            if (transportErrors.Length > 0)
+                throw new InvalidOperationException("Invalid transport structure: " + string.Join("; ", transportErrors.Select(issue => issue.ToString())));
+        }
+
         return _variableBuilder.BuildAsync(
             instance,
             context,

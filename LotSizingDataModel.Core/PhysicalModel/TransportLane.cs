@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Xml.Serialization;
 using LotSizingDataModel.Core.Common;
 
@@ -8,17 +8,16 @@ namespace LotSizingDataModel.Core.PhysicalModel;
 /// Represents a transport lane between two warehouses.
 ///
 /// A transport lane has exactly one origin warehouse,
-/// exactly one destination warehouse and a transport lead time.
+/// exactly one destination warehouse and a stable identifier.
 ///
 /// Corresponds to the UML class "Liaison".
 /// </summary>
 [Serializable]
 [XmlType(TypeName = "transportLane")]
-public sealed partial class TransportLane : ModelObject
+public sealed partial class TransportLane : IdentifiedEntity
 {
     private WarehouseReference _origin = new();
     private WarehouseReference _destination = new();
-    private int _leadTime;
 
     /// <summary>
     /// Initializes an empty transport lane.
@@ -39,19 +38,12 @@ public sealed partial class TransportLane : ModelObject
     /// <param name="destination">
     /// Reference to the destination warehouse.
     /// </param>
-    /// <param name="leadTime">
-    /// Number of planning periods required to complete
-    /// transportation on this lane.
-    /// </param>
-    public TransportLane(
-        WarehouseReference origin,
-        WarehouseReference destination,
-        int leadTime)
+    /// <param name="id">Stable lane identifier.</param>
+    public TransportLane(int id, WarehouseReference origin, WarehouseReference destination)
     {
-        // Initialize all transport lane properties (validation occurs in setters)
+        Id = id;
         Origin = origin;
         Destination = destination;
-        LeadTime = leadTime;
     }
 
     /// <summary>
@@ -92,31 +84,4 @@ public sealed partial class TransportLane : ModelObject
         }
     }
 
-    /// <summary>
-    /// Gets or sets the transport lead time.
-    ///
-    /// Corresponds to l[c] in the UML model.
-    /// The value is expressed as a number of planning periods.
-    /// </summary>
-    [XmlAttribute("leadTime")]
-    public int LeadTime
-    {
-        get => _leadTime;
-        set
-        {
-            // Validate that the lead time is non-negative
-            if (value < 0)
-            {
-                throw new ArgumentOutOfRangeException(
-                    nameof(value),
-                    value,
-                    "The transport lead time cannot be negative.");
-            }
-
-            // Update the backing field and notify property change if value differs
-            SetProperty(
-                ref _leadTime,
-                value);
-        }
-    }
 }

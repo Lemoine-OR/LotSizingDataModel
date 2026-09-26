@@ -79,6 +79,8 @@ The public documentation portal focuses on the user-facing libraries and applica
 
 ## Documentation
 
+Transport model evolution: [central lanes, assignments, equations and migration](docs/scientific/transport-assignments.md).
+
 The continuously updated API documentation is published with Doxygen:
 
 ### [Open the LotSizingDataModel documentation portal](https://lemoine-or.github.io/LotSizingDataModel/)
@@ -264,3 +266,7 @@ The release manifest provides a machine-readable record of the resulting distrib
 <p align="center">
   David Lemoine · Lemoine-OR
 </p>
+
+## Release 2.0.0
+
+See the [release notes and upgrade guidance](docs/integration/stable-2.0.0-release-notes.md) for the breaking transport API and XML migration.

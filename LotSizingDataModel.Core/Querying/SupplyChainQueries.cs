@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using LotSizingDataModel.Core.DecisionModel.Constraints;
@@ -736,7 +736,7 @@ public sealed class SupplyChainQueries
         foreach (TransportResource resource
                  in SupplyChain.TransportResources)
         {
-            foreach (TransportLane lane in resource.Lanes)
+            foreach (AssignedTransportLane lane in SupplyChain.GetTransportLanes(resource.Id))
             {
                 yield return new DirectTransportOption(
                     resource,
@@ -977,7 +977,7 @@ public sealed class SupplyChainQueries
         /// </param>
         public DirectTransportOption(
             TransportResource transportResource,
-            TransportLane lane)
+            AssignedTransportLane lane)
         {
             TransportResource = transportResource ??
                 throw new ArgumentNullException(
@@ -995,7 +995,7 @@ public sealed class SupplyChainQueries
         /// <summary>
         /// Gets the origin, destination and lead time.
         /// </summary>
-        public TransportLane Lane { get; }
+        public AssignedTransportLane Lane { get; }
 
         /// <summary>
         /// Gets the direct-transport lead time.

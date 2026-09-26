@@ -75,8 +75,8 @@ public sealed class TransportSetupVariableFamilyBuilder :
                     "does not exist.");
 
             foreach (
-                TransportLane lane
-                in resource.Lanes)
+                AssignedTransportLane lane
+                in instance.SupplyChain.GetTransportLanes(resource.Id))
             {
                 for (
                     int period = 1;
@@ -99,8 +99,7 @@ public sealed class TransportSetupVariableFamilyBuilder :
                     AddBinaryVariable(
                         context,
                         $"YT_i{characteristic.ItemId}_r{resource.Id}" +
-                        $"_o{lane.Origin.ReferenceId}" +
-                        $"_d{lane.Destination.ReferenceId}_t{period}",
+                        $"_l{lane.Id}_t{period}",
                         domainKey,
                         $"Transport setup for item " +
                         $"{characteristic.ItemId}, resource " +
@@ -117,7 +116,7 @@ public sealed class TransportSetupVariableFamilyBuilder :
         string category,
         int itemId,
         TransportResource resource,
-        TransportLane lane)
+        AssignedTransportLane lane)
     {
         var keyBuilder =
             new MathematicalDomainKeyBuilder(
