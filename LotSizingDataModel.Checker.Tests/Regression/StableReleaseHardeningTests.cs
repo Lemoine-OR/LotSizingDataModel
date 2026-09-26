@@ -106,8 +106,15 @@ public sealed class StableReleaseHardeningTests
                     ?.InformationalVersion ??
                 string.Empty;
 
-            string expectedStablePrefix =
-                $"{version.Major}.{version.Minor}.{version.Build}.";
+            // NBGV keeps AssemblyVersion stable across patch releases; the
+            // file and informational versions carry the actual patch number.
+            string fileVersionText = assembly
+                .GetCustomAttribute<AssemblyFileVersionAttribute>()?.Version
+                ?? throw new InvalidOperationException("Missing assembly file version.");
+            Version fileVersion = Version.Parse(fileVersionText);
+            Assert.Equal(version.Major, fileVersion.Major);
+            Assert.Equal(version.Minor, fileVersion.Minor);
+            string expectedStablePrefix = $"{fileVersionText}+";
 
             Assert.StartsWith(
                 expectedStablePrefix,
@@ -148,7 +155,7 @@ public sealed class StableReleaseHardeningTests
                 numericParts[1]);
 
             Assert.Equal(
-                version.Build.ToString(),
+                fileVersion.Build.ToString(),
                 numericParts[2]);
 
             Assert.True(

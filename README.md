@@ -270,3 +270,7 @@ The release manifest provides a machine-readable record of the resulting distrib
 ## Release 2.0.0
 
 See the [release notes and upgrade guidance](docs/integration/stable-2.0.0-release-notes.md) for the breaking transport API and XML migration.
+
+## Release 2.0.1
+
+See the [Xpress correction and native validation notes](docs/integration/stable-2.0.1-release-notes.md).

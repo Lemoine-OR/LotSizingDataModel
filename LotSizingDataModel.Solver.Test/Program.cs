@@ -1,6 +1,16 @@
 ﻿using System;
 using LotSizingDataModel.Solver.Cplex;
 
+if (args.Contains("--xpress-smoke", StringComparer.Ordinal))
+{
+    var available = await new LotSizingDataModel.Solver.Xpress.XpressSolverAdapter().CheckAvailabilityAsync();
+    Console.WriteLine($"Xpress {available.SolverVersion}: usable={available.IsUsable}");
+    if (!available.IsUsable) throw new InvalidOperationException(string.Join("; ", available.Diagnostics));
+    await TransportAssignmentSmokeTests.RunAsync(useXpress: true);
+    await XpressNativeSmokeTests.RunAsync();
+    return;
+}
+
 if (args.Contains("--transport-smoke", StringComparer.Ordinal))
 {
     await TransportAssignmentSmokeTests.RunAsync();

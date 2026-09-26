@@ -30,7 +30,8 @@ internal static class XpressRuntimeLocator
                         string.Equals(
                             assembly.GetName().Name,
                             "Optimizer",
-                            StringComparison.OrdinalIgnoreCase));
+                            StringComparison.OrdinalIgnoreCase) ||
+                        string.Equals(assembly.GetName().Name, "xprsdn", StringComparison.OrdinalIgnoreCase));
 
         if (loaded is not null)
         {
@@ -81,21 +82,22 @@ internal static class XpressRuntimeLocator
             }
         }
 
-        try
+        foreach (string assemblyName in new[] { "Optimizer", "xprsdn" })
         {
-            Assembly assembly =
-                Assembly.Load("Optimizer");
-
-            resolvedPath =
-                string.IsNullOrWhiteSpace(assembly.Location)
+            try
+            {
+                Assembly assembly = Assembly.Load(assemblyName);
+                resolvedPath = string.IsNullOrWhiteSpace(assembly.Location)
                     ? "assembly probing"
                     : assembly.Location;
+                return assembly;
+            }
+            catch
+            {
+                // Try the next supported SDK assembly identity.
+            }
+        }
 
-            return assembly;
-        }
-        catch
-        {
-            return null;
-        }
+        return null;
     }
 }
