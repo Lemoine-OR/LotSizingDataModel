@@ -109,7 +109,7 @@ public static class LotSizingProblemFeatureExtractor
         bool hasTransportLanes =
             supplyChain.TransportResources.Any(
                 resource =>
-                    resource.Lanes.Count > 0);
+                    supplyChain.TransportAssignments.Any(a => a.TransportResourceId == resource.Id));
 
         var features =
             new LotSizingProblemFeatures
@@ -345,7 +345,7 @@ public static class LotSizingProblemFeatureExtractor
                         .TransportResources
                         .SelectMany(
                             resource =>
-                                resource.Lanes)
+                                supplyChain.GetTransportLanes(resource.Id))
                         .Any(
                             lane =>
                                 lane.LeadTime > 0),

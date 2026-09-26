@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using LotSizingDataModel.Core;
 using LotSizingDataModel.Core.PhysicalModel;
@@ -213,7 +213,7 @@ public static class LotSizingSolutionFactory
             }
 
             foreach (var lane
-                     in transportResource.Lanes)
+                     in supplyChain.GetTransportLanes(transportResource.Id))
             {
                 var decision =
                     new TransportDecision(

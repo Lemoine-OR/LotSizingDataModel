@@ -70,8 +70,8 @@ public sealed class TransportVariableFamilyBuilder :
                     "does not exist.");
 
             foreach (
-                TransportLane lane
-                in resource.Lanes)
+                AssignedTransportLane lane
+                in instance.SupplyChain.GetTransportLanes(resource.Id))
             {
                 for (
                     int period = 1;
@@ -94,8 +94,7 @@ public sealed class TransportVariableFamilyBuilder :
                     AddNonNegativeContinuousVariable(
                         context,
                         $"T_i{characteristic.ItemId}_r{resource.Id}" +
-                        $"_o{lane.Origin.ReferenceId}" +
-                        $"_d{lane.Destination.ReferenceId}_t{period}",
+                        $"_l{lane.Id}_t{period}",
                         domainKey,
                         double.PositiveInfinity,
                         $"Transported quantity of item " +
@@ -113,7 +112,7 @@ public sealed class TransportVariableFamilyBuilder :
         string category,
         int itemId,
         TransportResource resource,
-        TransportLane lane)
+        AssignedTransportLane lane)
     {
         var keyBuilder =
             new MathematicalDomainKeyBuilder(

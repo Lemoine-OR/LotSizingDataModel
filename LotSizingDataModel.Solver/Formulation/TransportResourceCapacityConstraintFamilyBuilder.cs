@@ -78,7 +78,7 @@ public sealed class TransportResourceCapacityConstraintFamilyBuilder :
                 foreach (TransportCharacteristic characteristic
                          in characteristics)
                 {
-                    foreach (TransportLane lane in resource.Lanes)
+                    foreach (AssignedTransportLane lane in instance.SupplyChain.GetTransportLanes(resource.Id))
                     {
                         string transportKey =
                             CreateKey(
@@ -162,7 +162,7 @@ public sealed class TransportResourceCapacityConstraintFamilyBuilder :
         string category,
         int itemId,
         int resourceId,
-        TransportLane lane,
+        AssignedTransportLane lane,
         int period)
     {
         var keyBuilder =

@@ -83,7 +83,7 @@ public sealed class SupplyNetworkAnalyzer
         foreach (TransportResource resource
                  in supplyChain.TransportResources)
         {
-            foreach (TransportLane lane in resource.Lanes)
+            foreach (AssignedTransportLane lane in supplyChain.GetTransportLanes(resource.Id))
             {
                 string from = WarehouseKey(lane.Origin);
                 string to = WarehouseKey(lane.Destination);
@@ -211,7 +211,7 @@ public sealed class SupplyNetworkAnalyzer
 
         bool hasTransshipment =
             supplyChain.TransportResources.Any(
-                resource => resource.Lanes.Count > 0);
+                resource => supplyChain.GetTransportLanes(resource.Id).Any());
 
         bool hasDistributionNetwork =
             supplyChain.DistributionCenterSourcings.Count > 0;

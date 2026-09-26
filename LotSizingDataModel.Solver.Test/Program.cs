@@ -1,6 +1,12 @@
 ﻿using System;
 using LotSizingDataModel.Solver.Cplex;
 
+if (args.Contains("--transport-smoke", StringComparer.Ordinal))
+{
+    await TransportAssignmentSmokeTests.RunAsync();
+    return;
+}
+
 CplexNativeSmokeTestResult result =
     CplexNativeSmokeTest.Run();
 

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace LotSizingDataModel.Solver.Formulation;
 
@@ -65,6 +65,9 @@ public sealed class StandardLotSizingFormulationOptions
     /// </remarks>
     public double ProductionSetupBigM { get; set; } = 1e6;
 
+    /// <summary>Explicit quantity bound for transport activation when capacities cannot establish one. No implicit fallback is used.</summary>
+    public double? TransportActivationBigM { get; set; }
+
     /// <summary>Creates an independent copy.</summary>
     public StandardLotSizingFormulationOptions Clone()
     {
@@ -87,6 +90,9 @@ public sealed class StandardLotSizingFormulationOptions
             throw new InvalidOperationException(
                 "ProductionSetupBigM must be finite and strictly positive.");
         }
+
+        if (TransportActivationBigM is double transportBound && (!double.IsFinite(transportBound) || transportBound <= 0))
+            throw new InvalidOperationException("TransportActivationBigM must be finite and strictly positive when supplied.");
 
         if (IncludeTransportSetups && !IncludeTransport)
         {

@@ -472,78 +472,43 @@ public sealed class SupplyChainValidator
                 supplyChain.PlanningHorizon,
                 issues);
 
-            if (resource.Lanes.Count == 0)
-            {
-                AddError(
-                    issues,
-                    "TRN001",
-                    path + ".lanes",
-                    "A transport resource must contain at least " +
-                    "one transport lane.");
-            }
-
-            var laneKeys =
-                new HashSet<string>(StringComparer.Ordinal);
-
-            for (int index = 0;
-                 index < resource.Lanes.Count;
-                 index++)
-            {
-                TransportLane lane =
-                    resource.Lanes[index];
-
-                string lanePath =
-                    path + $".lanes[{index}]";
-
-                ValidateWarehouseReference(
-                    supplyChain,
-                    lane.Origin,
-                    lanePath + ".origin",
-                    issues);
-
-                ValidateWarehouseReference(
-                    supplyChain,
-                    lane.Destination,
-                    lanePath + ".destination",
-                    issues);
-
-                if (SameWarehouse(
-                        lane.Origin,
-                        lane.Destination))
-                {
-                    AddError(
-                        issues,
-                        "TRN002",
-                        lanePath,
-                        "The origin and destination warehouses " +
-                        "must be different.");
-                }
-
-                if (lane.LeadTime < 0)
-                {
-                    AddError(
-                        issues,
-                        "TRN003",
-                        lanePath + ".leadTime",
-                        "A transport lead time cannot be negative.");
-                }
-
-                string key =
-                    WarehouseKey(lane.Origin) +
-                    "->" +
-                    WarehouseKey(lane.Destination);
-
-                if (!laneKeys.Add(key))
-                {
-                    AddError(
-                        issues,
-                        "TRN004",
-                        lanePath,
-                        "This transport resource contains the same " +
-                        "origin-destination lane more than once.");
-                }
-            }
         }
+        var laneIds = new HashSet<int>();
+        var laneKeys = new HashSet<string>(StringComparer.Ordinal);
+        foreach (TransportLane lane in supplyChain.TransportLanes)
+        {
+            string path = $"supplyChain.transportLanes[id={lane.Id}]";
+            if (lane.Id < 0 || !laneIds.Add(lane.Id)) AddError(issues, "TRN005", path, "Invalid or duplicate lane identifier.");
+            ValidateWarehouseReference(supplyChain, lane.Origin, path + ".origin", issues);
+            ValidateWarehouseReference(supplyChain, lane.Destination, path + ".destination", issues);
+            if (SameWarehouse(lane.Origin, lane.Destination)) AddError(issues, "TRN002", path, "The origin and destination warehouses must be different.");
+            if (!laneKeys.Add(WarehouseKey(lane.Origin) + "->" + WarehouseKey(lane.Destination)))
+                AddError(issues, "TRN004", path, "Duplicate directed transport lane.");
+        }
+        var assignments = new HashSet<(int, int)>();
+        foreach (TransportAssignment assignment in supplyChain.TransportAssignments)
+        {
+            string path = $"supplyChain.transportAssignments[lane={assignment.LaneId},resource={assignment.TransportResourceId}]";
+            if (!laneIds.Contains(assignment.LaneId) || !supplyChain.TransportResources.Any(r => r.Id == assignment.TransportResourceId))
+                AddError(issues, "TRN006", path, "An assignment references a missing lane or resource.");
+            if (!assignments.Add((assignment.LaneId, assignment.TransportResourceId)))
+                AddError(issues, "TRN007", path, "Duplicate lane-resource assignment.");
+            if (assignment.LeadTime < 0) AddError(issues, "TRN003", path, "A transport lead time cannot be negative.");
+        }
+        if (supplyChain.TransportFormatVersion != 2)
+            AddError(issues, "TRN008", "supplyChain.transportFormatVersion", "Unsupported transport format version.");
+    }
+
+    /// <summary>Advisory transport readiness diagnostics, independent of structural validity.</summary>
+    public IReadOnlyList<ValidationIssue> ValidateTransportReadiness(SupplyChain supplyChain)
+    {
+        ArgumentNullException.ThrowIfNull(supplyChain);
+        var issues = new List<ValidationIssue>();
+        foreach (var lane in supplyChain.TransportLanes.Where(l => !supplyChain.TransportAssignments.Any(a => a.LaneId == l.Id)))
+            issues.Add(new ValidationIssue(ValidationSeverity.Warning, "TRNR001", $"transportLanes[id={lane.Id}]", "No resource is assigned to this lane."));
+        foreach (var resource in supplyChain.TransportResources.Where(r => !supplyChain.TransportAssignments.Any(a => a.TransportResourceId == r.Id)))
+            issues.Add(new ValidationIssue(ValidationSeverity.Warning, "TRNR002", $"transportResources[id={resource.Id}]", "This resource serves no lane."));
+        return issues;
     }
 
     private static void ValidateProductionRoutings(

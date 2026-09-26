@@ -290,21 +290,14 @@ public sealed class UniversalNotationMatcherTests
             new TransportResource(
                 id: 1,
                 name: "Transport");
+        supplyChain.AddTransportResource(transport);
 
-        transport.AddLane(
-            new TransportLane(
-                WarehouseReference.ForStandaloneWarehouse(1),
-                WarehouseReference.ForStandaloneWarehouse(2),
-                0));
+        supplyChain.AddTransportLane(new TransportLane(1, WarehouseReference.ForStandaloneWarehouse(1), WarehouseReference.ForStandaloneWarehouse(2)));
+        supplyChain.AddTransportAssignment(new TransportAssignment(1, transport.Id, 0));
 
-        transport.AddLane(
-            new TransportLane(
-                WarehouseReference.ForStandaloneWarehouse(1),
-                WarehouseReference.ForStandaloneWarehouse(3),
-                0));
+        supplyChain.AddTransportLane(new TransportLane(2, WarehouseReference.ForStandaloneWarehouse(1), WarehouseReference.ForStandaloneWarehouse(3)));
+        supplyChain.AddTransportAssignment(new TransportAssignment(2, transport.Id, 0));
 
-        supplyChain.AddTransportResource(
-            transport);
 
         return LotSizingProblemDescriptor.FromLegacyFeatures(
             features,

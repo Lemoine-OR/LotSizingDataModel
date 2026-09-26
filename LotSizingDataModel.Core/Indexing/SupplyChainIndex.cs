@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using LotSizingDataModel.Core.LogicalModel;
 using LotSizingDataModel.Core.PhysicalModel;
@@ -15,6 +15,13 @@ namespace LotSizingDataModel.Core.Indexing;
 /// </summary>
 public sealed class SupplyChainIndex
 {
+    private readonly Dictionary<int, TransportLane> _transportLanes = new();
+    private readonly Dictionary<(int, int), TransportAssignment> _transportAssignments = new();
+
+    public bool TryGetTransportLane(int laneId, out TransportLane? lane) => _transportLanes.TryGetValue(laneId, out lane);
+    public TransportLane GetRequiredTransportLane(int laneId) => _transportLanes.TryGetValue(laneId, out var lane) ? lane : throw new KeyNotFoundException($"Transport lane {laneId} does not exist.");
+    public bool TryGetTransportAssignment(int laneId, int resourceId, out TransportAssignment? assignment) => _transportAssignments.TryGetValue((laneId, resourceId), out assignment);
+
     private readonly Dictionary<int, Item> _items = new();
     private readonly Dictionary<int, Plant> _plants = new();
 
@@ -112,6 +119,8 @@ public sealed class SupplyChainIndex
         IndexSuppliers();
         IndexDistributionCenters();
         IndexTransportResources();
+        foreach (var lane in SupplyChain.TransportLanes) AddUnique(_transportLanes, lane.Id, lane, "transport lane");
+        foreach (var assignment in SupplyChain.TransportAssignments) AddUnique(_transportAssignments, (assignment.LaneId, assignment.TransportResourceId), assignment, "transport assignment");
     }
 
     /// <summary>
@@ -119,6 +128,8 @@ public sealed class SupplyChainIndex
     /// </summary>
     private void Clear()
     {
+        _transportLanes.Clear();
+        _transportAssignments.Clear();
         _items.Clear();
         _plants.Clear();
         _standaloneWarehouses.Clear();

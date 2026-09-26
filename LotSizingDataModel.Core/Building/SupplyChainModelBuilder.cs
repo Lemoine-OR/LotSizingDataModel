@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using LotSizingDataModel.Core.Indexing;
@@ -365,7 +365,7 @@ public sealed class SupplyChainModelBuilder
     /// <summary>
     /// Adds a transport resource.
     ///
-    /// Existing lanes are checked before the resource is added.
+    /// Resources may be added before any lane assignment.
     /// </summary>
     public SupplyChainModelBuilder
         AddTransportResource(
@@ -374,13 +374,7 @@ public sealed class SupplyChainModelBuilder
         ArgumentNullException.ThrowIfNull(
             transportResource);
 
-        foreach (TransportLane lane
-                 in transportResource.Lanes)
-        {
-            ValidateTransportLane(lane);
-        }
-
-        SupplyChain.AddTransportResource(
+SupplyChain.AddTransportResource(
             transportResource);
 
         RebuildIndex();
@@ -401,24 +395,22 @@ public sealed class SupplyChainModelBuilder
     }
 
     /// <summary>
-    /// Adds a lane to an existing transport resource.
+    /// Adds a central directed lane.
     ///
     /// Both warehouses must already exist.
     /// </summary>
-    public SupplyChainModelBuilder AddTransportLane(
-        int transportResourceId,
-        TransportLane lane)
+    public SupplyChainModelBuilder AddTransportLane(TransportLane lane)
     {
-        ArgumentNullException.ThrowIfNull(lane);
-
         ValidateTransportLane(lane);
+        SupplyChain.AddTransportLane(lane);
+        RebuildIndex();
+        return this;
+    }
 
-        TransportResource transportResource =
-            _index.GetRequiredTransportResource(
-                transportResourceId);
-
-        transportResource.AddLane(lane);
-
+    public SupplyChainModelBuilder AddTransportAssignment(int laneId, int resourceId, int leadTime)
+    {
+        SupplyChain.AddTransportAssignment(new TransportAssignment(laneId, resourceId, leadTime));
+        RebuildIndex();
         return this;
     }
 
@@ -710,13 +702,6 @@ public sealed class SupplyChainModelBuilder
                 "different warehouses.");
         }
 
-        if (lane.LeadTime < 0)
-        {
-            throw new ArgumentOutOfRangeException(
-                nameof(lane),
-                lane.LeadTime,
-                "A transport lead time cannot be negative.");
-        }
     }
 
     private void ValidateWarehouseReference(

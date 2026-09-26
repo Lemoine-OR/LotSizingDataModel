@@ -197,7 +197,7 @@ public sealed partial class SupplyChain :
     /// <summary>
     /// Gets the transport resources in the supply chain.
     ///
-    /// Each transport resource contains its own transport lanes.
+    /// Authorized lanes are defined by the central transport assignments.
     /// </summary>
     [XmlArray("transportResources")]
     [XmlArrayItem("transportResource")]

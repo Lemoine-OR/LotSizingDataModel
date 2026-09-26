@@ -306,7 +306,7 @@ public sealed class InventoryBalanceConstraintFamilyBuilder :
                             candidate.Id ==
                             characteristic.TransportResourceId);
 
-            foreach (TransportLane lane in resource.Lanes)
+            foreach (AssignedTransportLane lane in instance.SupplyChain.GetTransportLanes(resource.Id))
             {
                 if (StandardFormulationDomainKeyFactory.AreSameWarehouse(
                         lane.Origin,

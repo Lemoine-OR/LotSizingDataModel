@@ -58,8 +58,8 @@ public sealed class TransportCostObjectiveTermBuilder :
                             characteristic.TransportResourceId);
 
             foreach (
-                TransportLane lane
-                in resource.Lanes)
+                AssignedTransportLane lane
+                in instance.SupplyChain.GetTransportLanes(resource.Id))
             {
                 for (
                     int period = 1;
@@ -94,7 +94,7 @@ public sealed class TransportCostObjectiveTermBuilder :
         string category,
         int itemId,
         int resourceId,
-        LotSizingDataModel.Core.PhysicalModel.TransportLane lane)
+        LotSizingDataModel.Core.PhysicalModel.AssignedTransportLane lane)
     {
         var keyBuilder =
             new MathematicalDomainKeyBuilder(
