@@ -266,3 +266,7 @@ The release manifest provides a machine-readable record of the resulting distrib
 <p align="center">
   David Lemoine · Lemoine-OR
 </p>
+
+## Release 2.0.0
+
+See the [release notes and upgrade guidance](docs/integration/stable-2.0.0-release-notes.md) for the breaking transport API and XML migration.

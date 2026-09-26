@@ -175,8 +175,7 @@ with delay three.
 The transport subformat is now `transportFormatVersion="2"` on `supplyChain`.
 This versions transport independently of unrelated instance provenance formats.
 Transport-free documents omit the new empty collections and attribute, preserving
-their canonical XML/fingerprints. No release tag or package version is published
-by this change; the API break must be included in the next release policy decision.
+their canonical XML/fingerprints. The breaking transport API is released in version 2.0.0; see the [release notes](../integration/stable-2.0.0-release-notes.md).
 
 Use `SupplyChainXmlSerializer` or `LotSizingInstanceXmlSerializer` for loading old
 files. They call `TransportXmlMigration` through their existing secure XML readers.
